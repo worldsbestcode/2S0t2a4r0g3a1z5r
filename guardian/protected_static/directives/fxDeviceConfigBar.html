@@ -1,0 +1,42 @@
+<div>
+  <span ng-if="!isLoggedIn()">
+    <fx-button
+      disabled="{{disableLoginToDevice()}}"
+      callback="propagateCallback">
+      <i class="fa fa-gear"></i> Login to device
+    </fx-button>
+  </span>
+  <span ng-if="isLoggedIn()">
+    <fx-button
+      callback="propagateCallback">
+      <i class="fa fa-gear"></i> Select device
+    </fx-button>
+  </span>
+  <span ng-if="viewEnable()">
+    <fx-button
+      disabled="{{enableDisabled()}}"
+      callback="enableDevice;">
+      <i class="fa fa-check"></i> Enable
+    </fx-button>
+  </span>
+  <span ng-if="viewDisable()">
+    <fx-button
+      disabled="{{enableDisabled()}}"
+      callback="disableDevice">
+      <i class="fa fa-ban"></i> Disable
+    </fx-button>
+  </span>
+  <span ng-if="isConfigurable()">
+    <fx-button
+      callback="deleteDevice">
+      <i class="fa fa-remove"></i> Delete device
+    </fx-button>
+  </span>
+  <span ng-if="isConfigurable()">
+    <fx-button
+      disabled="{{changeRoleDisabled()}}"
+      callback="changeRole">
+      <i class="fa fa-star"></i> Change role
+    </fx-button>
+  </span>
+</div>

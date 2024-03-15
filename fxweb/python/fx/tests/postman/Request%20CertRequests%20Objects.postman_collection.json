@@ -1,0 +1,40 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Request CertRequests Objects",
+		"_postman_id": "55e68d1a-0b5d-6959-e4d2-e4ec615fa238",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Request CertRequest Objects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"CertRequests\"] = jsonData.result === \"Failure\"\n"
+					}
+				}
+			],
+			"request": {
+				"url": "http://10.0.4.231:8081/object",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"retrieve\",\n  \"objectType\": \"Filter\",\n  \"quantity\": 10,\n  \"request\": {\n    \"manager\": \"CERT_REQ\",\n    \"chunk\": 0,\n    \"chunkSize\": 10,\n    \"chunkCount\": 1,\n    \"matchCount\": 1,\n    \"flags\": [\n    ],\n    \"filterType\": \"RESULTS\",\n    \"sortAscending\": false,\n    \"distinctOn\": \"\",\n    \"objectIDs\": {}\n  }\n}\n"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

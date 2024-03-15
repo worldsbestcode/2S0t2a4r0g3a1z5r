@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "PermissionFlags",
+    "description": "Flags for permissions. Not all flags may applicable to all object types.",
+    "enum": [
+        "Add",
+        "Delete",
+        "Modify",
+        "Print",
+        "Export",
+        "Inject",
+        "ExportComponent",
+        "MassImport",
+        "MassExport",
+        "Ethernet",
+        "Network",
+        "TCP",
+        "SSL",
+        "Upload",
+        "Approve"
+    ]
+}

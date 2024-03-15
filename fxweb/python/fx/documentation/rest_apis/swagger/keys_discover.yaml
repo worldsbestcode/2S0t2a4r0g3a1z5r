@@ -1,0 +1,656 @@
+openapi: 3.0.0
+info:
+  version: "0.1.0"
+  title: 'Keys'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    ***
+    ### Special Notes
+    ***
+    + Importing symmetric keys is not available at this time.
+
+security:
+  - bearerToken: []
+
+paths:
+  '/keys':
+    post:
+      tags:
+        - Symmetric Keys
+      summary: 'Create single random symmetric key'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Registration Authority
+        + **Host API Commands**
+          + RKCK
+        + **Permissions**
+          + Certificate Management - Upload
+          + Certificate Object - Use
+        ***
+        ### Additional Notes
+        ***
+        + Major Key must be specified when creating a new key with an AES algorithm
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRandomKey'
+            examples:
+              'Create random symmetric key':
+                $ref: '#/components/examples/CreateRandomKey'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRandomKeyResponse'
+              examples:
+                'Create Key Response':
+                  $ref: '#/components/examples/CreateRandomKeyResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    get:
+      tags:
+        - Symmetric Keys
+      summary: 'Retrieve single symmetric key'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Remote POS
+        + **Host API Commands**
+          + RKRC
+        + **Permissions**
+          + Key -> Export user group permissions
+          + Use permissions for exported key
+          + Use permissions on the specified host (if one is supplied)
+        ***
+        ### Additional Notes
+        ***
+        + Either id or keyGroupId **must** be supplied as a URL query parameter
+        + Supplying the keyGroupId will use the group's key retrieval algorithm
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: 'ID of the key to export (required if keyGroupId is not supplied)'
+        - name: keyGroupId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: 'ID of the key group to use (required if keyId is not supplied)'
+        - name: hostname
+          in: query
+          schema:
+            type: string
+          description: 'Name of host to use'
+        - name: transferKey
+          in: query
+          schema:
+            type: string
+          description: 'Name of key transfer key to use (if not using host)'
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: ['Cryptogram','AKB','TR-31','Clear']
+            default: 'Cryptogram'
+          description: 'Export option'
+        - name: useCbc
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Whether or not to use CBC encryption'
+        - name: checksumLength
+          in: query
+          schema:
+            type: integer
+            enum: [4,5,6]
+            default: 4
+          description: 'Option to change length of checksum. Must be enabled.'
+        - name: returnKeyGroup
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Lookup and return key group name'
+        - name: header
+          in: query
+          schema:
+            type: string
+          description: 'The header that will be used for the AKB. Only used if using AKB format'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                # Return a details about a single key
+                $ref: '#/components/schemas/RetrieveKeyResponse'
+              examples:
+                'Retrieve single symmetric key':
+                  $ref: '#/components/examples/RetrieveKeyResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/keys/encrypt':
+    post:
+      tags:
+        - Symmetric Keys - Crypto Operations
+      summary: 'Encrypt data with a symmetric key'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Certificate Authority
+        + **Host API Commands**
+          + RKED
+        + **Permissions**
+          + Key class (user group) permissions
+          + Encrypt permissions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptDecryptRequest'
+            examples:
+              'Encrypt data with key':
+                $ref: '#/components/examples/EncryptRequest'
+              'Encrypt data with key (DPM)':
+                $ref: '#/components/examples/DPMEncryptRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptDecryptResponse'
+              examples:
+                'Encrypt Response':
+                  $ref: '#/components/examples/EncryptResponse'
+                'Encrypt Response (DPM)':
+                  $ref: '#/components/examples/DPMEncryptResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/keys/decrypt':
+    post:
+      tags:
+        - Symmetric Keys - Crypto Operations
+      summary: 'Decrypt data with a symmetric key'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Certificate Authority
+        + **Host API Commands**
+          + RKED
+        + **Permissions**
+          + Key class (user group) permissions
+          + Decrypt permissions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptDecryptRequest'
+            examples:
+              'Decrypt data with key':
+                $ref: '#/components/examples/DecryptRequest'
+              'Decrypt data with key (DPM)':
+                $ref: '#/components/examples/DPMDecryptRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptDecryptResponse'
+              examples:
+                'Decrypt Response':
+                  $ref: '#/components/examples/DecryptResponse'
+                'Decrypt Response (DPM)':
+                  $ref: '#/components/examples/DPMDecryptResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+
+
+  schemas:
+    RequestBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/RequestBase'
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+    # Symmetric Key Schemas
+    CreateRandomKey:
+      type: object
+      properties:
+        keyGroupId:
+          $ref: '#/components/schemas/KeyGroupId'
+        keyName:
+          $ref: '#/components/schemas/KeyName'
+        keyType:
+          $ref: '#/components/schemas/KeyType'
+        majorKey:
+          $ref: '#/components/schemas/MajorKey'
+        algorithm:
+          $ref: '#/components/schemas/KeyAlgorithm'
+        keyUsage:
+          $ref: '#/components/schemas/KeyUsage'
+        clearExport:
+          type: boolean
+          default: false
+          description: 'Enable clear key export'
+        validityPeriod:
+          allOf:
+            - $ref: '#/components/schemas/DateTimePeriod'
+            - description: 'Time period in which the key is valid'
+        owner:
+          type: string
+          description: 'Key owner'
+        mailAddress:
+          type: string
+          description: 'Address of key owner'
+        attributes:
+          allOf:
+            - $ref: '#/components/schemas/KeyAttributes'
+            - description: 'List of attribute objects'
+        tr31Header:
+          type: string
+          description: 'TR-31 key block'
+        # @TODO: Remove stub once AKB Header support is added
+        # akbHeader:
+        #   type: string
+        #   default: ''
+      required:
+        - keyGroupId
+        - keyName
+        - keyType
+        - algorithm
+        - keyUsage
+    CreateRandomKeyResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                checksum:
+                  type: string
+                  format: hex
+                keyblock:
+                  type: string
+                  format: hex
+              required:
+                - id
+                - checksum
+                - keyblock
+          required:
+            - message
+            - response
+    RetrieveKeyResponse: # AKA Export Key
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                id:
+                  $ref: '#/components/schemas/KeyId'
+                keyName:
+                  $ref: '#/components/schemas/KeyName'
+                keyGroup:
+                  $ref: '#/components/schemas/KeyGroupName'
+                keyBlock:
+                  $ref: '#/components/schemas/KeyBlock'
+                checksum:
+                  $ref: '#/components/schemas/KeyChecksum'
+                modifier:
+                  $ref: '#/components/schemas/KeyModifier'
+                keyUsage:
+                  $ref: '#/components/schemas/KeyUsage'
+                securityUsage:
+                  $ref: '#/components/schemas/KeySecurityUsage'
+                majorKey:
+                  $ref: '#/components/schemas/MajorKey'
+                keyType:
+                  $ref: '#/components/schemas/KeyType'
+                validityPeriod:
+                  $ref: '#/components/schemas/DateTimePeriod'
+                attributes:
+                  $ref: '#/components/schemas/KeyAttributes'
+              required:
+                - id
+                - name
+    EncryptDecryptRequest:
+      allOf:
+        - $ref: '#/components/schemas/EncryptDecryptParams'
+        - type: object
+          properties:
+            data:
+              type: string
+              format: hex
+              description: 'Hex encoded data to be encrypted or decrypted'
+            dataFormat:
+              type: string
+              enum: ['raw','DPM']
+              default: 'raw'
+              description: 'Data format used for input and output'
+          required:
+            - data
+    EncryptDecryptResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/EncryptDecryptParams'
+                - type: object
+                  properties:
+                    checksum:
+                      type: string
+                      format: hex
+                    result:
+                      type: string
+    EncryptDecryptParams:
+      type: object
+      properties:
+        keyGroupId:
+          # Users will use the key group name for now.
+          # Middleware will "switch" until UUIDs are fully implemented
+          type: string
+          default: ''
+          description: 'ID of key key group to use (required if keyId is not supplied)'
+        keyId:
+          # Users will use the key name for now.
+          # Middleware will "switch" until UUIDs are fully implemented
+          allOf:
+            - $ref: '#/components/schemas/KeyId'
+            - description: 'ID of key to use (required if keyGroupId is not supplied)'
+        padding:
+          type: boolean
+          default: false
+          description: 'Padding mode'
+        cipher:
+          type: string
+          enum: ['ECB','CBC','CFB','CFB1','CFB8','CFB64','CFB128','OFB']
+          default: 'ECB'
+          description: 'Cipher type to be used'
+
+
+    # Common key properties:
+    KeyType:
+      allOf:
+        - $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyType'
+        - description: 'Key type (required if using an AES algorithm'
+    KeyUsage:
+      allOf:
+        - $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyUsage'
+        - description: 'Key usage'
+    MajorKey:
+      allOf:
+        - $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/MajorKey'
+        - description: 'Major key to encrypt the key under'
+    KeyAlgorithm:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyAlgorithm'
+    DateTimePeriod:
+      allOf:
+        - $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/DateTimePeriod'
+        - description: 'Time period in which the key is valid'
+    KeyId:
+      type: string
+      format: uuid
+      description: 'ID of the key'
+    KeyName:
+      type: string
+      description: 'Name of key'
+    KeyGroupId:
+      type: string
+      format: uuid
+      description: 'ID of the key group to add the key to'
+    KeyGroupName:
+      type: string
+      default: ''
+    KeyChecksum:
+      type: string
+      format: hex
+    KeyChecksumAlgorithm:
+      type: string
+      enum: ['Financial', 'CMAC']
+      default: 'Financial'
+    KeyModifier:
+      type: string
+      format: hex
+    KeyBlock:
+      type: string
+      format: hex
+    KeySecurityUsage:
+      type: string
+      enum: ['None','Private','Sensitive','Immutable','Password Export',
+             'Clear key export','Anonymous Signing']
+    KeyAttributes:
+      type: array
+      items:
+        type: object
+        properties:
+          attribute:
+            type: string
+            description: 'Name of attribute'
+          value:
+            type: string
+            description: 'Value of attribute'
+        required:
+          - attribute
+          - value
+
+
+  examples:
+    CreateRandomKey:
+      value:
+        keyGroupId: 'Root Key Group'
+        keyName: 'Encryption Key #1'
+        keyType: 'Data encryption key'
+        majorKey: 'PMK'
+        algorithm: 'AES-256'
+        keyUsage: 'Encrypt/Decrypt'
+        clearExport: false
+        validityPeriod:
+          start: '2020-02-10 19:00:00'
+          end : '2020-04-10 19:00:00'
+        owner: 'Futurex'
+        mailAddress: 'Mailing Address #101, Bulverde, TX 78163'
+        attributes:
+          - attribute: 'Web Key'
+            value: 'eCommerce'
+          - attribute: 'Company'
+            value: 'Futurex'
+        tr31Header: 'B0016M0TB00E0001770004ABCD'
+        # @TODO: Remove stub once AKB Header support is added
+        # akbHeader: '1PUNE000'
+    CreateRandomKeyResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          # @TODO: Remove stub once UUID support is added
+          # id: 'RW5jcnlwdGlvbiBLZXkgIzE='
+          id: 'Encryption Key #1'
+          checksum: 'BBD5'
+          keyblock: 'CD9458FE2F279B125F2449174B195FDF99EF72217229F678151D537A5A76A77830BAE4084109B97B2A1067DD1EAA6A99BA3B66A451B4FE74'
+    EncryptRequest:
+      value:
+        # @TODO: Remove stub once UUID support is added
+        # id: 'RW5jcnlwdGlvbiBLZXkgIzE='
+        keyId: 'Encryption Key #1'
+        padding: true
+        cipher: 'CBC'
+        data: '546f702d73656372657420646174612074686174206e6565647320746f20626520656e63727970746564204153415021'
+        dataFormat: 'raw'
+    EncryptResponse:
+      value:
+        status: 'Success'
+        message: 'Encryption successful'
+        response:
+          # @TODO: Remove stub once UUID support is added
+          # keyGroupId: 'a2V5LWVDb21tZXJjZQ=='
+          keyGroupId: 'Root Key Group'
+          # @TODO: Remove stub once UUID support is added
+          # keyId: 'RW5jcnlwdGlvbiBLZXkgIzE='
+          keyId: 'Encryption Key #1'
+          padding: true
+          cipher: 'CBC'
+          checksum: 'CA4C'
+          result: 'EA0DBD299189EDAF70546C853277C0E540AFEC0914943CC9D3BF43375E713012A22D4B7EE09D482698F18E4FB1A3562522D216B5B090537537C724755096CB1E'
+    DPMEncryptRequest:
+      value:
+        # @TODO: Remove stub once UUID support is added
+        # keyId: 'RW5jcnlwdGlvbiBLZXkgIzE='
+        keyId: 'Encryption Key #1'
+        data: '546f702d73656372657420646174612074686174206e6565647320746f20626520656e63727970746564204153415021'
+        dataFormat: 'DPM'
+    DPMEncryptResponse:
+      value:
+        status: 'Success'
+        message: 'Encryption successful'
+        response:
+          checksum: '6A95'
+          cipher: 'ECB'
+          # @TODO: Remove stub once UUID support is added
+          # keyId: 'RW5jcnlwdGlvbiBLZXkgIzE='
+          keyId: 'Encryption Key #1'
+          padding: false
+          result: '4675747572657820362E312E332E3200FFFFFFFF0000000575756964000000000F456E6372797074696F6E204B657900FFFFFFFF0000000369760000000000FFFFFFFF000000056373756D00000000026A95FFFFFFFF000000056D6F6465000000000100FFFFFFFF0000000470616400000000010067D00B665DEAB094B531F9B7C4558C89AD4041D61F5101FFA12EDF638FD70834D45A395BDB66534C085CC4DC8165C12F'
+    DecryptRequest:
+      value:
+        # @TODO: Remove stub once UUID support is added
+        # id: 'RW5jcnlwdGlvbiBLZXkgIzE='
+        keyId: 'Decryption Key #1'
+        padding: true
+        cipher: 'CBC'
+        data: 'EA0DBD299189EDAF70546C853277C0E540AFEC0914943CC9D3BF43375E713012A22D4B7EE09D482698F18E4FB1A3562522D216B5B090537537C724755096CB1E'
+        dataFormat: 'raw'
+    DecryptResponse:
+      value:
+        status: 'Success'
+        message: 'Decryption successful'
+        response:
+          # @TODO: Remove stub once UUID support is added
+          # keyGroupId: 'a2V5LWVDb21tZXJjZQ=='
+          keyGroupId: 'Root Key Group'
+          # @TODO: Remove stub once UUID support is added
+          # keyId: 'RW5jcnlwdGlvbiBLZXkgIzE='
+          keyId: 'Decryption Key #1'
+          padding: true
+          cipher: 'CBC'
+          checksum: 'CA4C'
+          result: '546F702D73656372657420646174612074686174206E6565647320746F20626520656E63727970746564204153415021'
+    DPMDecryptRequest:
+      value:
+        keyId: 'Decryption Key #1'
+        data: '4675747572657820362E312E332E3200FFFFFFFF0000000575756964000000000F456E6372797074696F6E204B657900FFFFFFFF0000000369760000000000FFFFFFFF000000056373756D00000000026A95FFFFFFFF000000056D6F6465000000000100FFFFFFFF0000000470616400000000010067D00B665DEAB094B531F9B7C4558C89AD4041D61F5101FFA12EDF638FD70834D45A395BDB66534C085CC4DC8165C12F'
+        dataFormat: 'DPM'
+    DPMDecryptResponse:
+      value:
+        status: 'Success'
+        message: 'Decryption successful'
+        response:
+          checksum: '6A95'
+          cipher: 'ECB'
+          keyId: 'Decryption Key #1'
+          padding: false
+          result: '546f702d73656372657420646174612074686174206e6565647320746f20626520656e63727970746564204153415021'
+    RetrieveKeyResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          # @TODO: Remove stub once UUID support is added
+          # id: 'RW5jcnlwdGlvbiBLZXkgIzE='
+          id: 'Encryption Key #1'
+          keyName: 'Encryption Key #1'
+          keyGroup: 'Root Key Group'
+          keyBlock: 'CD9458FE2F279B125F2449174B195FDF99EF72217229F678151D537A5A76A77830BAE4084109B97B2A1067DD1EAA6A99BA3B66A451B4FE74'
+          checksum: 'BBD5'
+          modifier: '0x0A'
+          keyUsage: 'Encrypt/Decrypt'
+          securityUsage: 'Private'
+          majorKey: 'PMK'
+          keyType: 'Data encryption key'
+          validityPeriod:
+            start: '2020-02-10 19:00:00'
+            end: '2020-04-10 19:00:00'
+          attributes:
+            - attribute: 'Web Key'
+              value: 'eCommerce'
+            - attribute: 'Company'
+              value: 'Futurex'
+
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'

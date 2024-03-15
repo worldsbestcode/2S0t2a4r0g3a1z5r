@@ -1,0 +1,632 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.4"
+  title: User Groups
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    ***
+    ### Special Notes
+    ***
+    + **Please Note** - When interpreting permissions, a permission is 
+          interpreted as "disabled" if the permission is not listed. 
+      + For example, if `logs:['Add','Modify']` is returned the user group cannot delete logs. It can only view, add, and modify logs.
+      + Additionally, a permission is regarded as viewable if it exists. For example, `logs: [ ] indicates` logs are set to view only.
+      + If a permission object is not returned it is considered disabled all together
+
+security:
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/user-groups':
+    post:
+      tags:
+        - CRUD Operations
+      summary: 'Create single User Group'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + RKCW
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserGroup'
+            examples:
+              'Create a single User Group':
+                $ref: '#/components/examples/CreateUserGroup'
+      responses:
+        '201':
+          $ref: '#/components/responses/201-Created'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    get:
+      tags:
+        - CRUD Operations
+      summary: 'Retrieve a single User Group, or a list of User Groups'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + RKPS (single)
+          + RKRP (single)
+          + PGUG (list)
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + Supplying the following with net the following result:
+          + **No parameters** - Retrieve a list of user groups
+          + **userGroup** - Retrieve a specific user group
+          + **parentGroup** - Retrieve a list of user groups filtered by specified parent group
+      parameters:
+        - name: parentGroup
+          in: query
+          schema:
+            type: string
+        - name: group
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RetrieveUserGroup'
+                  - $ref: '#/components/schemas/RetrieveUserGroupList'
+              examples:
+                'Retrieve single User Group':
+                  $ref: '#/components/examples/RetrieveUserGroup'
+                'Retrieve a list of User Groups':
+                  $ref: '#/components/examples/RetrieveUserGroupList'
+                'Retrieve a list of User Groups (filtered)':
+                  $ref: '#/components/examples/RetrieveUserGroupListFiltered'
+          links:
+            CreateFolder:
+              description: >
+                The values returned from `/usergroups` can be used
+                as options for the `ownerGroup` in `POST /keyfolders`
+              operationRef: 'https://api.swaggerhub.com/apis/Futurex/keyfolders/1.0.0#/paths/~1keyfolders~1/post'
+              requestBody: $response.body#/usergroups/responseData/usergroups
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    put:
+      tags:
+        - CRUD Operations
+      summary: 'Update single User Group'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + RKEW
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserGroup'
+            examples:
+              'Update single User Group':
+                $ref: '#/components/examples/UpdateUserGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    delete:
+      tags:
+        - CRUD Operations
+      summary: 'Delete single User Group'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + RKDW
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + 
+      parameters:
+        - name: group
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/user-groups/move':
+    put:
+      tags:
+        - Other Operations
+      summary: 'Move single User Group'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + RKMW
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveUserGroup'
+            examples:
+              'Move single User Group':
+                $ref: '#/components/examples/MoveUserGroup'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+
+  schemas:
+    CreateUserGroup:
+      allOf:
+        - $ref: '#/components/schemas/UserGroup'
+        - type: object
+          properties:
+            permissions:
+              $ref: '#/components/schemas/SetPermissions'
+            parentGroup:
+              type: string
+      required:
+        - name
+        - parentGroup
+    RetrieveUserGroup:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/UserGroup'
+                - type: object
+                  properties:
+                    permissions:
+                      $ref: '#/components/schemas/RetrievePermissions'
+                    childGroups:
+                      $ref: '#/components/schemas/ChildGroups'
+    RetrieveUserGroupList:
+      allOf:
+      - $ref: '#/components/schemas/ResponseBase'
+      - type: object
+        properties:
+          response:
+            allOf:
+            - $ref: '#/components/schemas/PaginationBase'
+            - type: object
+              properties:
+                userGroups:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/UserGroupList'
+                      - type: object
+                        properties:
+                          otpEnabled:
+                            type: boolean
+              required:
+                - userGroups
+    ChildGroups:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserGroupList'
+    UserGroupList:
+      type: object
+      properties:
+        name:
+          type: string
+        active:
+          type: boolean
+        created:
+          type: string
+          format: ''
+        numUsers:
+          type: integer
+        parentGroup:
+          type: string
+        loginsRequired:
+          type: integer
+          default: 2
+        ldapVerify:
+          type: boolean
+          default: false
+    UserGroup:
+      allOf:
+        - $ref: '#/components/schemas/UserGroupList'
+        - type: object
+          properties:
+            permissions: {}
+            passPolicy:
+              $ref: '#/components/schemas/PasswordPolicy'
+            userLocation:
+              type: string
+              enum: ['Database','Card','LDAP Server']
+            ldapGroup:
+              type: string
+            oauthSettings:
+              $ref: '#/components/schemas/OAuthSettings'
+            otpSettings:
+              $ref: '#/components/schemas/OTPSettings'
+    UpdateUserGroup:
+      type: object
+      properties:
+        group:
+          type: string
+        newName:
+          type: string
+        permissions:
+          $ref: '#/components/schemas/SetPermissions'
+        passPolicy:
+          $ref: '#/components/schemas/PasswordPolicy'
+        loginsRequired:
+          type: integer
+        oauthSettings:
+          $ref: '#/components/schemas/OAuthSettings'
+        otpSettings:
+          $ref: '#/components/schemas/OTPSettings'
+      required:
+        - group
+    MoveUserGroup:
+      type: object
+      properties:
+        group:
+          type: string
+        destination:
+          type: string
+        fixConflicts:
+          type: boolean
+      required:
+        - group
+        - destination
+        - fixConflicts
+    OAuthSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        tokenLifetime:
+          type: integer
+          format: 'seconds'
+          minimum: 1
+          maximum: 9999
+        clientId:
+          type: string
+        macKeyName:
+          type: string
+    OTPSettings:
+      type: object
+      properties:
+        required:
+          type: boolean
+        portList:
+          type: array
+          items:
+            type: string
+            enum: ['Host-API','Web','Client']
+        timeout:
+          type: integer
+          format: 'seconds'
+          minimum: 15
+          maximum: 300
+          default: 30
+    PasswordPolicy:
+      type: object
+      properties:
+        length:
+          $ref: '#/components/schemas/MinMax'
+        alphabetical:
+          $ref: '#/components/schemas/MinMax'
+        uppercase:
+          $ref: '#/components/schemas/MinMax'
+        lowercase:
+          $ref: '#/components/schemas/MinMax'
+        numeric:
+          $ref: '#/components/schemas/MinMax'
+        symbols:
+          $ref: '#/components/schemas/MinMax'
+    MinMax:
+      type: object
+      properties:
+        min:
+          type: integer
+        max:
+          type: integer
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+    PaginationBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/PaginationBase'
+    RetrievePermissions:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/RetrievePermissions'
+    SetPermissions:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/SetPermissions'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    CreateUserGroup:
+      value:
+        name: 'Group3'
+        parentGroup: 'Group1'
+        permissions:
+          logs:
+            perms: ['Add','Modify']
+          users:
+            perms: ['Add','Delete','Modify']
+          keys:
+            perms: []
+        passPolicy:
+          length:
+            min: 8
+            max: 15
+          uppercase:
+            min: 2
+            max: 2
+          numeric:
+            min: 2
+            max: 2
+          symbols:
+            min: 2
+            max: 2
+        loginsRequired: 1
+        userLocation: 'Database'
+        ldapVerify: false
+        ldapGroup: ''
+        oauthSettings:
+          enabled: true
+          tokenLifetime: 120
+          clientId: 'Futurex'
+          macKeyName: 'Test Key'
+        otpSettings:
+          required: true
+          portList: ['Host-API','Web']
+          timeout: 120
+    RetrieveUserGroup:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          name: 'Admin Group'
+          active: true
+          created: '2019-11-02 23:59:59'
+          numUsers: 3
+          parentGroup: ''
+          permissions:
+            Log:
+              display: 'View Logs'
+              perms: ['Add','Modify']
+            User:
+              display: 'Key Management'
+              perms: ['Add','Delete','Modify']
+            Key:
+              display: 'Key Management'
+              perms: []
+          passPolicy:
+            length:
+              min: 10
+              max: 15
+            uppercase:
+              min: 3
+              max: 3
+            numeric:
+              min: 3
+              max: 3
+            symbols:
+              min: 3
+              max: 3
+          loginsRequired: 2
+          userLocation: 'Database'
+          ldapVerify: true
+          ldapGroup: 'ATX Group'
+          oauthSettings:
+            enabled: true
+            tokenLifetime: 120
+            clientId: 'Futurex'
+            macKeyName: 'Test Key'
+          otpSettings:
+            required: true
+            portList: ['Host-API','Web']
+            timeout: 120
+    RetrieveUserGroupList:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          totalItems: 2
+          totalPages: 1
+          pageCount: 50
+          currentPage: 1
+          nextPage: 1
+          userGroups:
+            - name: 'Admin Group'
+              active: true
+              created: '2019-11-02 23:59:59'
+              numUsers: 3
+              parentGroup: ''
+              loginsRequired: 2
+              ldapVerify: true
+              otpEnabled: true
+            - name: 'Group 2'
+              active: true
+              created: '2019-11-02 23:59:59'
+              numUsers: 2
+              parentGroup: ''
+              loginsRequired: 2
+              ldapVerify: true
+              otpEnabled: true
+    RetrieveUserGroupListFiltered:
+      value:
+        status: 'success'
+        message: ''
+        response:
+          totalItems: 2
+          totalPages: 1
+          pageCount: 50
+          currentPage: 1
+          nextPage: 1
+          userGroups:
+            - name: 'Child Group 1'
+              active: true
+              created: '2019-11-02 23:59:59'
+              numUsers: 1
+              parentGroup: 'Admin Group'
+              loginsRequired: 2
+              ldapVerify: true
+              otpEnabled: true
+            - name: 'Child Group 2'
+              active: true
+              created: '2019-11-02 23:59:59'
+              numUsers: 1
+              parentGroup: 'Admin Group'
+              loginsRequired: 2
+              ldapVerify: true
+              otpEnabled: true
+    UpdateUserGroup:
+      value:
+        group: 'Child Group 2'
+        newName: 'Operations'
+        passPolicy:
+          length:
+            min: 10
+            max: 15
+          uppercase:
+            min: 3
+            max: 3
+          numeric:
+            min: 3
+            max: 3
+          symbols:
+            min: 3
+            max: 3
+        loginsRequired: 1
+        userLocation: 'Database'
+        ldapVerify: false
+        ldapGroup: ''
+        oauthSettings:
+          enabled: true
+          tokenLifetime: 120
+          clientId: 'Futurex'
+          macKeyName: 'Test Key'
+        otpSettings:
+          required: true
+          portList: ['Host-API','Web']
+          timeout: 120
+    MoveUserGroup:
+      value:
+        group: 'Child Group 2'
+        destination: 'Group 2'
+        fixConflicts: true

@@ -1,0 +1,18 @@
+<div ng-if="busy">
+    <fx-spinner class="fa-3x"/>
+</div>
+<div ng-if="!busy">
+  <div uib-carousel active="slide.active" no-wrap="true">
+      <div uib-slide ng-repeat="slide in slides track by slide.index" index="slide.index">
+          <table class="table table-hover table-striped table-sm table-bordered">
+              <thead>
+                  <th scope="col" ng-repeat="header in tableOptions.headers" class="col-sm-{{header.colSize}}">{{header.name}}</th>
+              </thead>
+              <tbody ng-repeat="event in slide.events">
+                  <td class="" ng-repeat="header in tableOptions.headers">{{event[header.attr]}}</td>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  <fx-button ng-click="downloadPeerLogs()">Download Peering Events</fx-button>
+</div>

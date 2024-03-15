@@ -1,0 +1,1056 @@
+<fx-box>
+	<fx-row>
+		<fx-column width="12">
+			<fx-row>
+				<!-- Progress Bar -->
+				<div class="submitter-form-progress-bar-wrapper">
+					<table class="submitter-form-progress-bar">
+						<tr class="submitter-form-progress-bar-row">
+							<!-- Left Button -->
+							<td class="submitter-form-progress-bar-button">
+								<div class="submitter-form-progress-bar-left-button">
+									<fx-button ng-show="getCurrentStepIndex() > 0" callback="prevStep" size="lg">
+										<i class="fa fa-arrow-left"></i>
+									</fx-button>
+								</div>
+							</td>
+							<!-- Steps -->
+							<td class="submitter-form-progress-bar-center">
+								<div class="submitter-form-progress-bar-steps" ng-style="{'width': cssPx(progressBarPx)}">
+									<!-- Labels -->
+									<div ng-style="{'width': cssPx(progressBarPx)}">
+										<span ng-repeat="step in steps track by $index"
+											class="submitter-form-progress-bar-step"
+											ng-style="{'width': cssPx(progressBarPx / steps.length - 1)}">
+											<span ng-class="{'submitter-form-progress-bar-step-text': currentStep.name === step.name}">
+												{{step.displayName}}
+											</span>
+											<i class="fa fa-circle-o submitter-form-progress-bar-step-dot"
+												ng-class="{'fa-circle': $index <= getCurrentStepIndex()}"
+												ng-style="{'color': stepDotColor($index),
+													'font-size': stepDotSize($index),
+													'text-shadow': stepDotShadow($index)}"></i>
+										</span>
+									</div>
+									<!-- Bar -->
+									<div class="progress progress-sm submitter-form-progress-bar-steps-progress">
+										<div ng-style="{width: getProgressWidth()}"
+											class="submitter-form-progress-bar-line progress-bar progress-bar-primary active">
+										</div>
+									</div>
+								</div>
+								<div class="submitter-form-progress-bar-steps-mini">
+									<h4>{{'Step ' + (getCurrentStepIndex() + 1) + ' of ' + steps.length}}</h4>
+								</div>
+							</td>
+							<!-- Right Button -->
+							<td class="submitter-form-progress-bar-button">
+								<div class="submitter-form-progress-bar-right-button">
+									<div ng-show="currentStep.canContinue">
+										<fx-button ng-hide="getCurrentStepIndex() === steps.length - 1" callback="nextStep" size="lg" id="continue-arrow">
+											<i class="fa fa-arrow-right"></i>
+										</fx-button>
+										<fx-button ng-show="getCurrentStepIndex() === steps.length - 1" callback="ctrl.submit" type="primary" size="lg">
+											Submit
+										</fx-button>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</fx-row>
+			<!-- Forms -->
+			<div ng-switch="currentStep.name">
+				<div ng-switch-when="signingCert">
+					<div class="submitter-form-row">
+						<div class="submitter-form-column">
+							<label>
+								Select a Signing Certificate
+								<span class="fx-widget-required-text"> *</span>
+							</label>
+							<div class="btn-group btn-block submitter-form-signing-cert-dropdown">
+								<button class="btn btn-block btn-default dropdown-toggle" data-toggle="dropdown">
+									<span class="pull-left" ng-if="ctrl.signingcerts.length <= 0">None Available</span>
+									<span ng-if="ctrl.requestsource == 'uploadHash' || ctrl.requestsource == 'localHash'" class="pull-left" ng-class="{'disabled-text': !ctrl.formdata.issuancePolicyData.allowObjectSigning}">
+										{{ctrl.formdata.issuancePolicyData.displayName}}
+									</span>
+									<span ng-if="ctrl.requestsource == 'neither' || ctrl.requestsource == 'local'" class="pull-left" ng-class="{'disabled-text': !ctrl.formdata.issuancePolicyData.allowUploads}">
+										{{ctrl.formdata.issuancePolicyData.displayName}}
+									</span>
+									<span ng-if="ctrl.formdata.isGeneratedPKI" class="pull-left" ng-class="{'disabled-text': !ctrl.formdata.issuancePolicyData.allowPKIGen}">
+										{{ctrl.formdata.issuancePolicyData.displayName}}
+									</span>
+									<span class="fa fa-caret-down pull-right"></span>
+								</button>
+								<ul class="dropdown-menu btn-block">
+									<li ng-repeat="cert in ctrl.signingcerts track by $index" ng-click="ctrl.selectsigningcert(cert);" class="cursor-pointer">
+										<div ng-if="ctrl.requestsource == 'localHash' || ctrl.requestsource == 'uploadHash'">
+                                            <span ng-class="{'disabled-text': !cert.allowHash}">&nbsp;{{cert.policyName}}</span>
+											<span ng-if="!cert.allowHash" class="submitter-form-pick-another-cert-text"> (File Signing Not Allowed)</span>
+										</div>
+										<div ng-if="ctrl.requestsource == 'neither' || ctrl.requestsource == 'local'">
+                                            <span ng-class="{'disabled-text': !cert.allowUploads}">&nbsp;{{cert.policyName}}</span>
+											<span ng-if="!cert.allowUploads" class="submitter-form-pick-another-cert-text"> (CSR Uploads Not Allowed)</span>
+										</div>
+										<div ng-if="ctrl.formdata.isGeneratedPKI">
+                                            <span ng-class="{'disabled-text': !cert.allowPKIGen}">&nbsp;{{cert.policyName}}</span>
+											<span ng-if="!cert.allowPKIGen" class="submitter-form-pick-another-cert-text"> (Generated PKI Not Allowed)</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="submitter-form-signing-cert-radio-buttons">
+								<input type="radio"
+									ng-model="ctrl.requestsource"
+									value="neither"
+									name="pki_options">
+										I already have a CSR
+								</input>
+								</br>
+								<input type="radio"
+									ng-model="ctrl.requestsource"
+									value="remote"
+									name="pki_options">
+										Use remote generated PKI
+								</input>
+								</br>
+								<input type="radio"
+									ng-model="ctrl.requestsource"
+									value="localHash"
+									name="pki_options">
+										Hash a file
+								</input>
+								</br>
+								<input type="radio"
+									ng-model="ctrl.requestsource"
+									value="uploadHash"
+									name="pki_options">
+										Upload a file hash
+								</input>
+								</br>
+							</div>
+
+							<div class="submitter-form-token">
+
+								<fx-select-arr
+									label="Providers"
+									required="true"
+									options="ctrl.tokendata.list_providers"
+									selected="ctrl.formdata.token_provider_name"
+									ng-class="{'hidden': ctrl.tokendata.is_local_token === false}">
+								</fx-select-arr>
+
+								<fx-select-obj-2
+										label="Key Type"
+										required="true"
+										options="ctrl.formdata.issuancePolicyData.keyTypes"
+										selected="ctrl.formdata.keyTypeSelected"
+										groupmode="true"
+										ng-if="ctrl.tokendata.is_local_token">
+									<fx-select-arr
+										ng-class="{'hidden': submitterViewService.getObjKeys(ctrl.formdata.keyTypeSelected)[0] !== 'ECC'}"
+										options="submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).step"
+										selected="ctrl.formdata.keyTypeSelectedSize">
+									</fx-select-arr>
+									<input class="form-control" type="number"
+										ng-model="ctrl.formdata.keyTypeSelectedSize"
+										ng-class="{'hidden': submitterViewService.getObjKeys(ctrl.formdata.keyTypeSelected)[0] === 'ECC'}"
+										min="{{submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).min}}"
+										max="{{submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).max}}"
+										step="{{submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).step}}">
+								</fx-select-obj-2>
+									
+								<fx-input
+									label="Key Name"
+									required="true"
+									type="text"
+									value="ctrl.formdata.token_key_name"
+									ng-class="{'hidden': ctrl.tokendata.is_local_token === false}">
+								</fx-input>
+							</div><br>
+							<span class="fx-widget-required-text pull-right"> * = required</span>
+						</div>
+					</div>
+				</div>
+				<div ng-switch-when="approvalGroup">
+					<div class="submitter-form-row">
+						<div class="submitter-form-column">
+							<fx-select-arr-obj
+								label="Select an Approval Group"
+								required="true"
+								options="ctrl.approvalgroups"
+								optionlabel="name"
+								selected="ctrl.formdata.approvalGroupData"
+								onselected="ctrl.selectapprovalgroup();">
+							</fx-select-arr-obj>
+						</div>
+					</div>
+				</div>
+                <div ng-switch-when="ldapAuth">
+                    <div class="submitter-form-row">
+                        <div class="submitter-form-column">
+                            <label>
+                                Log into LDAP
+                            </label>
+                            <input
+                                id="ldapUsername"
+                                type="text"
+                                class="form-control"
+                                placeholder="Username"
+                                autofocus
+                                required="true"
+                                ng-model="ctrl.formdata.ldapUsername"
+                                >
+                            <input
+                                id="ldapPassword"
+                                type="password"
+                                class="form-control"
+                                placeholder="Password"
+                                required="true"
+                                ng-model="ctrl.formdata.ldapPassword"
+                                >
+                            <span ng-if="!ctrl.formdata.ldap_auth.authenticated && ctrl.formdata.ldap_auth.message">
+                                <div class="submitter-form-row">
+                                    <span class="error-text">
+                                        {{ ctrl.formdata.ldap_auth.message}}
+                                    </span>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="uploadCsr">
+					<div class="submitter-form-row">
+						<div class="submitter-form-column">
+							<label>
+								Upload a Request
+								<span class="fx-widget-required-text"> *</span>
+							</label>
+							<fx-raw-file
+                                filestring="ctrl.formdata.textRequest"
+                                accept=".crt,.cer,.der,.pem,.csr"
+                                onfile="ctrl.fileupload"
+								onloaded="setUploadHint(); showUploadHint();">
+							</fx-raw-file>
+						</div>
+					</div>
+				</div>
+                <div ng-switch-when="uploadHash">
+                    <div class="submitter-form-row">
+                        <div class="submitter-form-column">
+                            <label>
+                                {{ctrl.uploadLabel}}
+                                <span class="fx-widget-required-text"> *</span>
+                            </label>
+                            <div ng-if="ctrl.requestsource === 'uploadHash'">
+                                <p> Expected File Format:&nbsp;<b>
+                                    <span title="The hex encoded hash">
+                                        <u><code>Digest</code></u>
+                                    </span>&Tab;
+                                    <span title="The filename of the hashed object">
+                                        <u><code>Name</code></u>
+                                    </span>
+                                </b></p>
+                            </div>
+                            <div ng-switch="ctrl.requestsource">
+                                <fx-raw-file
+                                    ng-switch-when="uploadHash"
+                                    accept=".md5,.ripemd,.sha1,.sha224,.sha256,.sha384,.sha512"
+                                    filestring="ctrl.formdata.hash"
+                                    onfile="ctrl.fileupload"
+                                    onloaded="setUploadHint(); showUploadHint();">
+                                </fx-raw-file>
+                                <fx-raw-file
+                                    ng-switch-when="localHash"
+                                    filestring="ctrl.formdata.hash"
+                                    onfile="ctrl.fileupload"
+                                    onloaded="setUploadHint(); showUploadHint();">
+                                </fx-raw-file>
+                            </div>
+                            <fx-select-arr
+                                   label="Select hash type"
+                                   required="true"
+                                   options="ctrl.formdata.issuancePolicyData.hashAlgorithms"
+                                   selected="ctrl.formdata.hashAlgorithm">
+                            </fx-select-arr>
+                            <fx-select-arr
+                                   label="Select padding mode"
+                                   required="true"
+                                   options="ctrl.formdata.issuancePolicyData.paddingModes"
+                                   selected="ctrl.formdata.padding">
+                            </fx-select-arr>
+                            <form ng-if="ctrl.formdata.padding === 'PSS'">
+                                <label>
+                                    Salt Length
+                                    <span class="fx-widget-required-text"> *</span>
+                                </label>
+                                <input class="form-control"
+                                    id="saltLength"
+                                    type="number"
+                                    min="0"
+                                    max="10000"
+                                    step="1"
+                                    value="ctrl.formdata.saltLength">
+                                </input>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+				<div ng-switch-when="v3Profile">
+					<div class="submitter-form-row">
+						<div class="submitter-form-column">
+							<fx-select-obj
+								label="Select an extension profile"
+								required="true"
+								options="ctrl.formdata.issuancePolicyData.profiles"
+								selected="ctrl.formdata.extensionProfile">
+							</fx-select-obj>
+							<br>
+							<label>
+								Extensions
+								<span ng-if="!ctrl.formdata.extensionProfileData.allowUserDefined">
+									<span> - </span>
+									<span class="error-text">
+										User-defined extensions not allowed for this profile
+									</span>
+								</span>
+							</label>
+							<fx-select-arr-obj
+								ng-init="ctrl.formdata.v3ExtOptions = submitterViewService.removeDuplicateOptions(
+									ctrl.formdata.v3ExtOptions, ctrl.formdata.v3Extensions);"
+								options="ctrl.formdata.v3ExtOptions"
+								optionlabel="name"
+								groupmode= "true"
+								selected="ctrl.selectedExtension"
+								disabled="{{{true: 'true', false: null}[!ctrl.formdata.extensionProfileData.allowUserDefined]}}">
+								<button class="btn btn-default"
+									ng-click="submitterViewService.addExtension(ctrl.selectedExtension, ctrl.formdata);"
+									ng-disabled="!ctrl.formdata.extensionProfileData.allowUserDefined">Add</button>
+							</fx-select-arr-obj>
+							<br>
+							<uib-accordion>
+								<div uib-accordion-group
+									class="panel-default"
+									is-open="extension.opened"
+									ng-repeat="extension in ctrl.formdata.v3Extensions track by $index">
+									<uib-accordion-heading>
+										<div class="submitter-form-accordion-header">
+											<span class="pull-left">{{extension.name}}</span>
+											<i class="fa fa-caret-down pull-right" ng-class="{'fa-caret-up': extension.opened}"></i>
+										</div>
+									</uib-accordion-heading>
+									<div ng-show="extension.mode === 'Uploaded' || extension.mode === 'Included'">
+										<button class="btn btn-default pull-right" ng-click="submitterViewService.removeExtension(extension, ctrl.formdata);">
+											<i class="fa fa-trash"></i>
+										</button>
+									</div>
+									<div class="v3-extension-infobox">
+										<div class="v3-extension-infobox-item">
+											<span class="v3-extension-infobox-item-text">Mode:</span>
+											<span>{{extension.mode}}</span>
+										</div>
+										<div class="v3-extension-infobox-item">
+											<input type="checkbox"
+												ng-model="extension.critical"
+												ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+											<span>Critical</span>
+										</div>
+										<div class="v3-extension-infobox-item" ng-if="extension.name === 'Custom'">
+											<span class="v3-extension-infobox-item-text">OID:</span><br>
+											<div id="custom-oid-{{$index}}" class="v3-extension-infobox-oid-input">
+												<fx-input-mask
+													value="extension.oid"
+													regex="true"
+													mask="\d+(?:\.\d+)+"
+													restrict="[^0-9\.]+"
+													whenblurred="submitterViewService.checkCustomOID(extension, $index, ctrl.formdata);">
+												</fx-input-mask>
+											</div>
+										</div>
+										<div class="v3-extension-infobox-item" ng-if="extension.useDefaultForm">
+											<span class="v3-extension-infobox-item-text">Value:</span>
+											<textarea class="v3-extension-infobox-value-textarea"
+												ng-model="extension.value"
+												ng-change="submitterViewService.updateASN1Preview(extension);"
+												ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);"></textarea>
+										</div>
+									</div>
+									<div ng-show="extension.useDefaultForm">
+										<label>
+											ASN.1 Preview
+											<span ng-if="extension.customFormData.parseFailed">
+												<span> - </span>
+												<span class="error-text">
+													Error parsing input ASN.1 structure
+												</span>
+											</span>
+										</label>
+										<br>
+										<textarea
+											class="v3-asn1-preview-textarea"
+											ng-model="extension.customFormData.parsedPreview"
+											disabled="true"></textarea>
+									</div>
+									<div ng-switch="extension.oid">
+										<!-- Subject Alternate Name -->
+										<div ng-switch-when="2_5_29_17">
+											<fx-select-arr-obj
+												label="Subject Alternate Name"
+												options="extension.customFormData.options"
+												optionlabel="name"
+												groupmode= "true"
+												selected="extension.customFormData.selected"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+												<button
+													class="btn btn-default pull-right"
+													ng-click="submitterViewService.addItemToExtension(extension.customFormData.names, extension.customFormData.selected);"
+													ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+														Add
+												</button>
+											</fx-select-arr-obj>
+											<br>
+											<uib-accordion>
+												<div uib-accordion-group
+													class="panel-default"
+													heading="{{item.name}}"
+													ng-repeat="item in extension.customFormData.names track by $index">
+													<button
+														class="btn btn-default subject-alternate-name-button"
+														ng-click="submitterViewService.removeItemFromExtension(extension.customFormData.names, $index);"
+														ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+															<i class="fa fa-trash"></i>
+													</button>
+													<br><br>
+													<div ng-if="item.name === 'Email' || item.name === 'DNS Name' || item.name === 'URI'">
+														<label>Value</label>
+														<input
+															type="text"
+															class="form-control subject-alternate-name-input"
+															ng-model="extension.customFormData.names[$index].value"
+															ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+													</div>
+													<div ng-if="item.name === 'IP Address'">
+														<label>Value</label>
+														<fx-input-mask
+															class="subject-alternate-name-input"
+															value="extension.customFormData.names[$index].value"
+															regex="true"
+															mask="(\d{1,3}\.){3}(\d{1,3})"
+															restrict="[^0-9\.]+"
+															disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+														</fx-input-mask>
+													</div>
+													<div ng-if="item.name === 'Other Name'">
+														<label>OID</label>
+														<fx-input-mask
+															value="item.oid"
+															regex="true"
+															mask="\d+(?:\.\d+)+"
+															restrict="[^0-9\.]+"
+															disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+														</fx-input-mask>
+														<label>Value</label><br>
+														<textarea
+															ng-init="submitterViewService.updateASN1Preview(item);"
+															class="subject-alternate-name-textarea"
+															ng-model="item.value"
+															ng-change="submitterViewService.updateASN1Preview(item);"
+															ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);"></textarea>
+														<label>
+															ASN.1 Preview
+															<span ng-if="item.customFormData.parseFailed">
+																<span> - </span>
+																<span class="error-text">
+																	Error parsing input ASN.1 structure
+																</span>
+															</span>
+														</label>
+														<br>
+														<textarea
+															class="subject-alternate-name-textarea"
+															ng-model="item.customFormData.parsedPreview"
+															disabled="true"></textarea>
+													</div>
+													<div ng-if="item.name === 'Directory Name'">
+														<fx-select-arr-obj
+															label="Directory Name"
+															options="item.types"
+															optionlabel="name"
+															groupmode= "true"
+															selected="item.selected"
+															disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+															<button
+																class="btn btn-default pull-right"
+																ng-click="submitterViewService.addItemToExtension(item.names, item.selected);"
+																ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																	Add
+															</button>
+														</fx-select-arr-obj>
+														<br>
+														<uib-accordion>
+															<div uib-accordion-group
+																class="panel-default"
+																heading="{{directoryName.name}}"
+																ng-repeat="directoryName in item.names track by $index">
+																<button
+																	class="btn btn-default subject-alternate-name-button"
+																	ng-click="submitterViewService.removeItemFromExtension(item.names, $index);"
+																	ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																		<i class="fa fa-trash"></i>
+																</button>
+																<br><br>
+																<div ng-show="directoryName.name === 'Custom'">
+																	<label>OID</label>
+																	<fx-input-mask
+																		value="directoryName.oid"
+																		regex="true"
+																		mask="\d+(?:\.\d+)+"
+																		restrict="[^0-9\.]+"
+																		disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+																	</fx-input-mask>
+																</div>
+																<label>Value</label>
+																<input
+																	type="text"
+																	class="form-control"
+																	ng-model="directoryName.value"
+																	ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+															</div>
+														</uib-accordion>
+													</div>
+												</div>
+											</uib-accordion>
+										</div>
+										<!-- Authority Key Identifier -->
+										<div ng-switch-when="2_5_29_35">
+											<fx-select-arr-obj
+												optionlabel="displayName"
+												options="extension.customFormData.options"
+												selected="extension.customFormData.selected"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+											</fx-select-arr-obj>
+										</div>
+										<!-- Subject Key Identifier -->
+										<div ng-switch-when="2_5_29_14">
+											<fx-select-arr-obj
+												optionlabel="displayName"
+												options="extension.customFormData.options"
+												selected="extension.customFormData.selected"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+											</fx-select-arr-obj>
+										</div>
+										<!-- Key Usage -->
+										<div ng-switch-when="2_5_29_15" class="key-usage">
+											<fx-checkbox
+												ng-repeat="option in extension.customFormData.options"
+												description="{{option.name}}"
+												value="option.value"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+											</fx-checkbox>
+										</div>
+										<!-- Extended Key Usage -->
+										<div ng-switch-when="2_5_29_37" class="extended-key-usage">
+											<fx-checkbox
+												ng-repeat="option in extension.customFormData.options"
+												description="{{option.name}}"
+												value="option.value"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+											</fx-checkbox>
+										</div>
+										<!-- Authority Information Access -->
+										<div ng-switch-when="1_3_6_1_5_5_7_1_1">
+											<button
+												class="btn btn-default"
+												ng-click="submitterViewService.addItemToExtension(extension.customFormData.items, extension.customFormData.defaultItem);"
+												ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+													Add
+											</button>
+											<ul class="authority-information-access-ul">
+												<li ng-repeat="item in extension.customFormData.items track by $index">
+													<fx-select-arr-obj
+														class="authority-information-access-types"
+														optionlabel="name"
+														options="extension.customFormData.types"
+														selected="item.type"
+														disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+													</fx-select-arr-obj>
+													<input
+														type="text"
+														class="form-control authority-information-access-input"
+														ng-model="item.value"
+														ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+													<button
+														class="btn btn-default authority-information-access-button"
+														ng-click="submitterViewService.removeItemFromExtension(extension.customFormData.items, $index);"
+														ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+															<i class="fa fa-trash"></i>
+													</button>
+												</li>
+											</ul>
+										</div>
+										<!-- CRL Distribution Points -->
+										<div ng-switch-when="2_5_29_31">
+											<button
+												class="btn btn-default"
+												ng-click="submitterViewService.addItemToExtension(extension.customFormData.items, extension.customFormData.defaultItem);"
+												ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+													Add
+											</button>
+											<ul class="crl-distribution-points-ul">
+												<li ng-repeat="item in extension.customFormData.items track by $index">
+													<fx-select-arr
+														class="crl-distribution-points-types"
+														options="extension.customFormData.types"
+														selected="item.type"
+														disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+													</fx-select-arr>
+													<input
+														type="text"
+														class="form-control crl-distribution-points-input"
+														ng-model="item.value"
+														ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+													<button
+														class="btn btn-default crl-distribution-points-button"
+														ng-click="submitterViewService.removeItemFromExtension(extension.customFormData.items, $index);"
+														ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+															<i class="fa fa-trash"></i>
+													</button>
+												</li>
+											</ul>
+										</div>
+										<!-- Basic Constraints -->
+										<div ng-switch-when="2_5_29_19" class="basic-constraints">
+											<fx-checkbox
+												description="CA"
+												value="extension.customFormData.ca"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+											</fx-checkbox>
+											<fx-checkbox
+												description="Path Length Constraint"
+												value="extension.customFormData.pathLengthConstraint"
+												disabled="{{{true: 'true', false: null}[!extension.customFormData.ca || submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+											</fx-checkbox>
+											<input
+												type="number"
+												min="0"
+												max="99"
+												step="1"
+												ng-model="extension.customFormData.pathLengthValue"
+												ng-disabled="!extension.customFormData.pathLengthConstraint || !extension.customFormData.ca || submitterViewService.isExtensionDisabled(extension, ctrl.formdata)">
+										</div>
+										<!-- Certificate Poliices -->
+										<div ng-switch-when="2_5_29_32">
+											<fx-select-arr-obj
+												label="Policy Information"
+												optionlabel="name"
+												options="extension.customFormData.policyTypes"
+												selected="extension.customFormData.selectedPolicy"
+												groupmode= "true"
+												disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+												<button
+													class="btn btn-default"
+													ng-click="submitterViewService.addItemToExtension(extension.customFormData.policies, extension.customFormData.selectedPolicy);"
+													ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+														Add
+												</button>
+											</fx-select-arr-obj>
+											<br>
+											<uib-accordion>
+												<div uib-accordion-group
+													class="panel-default"
+													heading="{{policy.name}}"
+													ng-repeat="policy in extension.customFormData.policies track by $index">
+													<button
+														class="btn btn-default pull-right"
+														ng-click="submitterViewService.removeItemFromExtension(extension.customFormData.policies, $index);"
+														ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+															<i class="fa fa-trash"></i>
+													</button>
+													<br><br>
+													<fx-select-arr-obj
+														label="Qualifier Information"
+														optionlabel="name"
+														options="extension.customFormData.qualifierTypes"
+														selected="extension.customFormData.selectedQualifier"
+														groupmode= "true"
+														disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+														<button
+															class="btn btn-default"
+															ng-click="submitterViewService.addItemToExtension(policy.qualifiers, extension.customFormData.selectedQualifier);"
+															ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																Add
+														</button>
+													</fx-select-arr-obj>
+													<br>
+													<uib-accordion>
+														<div uib-accordion-group
+															class="panel-default"
+															heading="{{qualifier.name}}"
+															ng-repeat="qualifier in policy.qualifiers track by $index">
+															<button
+																class="btn btn-default pull-right"
+																ng-click="submitterViewService.removeItemFromExtension(policy.qualifiers, $index);"
+																ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																	<i class="fa fa-trash"></i>
+															</button>
+															<br><br>
+															<div ng-switch="qualifier.name">
+																<div ng-switch-when="User Notice">
+																	<fx-checkbox
+																		description="Use Explicit Text"
+																		value="qualifier.useExplicitText"
+																		disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+																	</fx-checkbox>
+																	<label>Explicit Text</label>
+																	<input
+																		type="text"
+																		class="form-control"
+																		ng-model="qualifier.explicitText"
+																		ng-disabled="!qualifier.useExplicitText || submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																	<fx-checkbox
+																		description="Use Notice Reference"
+																		value="qualifier.useNoticeReference"
+																		disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+																	</fx-checkbox>
+																	<label>Organization</label>
+																	<input
+																		type="text"
+																		class="form-control"
+																		ng-model="qualifier.noticeReference.organization"
+																		ng-disabled="!qualifier.useNoticeReference || submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																	<label>Notice Numbers</label>
+																	<input
+																		type="text"
+																		class="form-control"
+																		ng-model="qualifier.noticeReference.noticeNumbers"
+																		ng-disabled="!qualifier.useNoticeReference || submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																</div>
+																<div ng-switch-when="CPS URI">
+																	<label>URI</label>
+																	<input
+																		type="text"
+																		class="form-control"
+																		ng-model="qualifier.uri"
+																		ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);">
+																</div>
+																<div ng-switch-when="Custom">
+																	<label>OID</label>
+																	<fx-input-mask
+																		value="qualifier.oid"
+																		regex="true"
+																		mask="\d+(?:\.\d+)+"
+																		restrict="[^0-9\.]+"
+																		disabled="{{{true: 'true', false: null}[submitterViewService.isExtensionDisabled(extension, ctrl.formdata)]}}">
+																	</fx-input-mask>
+																	<label>Value</label><br>
+																	<textarea
+																		class="v3-asn1-preview-textarea"
+																		ng-model="qualifier.value"
+																		ng-disabled="submitterViewService.isExtensionDisabled(extension, ctrl.formdata);"></textarea>
+																</div>
+															</div>
+														</div>
+													</uib-accordion>
+												</div>
+											</uib-accordion>
+										</div>
+									</div>
+								</div>
+							</uib-accordion>
+						</div>
+					</div>
+				</div>
+				<div ng-switch-when="dn">
+					<div class="submitter-form-row">
+						<div class="submitter-form-column">
+							<label>
+								Select a DN Profile
+								<span class="fx-widget-required-text"> *</span>
+							</label>
+							<fx-select-arr-obj
+								options="ctrl.formdata.DNProfiles"
+								optionlabel="name"
+								selected="ctrl.formdata.selectedDNProfile">
+							</fx-select-arr-obj>
+							<br>
+							<div ng-repeat="(oid, field) in ctrl.formdata.selectedDNProfile.extensions track by $index">
+								<fx-input-mask
+									ng-if="oid === 'OID_2_5_4_6'"
+									label="Country"
+									iconclass="globe"
+									mask="A{2}"
+									value="ctrl.formdata.subject.OID_2_5_4_6.value">
+								</fx-input-mask>
+                                <fx-input
+									ng-if="oid === 'OID_2_5_4_8'"
+									label="State/Province"
+									iconclass="map-marker"
+                                    type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_8.value">
+                                </fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_7'"
+									label="Locality"
+									iconclass="map-pin"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_7.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_10'"
+									label="Organization"
+									iconclass="building"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_10.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_11'"
+									label="Organizational Unit"
+									iconclass="building-o"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_11.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_12'"
+									label="Title"
+									iconclass="tag"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_12.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_3'"
+									label="Common Name"
+									iconclass="users"
+									type="text"
+									required="true"
+									value="ctrl.formdata.subject.OID_2_5_4_3.value">
+								</fx-input>
+								<fx-input-mask
+									ng-if="oid === 'OID_1_2_840_113549_1_9_1'"
+									label="E-mail"
+									iconclass="envelope"
+									regex="true"
+									mask="{{submitterViewService.emailRegex()}}"
+									value="ctrl.formdata.subject.OID_1_2_840_113549_1_9_1.value">
+								</fx-input-mask>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_65'"
+									label="Pseudonym"
+									iconclass="user-secret"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_65.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_15'"
+									label="Business Category"
+									iconclass="briefcase"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_15.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_46'"
+									label="DN Qualifier"
+									iconclass="cog"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_46.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_0_9_2342_19200300_100_1_25'"
+									label="Domain Component"
+									iconclass="puzzle-piece"
+									type="text"
+									value="ctrl.formdata.subject.OID_0_9_2342_19200300_100_1_25.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_44'"
+									label="Generation Qualifier"
+									iconclass="cog"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_44.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_42'"
+									label="Given Name"
+									iconclass="user"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_42.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_43'"
+									label="Initials"
+									iconclass="font"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_43.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_1_3_6_1_4_1_311_60_2_1_3'"
+									label="Jurisdiction of Incorporation Country Name"
+									iconclass="globe"
+									type="text"
+									value="ctrl.formdata.subject.OID_1_3_6_1_4_1_311_60_2_1_3.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_1_3_6_1_4_1_311_60_2_1_2'"
+									label="Jurisdiction of Incorporation State or Province Name"
+									iconclass="map-marker"
+									type="text"
+									value="ctrl.formdata.subject.OID_1_3_6_1_4_1_311_60_2_1_2.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_41'"
+									label="Name"
+									iconclass="user"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_41.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_17'"
+									label="Postal Code"
+									iconclass="envelope-o"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_17.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_5'"
+									label="Serial Number"
+									iconclass="tag"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_5.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_9'"
+									label="Street Address"
+									iconclass="map-pin"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_9.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_4'"
+									label="Surname"
+									iconclass="user"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_4.value">
+								</fx-input>
+								<fx-input
+									ng-if="oid === 'OID_2_5_4_45'"
+									label="X.500 Unique Identifier"
+									iconclass="file-text-o"
+									type="text"
+									value="ctrl.formdata.subject.OID_2_5_4_45.value">
+								</fx-input>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-switch-when="config">
+					<div class="submitter-form-row">
+						<div class="submitter-form-column submitter-form-wide-column">
+							<fx-row>
+								<fx-column width="6">
+									<fx-input
+										label="Name"
+										type="text"
+										value="ctrl.formdata.name"
+										required="true"
+										autofocus>
+									</fx-input>
+									<label>Notes</label>
+									<textarea
+										placeholder="Notes"
+										class="textarea fx-textarea submitter-form-textarea"
+										ng-model="ctrl.formdata.notes">
+									</textarea>
+								</fx-column>
+								<fx-column width="6">
+									<fx-box>
+										<div class="submitter-form-infobox">
+											<div class="submitter-form-infobox-item submitter-form-infobox-first-item">
+												<span class="submitter-form-infobox-item-text">Status:</span>
+												<span>{{$ctrl.formdata.status}}</span>
+											</div>
+											<div class="submitter-form-infobox-item">
+												<span class="submitter-form-infobox-item-text">Uploader:</span>
+												<small>{{ctrl.formdata.uploaderName}}</small>
+											</div>
+											<div class="submitter-form-infobox-item submitter-form-infobox-last-item">
+												<span class="submitter-form-infobox-item-text">Load Time:</span>
+												<small>{{ctrl.formdata.loadTime}}</small>
+											</div>
+										</div>
+									</fx-box>
+									<fx-date
+										label="Expiration"
+										maxdate="{{ctrl.formdata.issuancePolicyData.expiration}}"
+										required="true"
+										datestring="ctrl.formdata.expiration">
+									</fx-date><br>
+									<div ng-switch="ctrl.formdata.isGeneratedPKI">
+										<fx-input-mask
+											ng-switch-when="false"
+											label="Emails"
+											iconclass="envelope"
+											regex="true"
+											csvregex="true"
+											forceregex="false"
+											mask="{{submitterViewService.emailRegex()}}"
+											value="ctrl.formdata.emails">
+										</fx-input-mask>
+										<fx-input-mask
+											ng-switch-when="true"
+											label="Emails"
+											iconclass="envelope"
+											regex="true"
+											csvregex="true"
+											forceregex="false"
+											mask="{{submitterViewService.emailRegex()}}"
+											required="true"
+											value="ctrl.formdata.emails">
+										</fx-input-mask>
+										<span class="emails-delimiter">
+											Multiple emails delimited by ',' or ';'
+										</span>
+									</div>
+									<fx-select-obj-2
+											ng-if="ctrl.formdata.isGeneratedPKI"
+											label="Key Type"
+											required="true"
+											options="ctrl.formdata.issuancePolicyData.keyTypes"
+											selected="ctrl.formdata.keyTypeSelected"
+											groupmode="true">
+										<fx-select-arr
+											ng-class="{'hidden': submitterViewService.getObjKeys(ctrl.formdata.keyTypeSelected)[0] !== 'ECC'}"
+											options="submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).step"
+											selected="ctrl.formdata.keyTypeSelectedSize">
+										</fx-select-arr>
+										<input class="form-control" type="number"
+											ng-model="ctrl.formdata.keyTypeSelectedSize"
+											ng-class="{'hidden': submitterViewService.getObjKeys(ctrl.formdata.keyTypeSelected)[0] === 'ECC'}"
+											min="{{submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).min}}"
+											max="{{submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).max}}"
+											step="{{submitterViewService.getFirstInnerValue(ctrl.formdata.keyTypeSelected).step}}">
+									</fx-select-obj-2>
+									<fx-input
+										ng-if="ctrl.formdata.isGeneratedPKI"
+										label="Password"
+										type="password"
+										iconclass="lock"
+										required="true"
+										value="ctrl.formdata.password">
+									</fx-input>
+									<fx-input
+										ng-if="ctrl.formdata.isGeneratedPKI"
+										label="Verify Password"
+										type="password"
+										iconclass="lock"
+										required="true"
+										value="ctrl.formdata.verify_password">
+									</fx-input>
+								</fx-column>
+							</fx-row>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fx-column>
+	</fx-row>
+</fx-box>

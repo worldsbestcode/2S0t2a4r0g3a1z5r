@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <h4 class="modal-title">Select Device Role</h4>
+</div>
+<div class="modal-body">
+  <fx-box>
+    <fx-row>
+      <fx-column width="12">
+        <div>
+          <fx-select-obj
+            label="Role"
+            options="roleTypes"
+            selected="formdata.deviceRole"
+            groupmode="false">
+          </fx-select-obj>
+        </div>
+      </fx-column>
+    </fx-row>
+  </fx-box>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn" data-ng-click="cancel()">Cancel</button>
+  <button type="button" class="btn btn-primary" data-ng-click="submit()">OK</button>
+</div>

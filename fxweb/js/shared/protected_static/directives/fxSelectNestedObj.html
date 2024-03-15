@@ -1,0 +1,22 @@
+<div>
+	<label ng-if="$ctrl.label">
+		<span ng-if="$ctrl.required" class="fx-widget-required-text"> *</span>
+	</label>
+	<div class="btn-group btn-block">
+    <button
+      class="btn btn-block {{$ctrl.buttonClasses || 'btn-default btn-md' }} dropdown-toggle"
+      data-toggle="dropdown"
+      ng-disabled="$ctrl.disabled">
+			<span class="pull-left">{{selectedFilter($ctrl.selected);}}</span>
+			<span class="fa fa-caret-down pull-right"></span>
+		</button>
+		<ul class="dropdown-menu btn-block">
+			<div ng-repeat="parent in $ctrl.nestedOptions">
+				<li class="cursor-pointer" ng-click="$ctrl.selected=parent.id;">&nbsp;{{parent.name}}</li>
+				<div>
+					<li ng-repeat="child in parent.children" class="cursor-pointer nested-obj-sel-text" ng-click="$ctrl.selected=child.id;">&nbsp;{{child.name}}</li>
+				</div>
+			</div>
+		</ul>
+	</div>
+</div>

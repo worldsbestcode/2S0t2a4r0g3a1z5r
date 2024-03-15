@@ -1,0 +1,59 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "Filter",
+    "type": "object",
+    "definitions": {
+        "defObjectIDMap": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {
+                "^[0-9]+$": {"type": "string"}
+            }
+        },
+    },
+    "properties": {
+        "manager": {"type": "string"},
+        "chunk": {"type": "integer"},
+        "chunkSize": {"type": "integer"},
+        "chunkCount": {"type": "integer"},
+        "matchCount": {"type": "integer"},
+        "flags": {
+            "type": "array",
+            "items": {
+                "enum": [
+                    "ARCHIVED_INCLUDE",
+                    "ARCHIVED_ONLY",
+                    "DELETED_INCLUDE",
+                    "DELETED_ONLY",
+                    "EXPIRED_INCLUDE",
+                    "EXPIRED_ONLY",
+                    "INACTIVE_INCLUDE",
+                    "INACTIVE_ONLY",
+                    "IMMEDIATE_PARENT",
+                    "ANCESTORS",
+                    "IMMEDIATE_CHILDREN",
+                    "DESCENDANTS",
+                    "IGNORE_GROUPS",
+                    "IGNORE_LEAVES",
+                    "API_QUERY",
+                    "GUI_QUERY",
+                    "NOT_IDS",
+                    "NO_COUNT"
+                ]
+            },
+            "uniqueItems": true
+        },
+        "filterType": {
+            "enum": [
+                "COUNT",
+                "IDENTIFIERS",
+                "RESULTS",
+                "REPORT",
+                "ARCHIVE"
+            ]
+        },
+        "sortAscending": {"type": "boolean"},
+        "distinctOn": {"type": "string"},
+        "objectIDs": { "$ref": "#/definitions/defObjectIDMap" },
+    }
+}

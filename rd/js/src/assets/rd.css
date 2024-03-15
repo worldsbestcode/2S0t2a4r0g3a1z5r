@@ -1,0 +1,6 @@
+.floating-error {
+  position: absolute;
+  z-index: 1;
+  color: red;
+  border: 1px solid red;
+}

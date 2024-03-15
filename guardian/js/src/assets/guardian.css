@@ -1,0 +1,22 @@
+.text-box {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-weight: bold;
+  width: 80%;
+  margin: auto;
+}
+.error-box {
+  color: red;
+  border: 1px solid red;
+}
+.success-box {
+  color: green;
+  border: 1px solid black;
+}
+.info-box {
+  color: black;
+  border: 1px solid black;
+}
+.padded-div {
+  padding: 10px 10px 10px 10px;
+}

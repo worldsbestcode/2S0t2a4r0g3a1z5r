@@ -1,0 +1,65 @@
+<div class="stat-charts">
+    <div class="box box-info">
+        <div class="box-header stat-chart-header">
+            <fx-row>
+                <span class="stat-chart-expand-button">
+                    <span class="expand-icon" ng-click="openModal('currConnChart');">
+                        <i class="fa fa-expand"></i>
+                    </span>
+                </span>
+                <h3 class="stat-chart-title box-title">
+                    <i class="fa fa-{{statCharts.currConnIcon}}"></i>
+                    {{statCharts.currConnTitle}}
+                </h3>
+            </fx-row>
+            <fx-row>
+                <div class="stat-chart-live-info">
+                    <div ng-show="isLiveMap['currConnChart']">
+                        <div class="stat-chart-live-icon stat-chart-live-icon-pulsate"></div>
+                        Live - <small>Last Updated: {{chartLastUpdated | date:'HH:mm:ss':'GMT'}}</small>
+                    </div>
+                    <div ng-hide="isLiveMap['currConnChart']" class="stat-chart-not-live">
+                        Select a range that includes today's date for live updates
+                    </div>
+                </div>
+            </fx-row>
+            <div class="stat-chart-date-begin">
+                <div class="stat-chart-date-begin-text">Begin Date:</div>
+                <input type="text"
+                    class="stat-chart-datepicker stat-chart-date-begin-datepicker"
+                    uib-datepicker-popup="yyyy-MM-dd"
+                    ng-model="statSelectedDate.currConnChart.begin"
+                    ng-change="changeSeriesOrDate('currConnChart');"
+                    is-open="currConnChartBeginDateOpened"
+                    ng-click="currConnChartBeginDateOpened = !currConnChartBeginDateOpened"
+                    show-button-bar=false>
+            </div>
+            <br class="stat-chart-date-divider">
+            <div class="stat-chart-date-end">
+                <div class="stat-chart-date-end-text">End Date:</div>
+                <input type="text"
+                    class="stat-chart-datepicker stat-chart-date-end-datepicker"
+                    uib-datepicker-popup="yyyy-MM-dd"
+                    ng-model="statSelectedDate.currConnChart.end"
+                    ng-change="changeSeriesOrDate('currConnChart');"
+                    is-open="currConnChartEndDateOpened"
+                    ng-click="currConnChartEndDateOpened = !currConnChartEndDateOpened"
+                    show-button-bar=false>
+            </div>
+        </div>
+        <div class="box-body stat-chart-body">
+            <nvd3 options="statCharts.currConnOptions" data="statCharts.currConnData"></nvd3>
+            <div class="stat-chart-pager">
+                <div class="stat-chart-pager-elem stat-chart-pager-button stat-chart-pager-prev" ng-click="prevPage('currConnChart');">
+                    <i class="fa fa-arrow-left"></i>
+                </div>
+                <div class="stat-chart-pager-elem" ng-class="{'stat-chart-pager-hide-count': pagination.currConnChart.totalPages < 1}">
+                    Page {{pagination.currConnChart.currentPage}} of {{pagination.currConnChart.totalPages}}
+                </div>
+                <div class="stat-chart-pager-elem stat-chart-pager-button stat-chart-pager-next" ng-click="nextPage('currConnChart');">
+                    <i class="fa fa-arrow-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

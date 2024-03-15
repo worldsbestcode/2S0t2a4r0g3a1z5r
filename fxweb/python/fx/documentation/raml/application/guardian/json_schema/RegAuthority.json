@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "RegistrationAuthority",
+    "type": "object",
+    "definitions": {
+        "defIDName": {
+            "type": "object",
+            "properties": {
+                "objectID": {
+                    "$ref": "DBID.json"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "maxValidity": {
+            "type": "string",
+            "format": "timestamp"
+        },
+        "expiration": {
+            "type": "string",
+            "format": "timestamp"
+        },
+        "approvals": {
+            "type": "integer"
+        },
+        "notifyUpload": {
+            "type":"boolean"
+        },
+        "notifyDeny": {
+            "type":"boolean"
+        },
+        "notifyApprove": {
+            "type":"boolean"
+        },
+        "hashAlgorithms": {
+            "type": "array",
+            "items": {
+                "$ref": "HashType.json"
+            }
+        },
+        "profiles": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/defIDName"
+            }
+        },
+        "certificates": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/defIDName"
+            }
+        },
+        "objectType": {
+            "enum": ["REG_AUTH"]
+        },
+        "childType": {
+            "enum": ["CERT_REQ"]
+        }
+    },
+    "allOf": [{"$ref": "ManagedObject.json"}]
+}

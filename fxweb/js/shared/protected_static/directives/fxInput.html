@@ -1,0 +1,13 @@
+<div class="form-group">
+	<label ng-if="$ctrl.label">
+		{{$ctrl.label}}
+		<span ng-if="$ctrl.required" class="fx-widget-required-text"> *</span>
+	</label>
+	<div class="input-group" ng-if="$ctrl.iconclass">
+		<div class="input-group-addon">
+			<i class="fa fa-{{$ctrl.iconclass}}"></i>
+		</div>
+		<input class="form-control" type="{{$ctrl.type}}" ng-model="$ctrl.value" ng-disabled="$ctrl.disabled" ng-attr-autofocus="{{$ctrl.autofocus}}">
+	</div>
+	<input ng-if="!$ctrl.iconclass" class="form-control" type="{{$ctrl.type}}" ng-model="$ctrl.value" ng-disabled="$ctrl.disabled" ng-attr-autofocus="{{$ctrl.autofocus}}">
+</div>

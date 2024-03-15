@@ -1,0 +1,29 @@
+<fx-box>
+	<fx-row>
+		<fx-column width="12">
+            <h2>Download PKCS#12</h2>
+            <h5>Please enter your password to download the PKI data.</h5>
+		</fx-column>
+	</fx-row>
+	<fx-row>
+        <div class="download-form-body">
+            <fx-input label="Password" type="password" iconclass="lock" value="$ctrl.formdata.password"></fx-input>
+            <fx-row>
+                <fx-column width="6">
+                    <fx-checkbox class="pull-left download-form-checkbox" description="Clear PKCS#12" value="$ctrl.formdata.clear_pki"> </fx-checkbox>
+                </fx-column>
+                <fx-column width="6">
+                    <fx-button
+                        class="pull-right"
+                        size="md"
+                        type="default"
+                        callback="$ctrl.downloadcert"
+                        innerstyle="min-width: 150px; border-left-style: solid; border-left-width: 1px; border-top-left-radius 1px; border-bottom-left-radius: 1px;">
+                        Download
+                    </fx-button>
+                </fx-column>
+            </fx-row>
+        </div>
+	</fx-row>
+</fx-box>
+

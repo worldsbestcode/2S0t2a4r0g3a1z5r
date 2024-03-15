@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "HashType",
+    "description": "An enumeration of supported hash algorithms.",
+    "enum": [
+        "SHA_1",
+        "MD5_HASH",
+        "RIPEMD",
+        "SHA_256",
+        "SHA_384",
+        "SHA_512",
+        "SHA_224"
+    ]
+}

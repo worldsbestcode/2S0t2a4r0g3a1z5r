@@ -1,0 +1,78 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "PKICert",
+    "type": "object",
+    "properties": {
+        "data": {
+            "type": "string"
+        },
+        "loadTime": {
+            "type": "string"
+        },
+        "certAuth": {
+            "$ref": "DBID.json"
+        },
+        "newState": {
+            "enum":[
+                "OLD",
+                "NEW",
+                "EXPORTED",
+                "SIGNING",
+                "ENCRYPTING",
+                "CREATION"
+            ]
+        },
+        "status": {
+            "enum":[
+                "VALID",
+                "REVOKED",
+                "IN_CRL"
+            ]
+        },
+        "revokedReason": {
+            "$ref": "CRLReason.json"
+        },
+        "revokedAction": {
+            "type": "string"
+        },
+        "revokedIssuer": {
+            "type": "string"
+        },
+        "revokedTime": {
+            "type": "string",
+            "format": "timestamp"
+        },
+        "archive": {
+            "type":"boolean"
+        },
+        "CRLID": {
+            "$ref": "DBID.json"
+        },
+        "certType": {
+            "$ref": "PKIType.json"
+        },
+        "parentPublicKey": {
+            "type": "string"
+        },
+        "majorKey": {
+            "$ref": "FWMajorKeySlot.json"
+        },
+        "keyUsage": {
+            "$ref": "FWUsage.json"
+        },
+        "clearPublicKey": {
+            "type": "string"
+        },
+        "objectType": {
+            "enum": ["PKICERT"]
+        },
+        "parentType": {
+            "enum": ["PKICERT"]
+        },
+        "childType": {
+            "enum": ["PKICERT"]
+        }
+    },
+    "allOf": [{"$ref": "ManagedObject.json"}]
+
+}

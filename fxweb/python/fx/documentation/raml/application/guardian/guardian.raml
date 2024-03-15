@@ -1,0 +1,71 @@
+#%RAML 0.8
+
+title: fxWeb API - Registration Authority
+version: v1
+baseUri: http://localhost:8081
+
+resourceTypes:
+  - file: !include ../base/file.yaml
+  - page: !include ../base/page.yaml
+  - form: !include ../base/form.yaml
+  - loginForm: !include ../base/loginForm.yaml
+  - logoutPage: !include ../base/logoutPage.yaml
+  - landingPage: !include ../base/landingPage.yaml
+  - protectedFile: !include ../base/protectedFile.yaml
+  - viewFile: !include ../base/viewFile.yaml
+  - object: !include ../base/object.yaml
+  - formData: !include formData.yaml
+
+/:
+  type: page
+/login:
+  type: loginForm
+/logout:
+  type: logoutPage
+/app:
+  description: Protected Static Content Root URI (requires login)
+  /{filename}:
+    type: protectedFile
+  /landing:
+    type: landingPage
+  /components:
+    description: AngularJS HTML components
+    /{filename}:
+      type: protectedFile
+    /idioms:
+      description: Reusable common structural HTML
+      /{filename}:
+        type: protectedFile
+    /sections:
+      description: The application specific HTML components for building views
+      /{filename}:
+        description: Common HTML sections such as header.html and footer.html
+        type: protectedFile
+      /nodeView:
+        description: Nodes View
+        /{filename}:
+          type: viewFile
+  /directives:
+    description: Reusable AngularJS HTML directives (widgets)
+    /{filename}:
+      type: protectedFile
+  /formdata:
+    type: formData
+/object:
+  type:
+    object:
+      getResponseExample: !include json_example/ObjectGetResponseExample.json
+      getResponseSchema: !include json_schema/ObjectGetResponseSchema.json
+      postExample: !include json_example/ObjectPostExample.json
+      postSchema: |
+        !include json_schema/ObjectPostSchema.json
+      postResponseExample: !include json_example/ObjectPostResponseExample.json
+      postResponseSchema: !include json_schema/ObjectPostResponseSchema.json
+      putExample: !include json_example/ObjectPutExample.json
+      putSchema: !include json_schema/ObjectPutSchema.json
+      putResponseExample: !include json_example/ObjectPutResponseExample.json
+      putResponseSchema: !include json_schema/ObjectPutResponseSchema.json
+      deleteExample: !include json_example/ObjectDeleteExample.json
+      deleteSchema: !include json_schema/ObjectDeleteSchema.json
+      deleteResponseExample: !include json_example/ObjectDeleteResponseExample.json
+      deleteResponseSchema: !include json_schema/ObjectDeleteResponseSchema.json

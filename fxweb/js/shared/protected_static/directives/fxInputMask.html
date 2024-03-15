@@ -1,0 +1,45 @@
+<div class="form-group">
+	<label ng-if="$ctrl.label">
+		{{$ctrl.label}}
+		<span ng-if="$ctrl.required" class="fx-widget-required-text"> *</span>
+	</label>
+	<div class="input-group" ng-if="$ctrl.iconclass">
+		<div class="input-group-addon">
+			<i class="fa fa-{{$ctrl.iconclass}}"></i>
+		</div>
+		<input ng-if="!$ctrl.regex"
+			class="form-control"
+			type="text"
+			data-inputmask-mask="{{$ctrl.mask}}"
+			ng-model="$ctrl.value"
+			ng-disabled="$ctrl.disabled"
+			ng-blur="blurCallback($ctrl.value);">
+		<div ng-if="$ctrl.regex" ng-class="{'has-error': invalid}">
+			<input class="form-control"
+				type="text"
+				ng-init="checkRegexInput();"
+				ng-model="$ctrl.value"
+				ng-change="checkRegexInput();"
+				ng-disabled="$ctrl.disabled"
+				ng-blur="revertInput(); blurCallback($ctrl.value);">
+		</div>
+	</div>
+	<div ng-if="!$ctrl.iconclass">
+		<input ng-if="!$ctrl.regex"
+			class="form-control"
+			type="text"
+			data-inputmask-mask="{{$ctrl.mask}}"
+			ng-model="$ctrl.value"
+			ng-disabled="$ctrl.disabled"
+			ng-blur="blurCallback($ctrl.value);">
+		<div ng-if="$ctrl.regex" ng-class="{'has-error': invalid}">
+			<input class="form-control"
+				type="text"
+				ng-init="checkRegexInput();"
+				ng-model="$ctrl.value"
+				ng-change="checkRegexInput();"
+				ng-disabled="$ctrl.disabled"
+				ng-blur="revertInput(); blurCallback($ctrl.value);">
+		</div>
+	</div>
+</div>

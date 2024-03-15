@@ -1,0 +1,21 @@
+<div class="number">
+  <span>
+    <label>
+      {{$ctrl.description}}
+    </label>
+    <span ng-show="!$ctrl.config.portsLoaded">
+      <i class="fa fa-circle-o-notch fa-spin"></i>
+    </span>
+  <span>
+  <div ng-class="{'has-error': invalid}">
+    <input
+      class="form-control"
+      type="number"
+      ng-disabled="$ctrl.disabled || !$ctrl.config.portsLoaded"
+      ng-change="checkInput();"
+      ng-model="$ctrl.value"
+      min="{{$ctrl.config.minPort}}"
+      max="{{$ctrl.config.maxPort}}">
+    </input>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "PKIType",
+    "description": "PKI types to be used in Certificate Authorities and PKI Certs.",
+    "enum": [
+        "Visa EMV",
+        "Amex EMV",
+        "MasterCard EMV",
+        "JCB EMV",
+        "MultiBanco EMV",
+        "SCSA Root",
+        "SCSA Upper Level",
+        "X.509"
+    ]
+}

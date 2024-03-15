@@ -1,0 +1,49 @@
+<!-- NOTE: configuration and TLS config ID are currently disabled. -->
+<div>
+  <hr>
+  <h4>
+    {{$ctrl.description}}
+  </h4>
+  <div ng-if="!$ctrl.required">
+    <fx-checkbox
+      description="Allow Connection"
+      value="$ctrl.enabled"
+      disabled="{{$ctrl.disabled}}">
+    </fx-checkbox>
+  </div>
+  <div>
+    <fx-port
+      form-invalid="$ctrl.formInvalid"
+      description="Port"
+      value="$ctrl.port"
+      port-type="$ctrl.portInfo.type"
+      config="$ctrl.portConfig"
+      related-ports="$ctrl.relatedPorts"
+      disabled="{{$ctrl.disabled}}">
+    </fx-port>
+  </div>
+  <div>
+    <fx-select-obj ng-if="false"
+      label="Header Size"
+      options="$ctrl.headerSizes"
+      selected="$ctrl.headerSize"
+      disabled="{{$ctrl.disabled}}">
+    </fx-select-obj>
+  </div>
+  <div>
+    <fx-select-obj
+      label="Connection Type"
+      options="$ctrl.tlsTypes"
+      selected="$ctrl.connectionType"
+      disabled="{{$ctrl.disabled || $ctrl.forceTls}}">
+    </fx-select-obj>
+  </div>
+  <div>
+    <fx-select-obj ng-if="false"
+      label="Configuation"
+      options="$ctrl.tlsConfigs"
+      selected="$ctrl.tlsConfigId"
+      disabled="{{$ctrl.disabled}}">
+    </fx-select-obj>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+[base]
+server_type = kmes
+db_name = rk
+
+[log]
+level = info
+
+[comm]
+socktype = api
+context_tag = AG
+context_receive = AG
+
+[flask]
+uwsgi = True
+debug = False
+static_folder = ''
+template_folder = ''
+url = /

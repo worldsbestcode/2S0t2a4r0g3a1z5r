@@ -1,0 +1,11 @@
+{ "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Object POST Request Body",
+  "description": "JSON format for Object POST Request Body",
+  "type": "object",
+  "properties": {
+    "method": { "type": "string" },
+    "objectType": { "type": "string" },
+    "quantity": { "type": "integer" },
+    "request": { "$ref": "Filter.json" }
+  }
+}

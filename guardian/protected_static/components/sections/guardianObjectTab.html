@@ -1,0 +1,55 @@
+<div class="guardian-tab">
+  <h3>
+    {{ guardianService.getSelectionName() }}
+  </h3>
+
+  <uib-tabset type="pills" active="activeTab.ref">
+    <uib-tab index="0" classes="tab-content">
+      <uib-tab-heading>
+        <i class="glyphicon glyphicon-list-alt"></i> Logs
+      </uib-tab-heading>
+      <div class="guardian-tab-element">
+        <config-log-list></config-log-list>
+        <br>
+      </div>
+      <div class="guardian-tab-element" ng-if="logsShown()">
+        <config-human-readable></config-human-readable>
+        <br>
+      </div>
+      <div class="guardian-tab-element" ng-if="commandReportShown()">
+        <config-command-report></config-command-report>
+        <br>
+      </div>
+      <div class="guardian-tab-audit-logs" ng-if="auditLogsShown()">
+        <div class="guardian-tab-element">
+          <config-report></config-report>
+          <br>
+        </div>
+      </div>
+    </uib-tab>
+    <uib-tab index="1" classes="tab-content" ng-if="majorKeysShown()">
+      <uib-tab-heading>
+        <i class="glyphicon glyphicon-lock"></i> Major Keys
+      </uib-tab-heading>
+      <div class="guardian-tab-element">
+        <config-major-keys></config-major-keys>
+        <br>
+      </div>
+    </uib-tab>
+    <uib-tab index="2" classes="tab-content" ng-if="securitySettingsShown()">
+      <uib-tab-heading>
+        <i class="glyphicon glyphicon-lock"></i> Security Settings
+      </uib-tab-heading>
+      <!-- each section of the settings are its own guardian-tab-element -->
+      <fx-vue-wrapper shared="vueShared">
+        <div ng-non-bindable>
+          <hsm-group-management
+            :allowed-tab="2"
+            :selection-state="shared.selectionState"
+            :active-tab="shared.activeTab.ref">
+          </hsm-group-management>
+        </div>
+      </fx-vue-wrapper>
+    </uib-tab>
+  </uib-tabset>
+</div>

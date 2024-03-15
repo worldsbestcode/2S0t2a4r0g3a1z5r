@@ -1,0 +1,229 @@
+<div ng-controller="keyViewKeyEditCtrl" class="fx-layout-container">
+	<!-- {{selectedKey | json}} -->
+	<div class="fx-layout-fixed-300">
+		<div class="form-group has-feedback">
+			<input id="key-tree-search" type="text" class="form-control" placeholder="Search">
+			<i class="form-control-feedback fa fa-search"></i>
+		</div>
+		<div id="key-tree"></div>
+		<!-- {{selectedKey | json}} -->
+	</div>
+	<div class="fx-layout-fixed-300-fluid">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#key" data-toggle="tab">Key</a></li>
+				<li><a href="#options" data-toggle="tab">Options</a></li>
+				<li><a href="#keyblock" data-toggle="tab">Keyblock</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="key" class="tab-pane active" ng-if="selectedKey">
+					<fx-row>
+						<fx-column width="4">
+							<!-- input box -->
+							<h4>Name</h4>
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-key"></i>
+									</div>
+									<input class="form-control" type="text" ng-model="selectedKey.name">
+								</div>
+							</div>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Key Type</h4>
+							<fx-select options="{{typeToString(keyTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Encrypting Key</h4>
+							<fx-select options="{{typeToString(encryptingKeyTypes);}}"></fx-select>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width="4">
+							<h4>Algorithm</h4>
+							<fx-select options="{{typeToString(algorithmTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Key Length</h4>
+							<fx-select options="{{typeToString(keyLengthTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Modifier</h4>
+							<input type="number" ng-model="selectedKey.modifier"></input>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width="4">
+							<h4>Usage</h4>
+							<fx-select options="{{typeToString(usageTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Type</h4>
+							<fx-select options="{{typeToString(typeTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Parity</h4>
+							<input type="checkbox" ng-model="selectedKey.parity"></input>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width="4">
+							<fx-date-range label="Valid Period"></fx-date-range>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width=6>
+						</fx-column>
+						<fx-column width=6>
+							<fx-button size="lg" class="pull-right" type="primary">Save</fx-button>
+						</fx-column>
+					</fx-row>
+				</div>
+				<div id="options" class="tab-pane" ng-if="selectedKey">
+					<fx-row>
+						<fx-column width="4">
+							<!-- input box -->
+							<h4>Owner</h4>
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-key"></i>
+									</div>
+									<input class="form-control" type="text" ng-model="selectedKey.owner">
+								</div>
+							</div>
+						</fx-column>
+						<fx-column width="4">
+							<!-- input box -->
+							<h4>Address</h4>
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-key"></i>
+									</div>
+									<input class="form-control" type="text" ng-model="selectedKey.address">
+								</div>
+							</div>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width="12">
+							<h4>Attributes</h4>
+							<table class="table table-condensed">
+								<tbody>
+									<tr>
+										<th>Key</th>
+										<th>Value</th>
+										<th>System Attribute</th>
+										<th>Standard Attribute</th>
+									</tr>
+									<tr ng-repeat="attr in selectedKey.attributes">
+										<td>
+											<!-- {{attr.key.name}} -->
+											<input type="text" ng-model="attr.key.name">
+										</td>
+										<td>
+											<!-- {{attr.value}} -->
+											<input type="text" ng-model="attr.value">
+										</td>
+										<td>
+											<!-- <i class="fa fa-check" ng-if="attr.system_attr"></i> -->
+											<!-- <i class="fa fa-close" ng-if="!attr.system_attr"></i> -->
+											<input type="checkbox" ng-model="attr.system_attr">
+										</td>
+										<td>
+											<!-- <i class="fa fa-check" ng-if="attr.standard_attr"></i> -->
+											<!-- <i class="fa fa-close" ng-if="!attr.standard_attr"></i> -->
+											<input type="checkbox" ng-model="attr.standard_attr">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width=6>
+						</fx-column>
+						<fx-column width=6>
+							<fx-button size="lg" class="pull-right" type="primary">Save</fx-button>
+						</fx-column>
+					</fx-row>
+				</div>
+				<div id="keyblock" class="tab-pane" ng-if="selectedKey">
+					<fx-row>
+						<fx-column width="4">
+							<h4>Binding Method</h4>
+							<fx-select options="{{typeToString(bindingMethodTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Key Usage</h4>
+							<fx-select options="{{typeToString(keyUsageTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Algorithm</h4>
+							<fx-select options="{{typeToString(algorithmTypes);}}"></fx-select>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width="4">
+							<h4>Mode of Use</h4>
+							<fx-select options="{{typeToString(modeOfUseTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Key Version Number</h4>
+							<fx-select options="{{typeToString(keyVersionNumberTypes);}}"></fx-select>
+						</fx-column>
+						<fx-column width="4">
+							<h4>Exportability</h4>
+							<fx-select options="{{typeToString(exportabilityTypes);}}"></fx-select>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width="12">
+							<h4>Optional Blocks</h4>
+							<table class="table table-condensed">
+								<tbody>
+									<tr>
+										<th>Use</th>
+										<th>Tag</th>
+										<th>Description</th>
+										<th>Value</th>
+									</tr>
+									<tr ng-repeat="ob in selectedKey.optional_blocks">
+										<td>
+											<!-- {{ob.use}} -->
+											<input type="checkbox" ng-model="ob.use">
+										</td>
+										<td>
+											<!-- {{ob.tag}} -->
+											<input type="text" ng-model="ob.tag">
+										</td>
+										<td>
+											<!-- {{ob.description}} -->
+											<input type="text" ng-model="ob.description">
+										</td>
+										<td>
+											<!-- {{ob.value}} -->
+											<input type="text" ng-model="ob.value">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</fx-column>
+					</fx-row>
+					<fx-row>
+						<fx-column width=6>
+						</fx-column>
+						<fx-column width=6>
+							<fx-button size="lg" class="pull-right" type="primary">Save</fx-button>
+						</fx-column>
+					</fx-row>
+				</div>
+				<div class="tab-pane active" ng-if="!selectedKey">
+					<h4>Please select a key</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

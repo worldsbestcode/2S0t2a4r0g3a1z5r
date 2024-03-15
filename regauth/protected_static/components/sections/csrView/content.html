@@ -1,0 +1,24 @@
+<div class="content-wrapper" ng-controller="csrViewCtrl as ctrl">
+	<section class="content csr-view-content">
+		<div class="fx-layout-csr-form">
+			<div ng-if="!fxAppService.getLoading();">
+				<placeholder ng-if="formToDisplay === forms['placeholder']"></placeholder>
+				<csr-form
+					ng-if="formToDisplay === forms['csrForm']"
+					logindata="fxAppService.getLoginData"
+					formdata="ctrl.csrForm.data"
+					approve="ctrl.csrForm.approveCallback"
+					renew="ctrl.csrForm.renewCallback"
+					deny="ctrl.csrForm.denyCallback"
+					save="ctrl.csrForm.saveCallback"
+					downloadcert="ctrl.csrForm.downloadCertCallback"
+					csrupload="ctrl.csrForm.csrUploadCallback"
+					injectintosmarttoken="csrViewService.injectIntoSmartToken"
+                    downloadcrl="ctrl.csrForm.downloadCrlCallback"
+                    remove="ctrl.csrForm.removeCallback"
+                    revoke="ctrl.csrForm.revokeCallback">
+				</csr-form>
+			</div>
+		</div>
+	</section>
+</div>

@@ -1,0 +1,84 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "ManagedObject",
+    "type": "object",
+    "definitions": {
+        "defPermissionsMap": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "groupID": {
+                    	"description": "The group ID",
+                        "$ref": "DBID.json"
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "PermissionFlags.json"
+                        },
+                        "uniqueItems": true
+                    }
+                }
+            }
+        },
+        "defAttributeMap": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "properties": {
+        "objectID": {
+            "description": "Required to identify this object on both client and server",
+            "$ref": "DBID.json"
+        },
+        "parentID": {
+            "description": "The id of an object that contains this object",
+            "$ref": "DBID.json"
+        },
+        "objectType": {
+            "enum": ["UNKNOWN"]
+        },
+        "childType": {
+            "enum": ["UNKNOWN"]
+        },
+        "parentType": {
+            "enum": ["UNKNOWN"]
+        },
+        "ownerID": {
+            "description": "The name of the user that owns this object",
+            "$ref": "DBID.json"
+        },
+        "attributes": {
+            "description": "Used to specify additional user-configurable attributes for this object",
+            "$ref": "#/definitions/defAttributeMap"
+        },
+        "path": {
+            "description": "Used for showing this object's place in a related hierarchy",
+            "type": "string"
+        },
+        "groupPermissions": {
+            "$ref": "#/definitions/defPermissionsMap"
+        },
+        "inheritedPermissions": {
+            "$ref": "#/definitions/defPermissionsMap"
+        },
+        "aliases": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "numChildren": {
+            "type": "integer",
+            "minimum": 0
+        }
+    }
+}

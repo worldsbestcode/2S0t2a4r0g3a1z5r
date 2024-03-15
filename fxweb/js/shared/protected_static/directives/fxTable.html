@@ -1,0 +1,16 @@
+<div ng-transclude>
+	<table role="grid" class="table table-bordered table-hover dataTable">
+		<thead>
+			<tr role="row">
+				<th colspan="1" rowspan="1" class="sorting" ng-repeat="column in $ctrl.columns track by $index">
+					{{column}}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr role="row" ng-repeat="row in $ctrl.rows track by $index">
+				<td ng-repeat="field in row track by $index">{{field}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

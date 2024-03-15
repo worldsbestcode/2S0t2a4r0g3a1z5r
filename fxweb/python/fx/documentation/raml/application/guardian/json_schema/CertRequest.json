@@ -1,0 +1,76 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "CertRequest",
+    "type": "object",
+
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "subject": {
+            "type": "string"
+        },
+        "notes": {
+            "type": "string"
+        },
+        "loadTime": {
+            "type": "string"
+        },
+        "signingCertDBID": {
+            "$ref": "DBID.json"
+        },
+        "extensionProfileDBID": {
+            "$ref": "DBID.json"
+        },
+        "hash": {
+            "type": "string"
+        },
+        "status": {
+            "enum": [
+                "Pending",
+                "Approved",
+                "Signed",
+                "Denied"
+            ]
+        },
+        "request": {
+            "type": "string"
+        },
+        "uploaderGroupString": {
+            "type": "string"
+        },
+        "uploaderGroupUsers": {
+            "type": "string"
+        },
+        "hashAlgorithm": {
+            "$ref": "HashType.json"
+        },
+        "keyType": {
+            "type": "string"
+        },
+        "expiration": {
+            "type": "string",
+            "format": "timestamp"
+        },
+        "v3extensionSet": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        },
+        "signingApprovals": {
+            "type": "array",
+            "items": {
+                "$ref": "SigningApproval.json"
+            }
+        },
+        "objectType": {
+            "enum": ["CERT_REQ"]
+        },
+        "parentType": {
+            "enum": ["REG_AUTH"]
+        }
+    },
+    "allOf": [{"$ref": "ManagedObject.json"}]
+}

@@ -1,0 +1,71 @@
+/**
+ * @author Matthew Seaworth <mseaworth@futurex.com>
+ * @section LICENSE
+ * This program is the property of Futurex, L.P.
+ *
+ * No disclosure, reproduction, or use of any part thereof may be made without
+ * express written permission of Futurex L.P.
+ *
+ * Copyright by:  Futurex, LP. 2017
+ * @brief Contains styling for the list view object
+ */
+
+.list-content {
+    margin-bottom: 10px;
+}
+
+.list-content-rows {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.list-view-heading {
+    cursor: default;
+    font-weight: bold;
+    display: inline-block;
+    color: #ffffff;
+}
+
+.list-view-object {
+    display: inline-block;
+}
+
+.list-content-row {
+    min-width: 50%;
+}
+
+.list-content-row,
+.list-content-name,
+.list-content-value {
+    display: inline;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.list-content-name {
+    font-weight: bold;
+}
+
+.list-view-row {
+    text-align: left;
+}
+
+.list-view-group {
+    border-color: rgb(221, 221, 221);
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    overflow: hidden;
+}
+
+.list-view-header {
+    display: flex;
+}
+
+.list-view-header-group {
+    background-color: #1e1e1e;
+}
+
+.panel-group {
+    min-width: 40em;
+}

@@ -1,0 +1,5 @@
+<div class="form-group">
+    <label>{{label}}</label><fx-button type="default" size="xs" ng-click="clearSelection();" ng-disabled="disabled">Clear File</fx-button>
+	<textarea class="form-control textarea fx-textarea fx-raw-file-textarea" ng-model="filestring" ng-disabled="disabled"></textarea>
+	<form><input id="raw-file" type="file" accept="{{accept}}" ng-disabled="disabled"></form>
+</div>

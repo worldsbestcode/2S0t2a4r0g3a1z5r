@@ -1,0 +1,17 @@
+<div class="list-content" ng-controller="peerViewController as ctrl">
+    <!-- This contains all the info for a peer -->
+    <fx-list-content-rows content="content"></fx-list-content-rows>
+    <!-- This is the updating table of peering events -->
+    <div class="box box-info peer-item-events">
+        <div class="box-header">
+            <i class="fa fa-newspaper"></i>
+            <h3 class="box-title">Peering Events</h3>
+            <span class="expand-icon" ng-click="openModal(contentObject);">
+                <i class="fa fa-expand"></i>
+            </span>
+        </div>
+        <div class="box-body">
+            <fx-peer-event-view peer="contentObject" maxrowcount=5 />
+        </div>
+    </div>
+</div>

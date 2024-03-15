@@ -1,0 +1,424 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: 'Disks'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/disks':
+    get:
+      tags:
+        - Disks & Raid
+      summary: 'Retrieve list of Disk Paths, or single Disk details'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DISK, FN disk
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **path** - Path to specified disk
+      parameters:
+        - name: path
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveDisks'
+              examples:
+                'Retrieve list of Disk Paths':
+                  $ref: '#/components/examples/RetrieveDiskPaths'
+                'Retrieve single Disk':
+                  $ref: '#/components/examples/RetrieveDisk'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Disks & Raid
+      summary: 'Update single Disk status'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DISK, FN disk
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDisk'
+            examples:
+              'Enable disk':
+                $ref: '#/components/examples/UpdateDiskEnable'
+              'Disable disk':
+                $ref: '#/components/examples/UpdateDiskDisable'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/disks/raid':
+    get:
+      tags:
+        - Disks & Raid
+      summary: 'Retrieve list of RAID paths, or single RAID details'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DISK, FN raid
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **No parameters** - Returns a list of RAID disk paths
+        + **path** - Path to specific RAID disk; Returns information about 
+                     the specified disk
+      parameters:
+        - name: path
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveRaid'
+              examples:
+                'Retrieve Raid list':
+                  $ref: '#/components/examples/RetrieveRaidPaths'
+                'Retrieve single Raid':
+                  $ref: '#/components/examples/RetrieveRaid'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    RetrieveDisks:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/DiskPathList'
+                - $ref: '#/components/schemas/DiskDetails'
+    DiskPathList:
+      type: object
+      properties:
+        paths:
+          type: array
+          items:
+            type: string
+          description: 'List of disk paths.'
+      required:
+        - paths
+    DiskDetails:
+      type: object
+      properties:
+        detected:
+          type: boolean
+          description: ''
+        hasRaid:
+          type: boolean
+          description: ''
+        hasUdevLink:
+          type: boolean
+          description: ''
+        smartErrors:
+          type: boolean
+          description: ''
+        name:
+          type: string
+          description: ''
+        link:
+          type: string
+          description: ''
+        model:
+          type: string
+          description: ''
+        byteSize:
+          type: integer
+          description: ''
+        familyModel:
+          type: string
+          description: ''
+        deviceModel:
+          type: string
+          description: ''
+        serialNumber:
+          type: string
+          description: ''
+        firmwareVersion:
+          type: string
+          description: ''
+        ataVersion:
+          type: string
+          description: ''
+        byteCapacity:
+          type: integer
+          description: ''
+        attributes:
+          type: object
+          additionalProperties: {}
+          description: ''
+      required:
+        - detected
+        - hasRaid
+        - hasUdevLink
+        - smartErrors
+        - name
+        - link
+        - model
+        - byteSize
+        - familyModel
+        - deviceModel
+        - serialNumber
+        - firmwareVersion
+        - ataVersion
+        - byteCapacity
+        - attributes
+    UpdateDisk:
+      type: object
+      properties:
+        path:
+          type: string
+          description: ''
+        enable:
+          type: boolean
+          default: true
+          description: ''
+      required:
+        - path
+    RetrieveRaid:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/RetrieveRaidPaths'
+                - $ref: '#/components/schemas/RetrieveSingleRaid'
+    RetrieveRaidPaths:
+      type: object
+      properties:
+        paths:
+          type: array
+          items:
+            type: string
+          description: ''
+      required:
+        - paths
+    RetrieveSingleRaid:
+      type: object
+      properties:
+        devicePath:
+          type: string
+          description: ''
+        raidLevel:
+          type: string
+          description: ''
+        failed:
+          type: boolean
+          description: ''
+        delayed:
+          type: boolean
+          description: ''
+        totalDisks:
+          type: integer
+          description: ''
+        failedDisks:
+          type: integer
+          description: ''
+        raidRebuildPercent:
+          type: integer
+          minimum: 0
+          description: ''
+        raidRebuildTime:
+          type: integer
+          format: seconds
+          minimum: 0
+          description: ''
+        buildSpeed:
+          type: integer
+          description: ''
+        mounted:
+          type: boolean
+          description: ''
+        totalSpace:
+          type: integer
+          format: bytes
+          description: ''
+        availableSpace:
+          type: integer
+          format: bytes
+          description: ''
+      required:
+        - path
+        - raidLevel
+        - failed
+        - delayed
+        - totalDisks
+        - failedDisks
+        - raidRebuildPercent
+        - raidRebuildTime
+        - buildSpeed
+        - mounted
+        - totalSpace
+        - availableSpace
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    RetrieveDiskPaths:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          paths:
+            - '/fx/disk/Disk1'
+            - '/fx/disk/Disk2'
+            - '/fx/disk/Disk007'
+    RetrieveDisk:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          detected: true
+          hasRaid: true
+          hasUdevLink: true
+          smartErrors: false
+          name: 'Disk007'
+          link: ''
+          model: ''
+          byteSize: 256
+          familyModel: ''
+          deviceModel: ''
+          serialNumber: '123456789ABCDEF'
+          firmwareVersion: '5.0.0'
+          ataVersion: '3.5.4'
+          byteCapacity: 256
+          attributes: {}
+    UpdateDiskEnable:
+      value:
+        path: '/fx/disk/Disk007'
+        enable: true
+    UpdateDiskDisable:
+      value:
+        path: '/fx/disk/Disk007'
+        enable: false
+    RetrieveRaidPaths:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          paths:
+            - '/fx/raid/Disk1'
+            - '/fx/raid/Disk2'
+            - '/fx/raid/Disk007'
+    RetrieveRaid:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          devicePath: '/fx/raid/Disk007'
+          raidLevel: 'RAID 1'
+          failed: true
+          delayed: false
+          totalDisks: 3
+          failedDisks: 1
+          raidRebuildPercent: 25
+          raidRebuildTime: 10000
+          buildSpeed: 50
+          mounted: true
+          totalSpace: 256
+          availableSpace: 200

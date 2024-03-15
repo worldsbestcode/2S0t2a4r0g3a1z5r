@@ -1,0 +1,612 @@
+body {
+  user-select: none;
+  cursor: default;
+}
+
+#view-switcher {
+  overflow: hidden;
+}
+
+#node-view-content {
+  overflow: hidden;
+}
+
+#node-view-content-body {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: calc(100% - 40px);
+}
+
+#node-view-content-left-column {
+  float: left;
+  width: calc(100% - 420px);
+}
+
+#node-view-content-left-column-top {
+  height: calc(50% - 30px);
+  padding-bottom: 15px;
+}
+
+#node-view-content-left-column-bottom {
+  height: calc(50% + 30px);
+  padding-bottom: 15px;
+  overflow-y: auto;
+}
+
+#node-view-content-right-column {
+  float: right;
+  width: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#node-view-spinner {
+    position: relative;
+    z-index: 999;
+    top: 50%;
+    left: 50%
+}
+
+#config-spinner {
+    position: absolute;
+    z-index: 999;
+    top: 50%;
+    left: 50%
+}
+#node-view-spinner .fa-spinner {
+    color: #911111;
+    font-size: 1.5em;
+    margin-left: -.75em;
+}
+
+#config-spinner .fa-spinner {
+    color: #911111;
+    font-size: 1.5em;
+    margin-left: -.75em;
+}
+#node-image-frame {
+	min-height:155px;
+    max-height: 325px;
+    width: inherit;
+    vertical-align: center;
+}
+
+#node-image {
+  	width: 70%;
+	vertical-align: middle;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+.error {
+    color: red;
+}
+
+.caution {
+    color: #d6750a;
+}
+
+.disabled {
+    color: #6d6d6d;
+}
+
+.ok {
+    color: green;
+}
+
+.node-view-content-column {
+  display: inline-block;
+  height: 100%;
+}
+
+.node-view-content-column-collapse {
+  width: 100% !important;
+  height: 50% !important;
+}
+
+.node-view-content-left-column-top-collapse {
+  height: 100% !important;
+}
+
+.node-view-content-left-column-bottom-collapse {
+  height: auto !important;
+}
+
+.node-view-content-column-collapse .node-info-box {
+    clear: both !important;
+    width: 100% !important;
+}
+
+/**
+ * Style for the statistics views
+ */
+#node-stats-content, #node-stats-modal-content {
+  display: inline-block;
+  height: auto;
+  width: 100%;
+}
+
+#node-stats-modal-content {
+  height: 100%;
+}
+
+/**
+ * Style for the title in the statistics modals
+ */
+#node-stats-modal-content .modal-title {
+  display: inline;
+  vertical-align: middle;
+}
+
+/**
+ * Style for the statistics icon that appears to the left of the stat title
+ */
+.stat-icon {
+  margin-right: 5px;
+}
+
+.graph_view {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  min-width: 300px;
+  box-shadow: 0px 0px 5px 0px #aaa;
+}
+
+.control-sidebar-bg-guardian {
+  position: fixed;
+  z-index: 1000;
+  bottom: 0;
+}
+
+.control-sidebar-bg-guardian,
+.control-sidebar {
+  top: 0;
+  right: -600px;
+  width: 600px;
+  -webkit-transition: right 0.3s ease-in-out;
+  -o-transition: right 0.3s ease-in-out;
+  transition: right 0.3s ease-in-out;
+}
+
+.control-sidebar {
+  position: absolute;
+  height: 100%;
+  box-shadow: #aaa -1px 0px 7px;
+  /* Overwritten by the AdminLTE... */
+  padding-top: 60px;
+  z-index: 1010;
+}
+
+@media (max-width: 768px) {
+  .control-sidebar {
+    padding-top: 100px;
+  }
+}
+
+.control-sidebar > .tab-content {
+  padding: 10px 15px;
+}
+
+.control-sidebar-body {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.expand-icon {
+  float: right;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: -10px;
+}
+
+.expand-icon:hover {
+  background-color: #ccc;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.expand-icon:active {
+  background-color: #aaa;
+}
+
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal::before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.stat-chart-column {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  width: calc(50% - 2px);
+  min-width: 350px;
+  max-width: 100%;
+}
+
+.stat-chart-column-expanded {
+  width: 100%;
+}
+
+.stat-chart-select {
+  float: right;
+}
+
+.stat-chart-header {
+  padding-bottom: 15px;
+}
+
+.stat-chart-body {
+  padding-top: 15px;
+}
+
+.stat-chart-expand-button {
+  display: inline;
+  float: right;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.stat-chart-title {
+  display: block !important;
+  width: 275px;
+  margin-left: 15px !important;
+  margin-right: 15px !important;
+}
+
+.stat-chart-live-info {
+  margin: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.stat-chart-datepicker {
+  display: inline-block;
+}
+
+.stat-chart-date-begin {
+  display: inline-block;
+}
+
+.stat-chart-date-begin-text {
+  font-size: 14px;
+}
+
+.stat-chart-date-begin-datepicker {
+  height: 25px;
+}
+
+.stat-chart-date-divider {
+  display: none;
+}
+
+.stat-chart-date-end {
+  display: inline-block;
+  float: right;
+}
+
+.stat-chart-date-end-text {
+  font-size: 14px;
+}
+
+.stat-chart-date-end-datepicker {
+  height: 25px;
+}
+
+@media (max-width: 1125px) {
+  .stat-chart-date-divider {
+    display: initial;
+  }
+
+  .stat-chart-date-end {
+    float: none;
+    display: block;
+  }
+
+  .stat-chart-date-begin-text {
+    font-size: 10px;
+  }
+
+  .stat-chart-date-begin-datepicker {
+    height: 18px;
+  }
+
+  .stat-chart-date-end-text {
+    font-size: 10px;
+  }
+
+  .stat-chart-date-end-datepicker {
+    height: 18px;
+  }
+
+  .stat-chart-header {
+    padding-bottom: 0px;
+  }
+
+  .stat-chart-body {
+    padding-top: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-chart-date-divider {
+    display: none;
+  }
+
+  .stat-chart-date-end {
+    display: inline-block;
+    float: right;
+  }
+
+  .stat-chart-date-begin-text {
+    font-size: 14px;
+  }
+
+  .stat-chart-date-begin-datepicker {
+    height: 25px;
+  }
+
+  .stat-chart-date-end-text {
+    font-size: 14px;
+  }
+
+  .stat-chart-date-end-datepicker {
+    height: 25px;
+  }
+
+  .stat-chart-header {
+    padding-bottom: 15px;
+  }
+
+  .stat-chart-body {
+    padding-top: 15px;
+  }
+}
+
+@media (max-width: 475px) {
+  .stat-chart-date-divider {
+    display: initial;
+  }
+
+  .stat-chart-date-end {
+    float: none;
+    display: block;
+  }
+
+  .stat-chart-date-begin-text {
+    font-size: 10px;
+  }
+
+  .stat-chart-date-begin-datepicker {
+    height: 18px;
+  }
+
+  .stat-chart-date-end-text {
+    font-size: 10px;
+  }
+
+  .stat-chart-date-end-datepicker {
+    height: 18px;
+  }
+
+  .stat-chart-header {
+    padding-bottom: 0px;
+  }
+
+  .stat-chart-body {
+    padding-top: 0px;
+  }
+}
+
+.stat-chart-not-live {
+  height: 25px;
+}
+
+.stat-chart-live-icon {
+  display: inline-block;
+  margin-right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+  background: rgba(0, 132, 163, 1.0);
+}
+
+.stat-chart-live-icon-pulsate {
+  animation: stat-chart-live-icon-pulsate-shadow 2s infinite;
+}
+
+@keyframes stat-chart-live-icon-pulsate-shadow {
+  from {
+    box-shadow: 0px 0px 0px 0px rgba(0, 132, 163, 0.75);
+  }
+  to {
+    box-shadow: 0px 0px 0px 7px rgba(0, 132, 163, 0.0);
+  }
+}
+
+.stat-chart-pager {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.stat-chart-pager-elem {
+  display: inline-block;
+}
+
+.stat-chart-pager-button {
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.stat-chart-pager-button:hover {
+  background-color: #ccc;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.stat-chart-pager-button:active {
+  background-color: #aaa;
+}
+
+.stat-chart-pager-prev {
+  float: left;
+}
+
+.stat-chart-pager-next {
+  float: right;
+}
+
+.stat-chart-pager-hide-count {
+  visibility: hidden;
+}
+
+.stat-chart-overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.node-info-box {
+  margin: 0px;
+}
+
+.node-text-info {
+  overflow: auto;
+  height: 200px;
+}
+.node-text-info pre {
+    white-space: pre-wrap;
+    color: inherit !important;
+    background: inherit !important;
+    font-family: inherit !important;
+}
+
+.guardian-tab {
+    margin-left: 20px !important;
+}
+
+.guardian-tab > h3 {
+  margin-bottom: 15px;
+}
+
+.guardian-tab-audit-logs {
+  margin-top: 30px;
+}
+
+.nav {
+  border-bottom: 2px;
+}
+
+.nav-tabs {
+  background-color: transparent;
+}
+
+.tab-pane {
+  margin-top: 10px !important;
+  margin-right: 10px !important;
+  overflow: hidden;
+}
+
+.form-group {
+  overflow: hidden;
+}
+
+.major-key {
+  float: left;
+  font-weight: bold;
+  width: 75px;
+}
+
+.major-key-kcv {
+  width: 35%;
+  text-align: center;
+}
+
+.guardian-tab-element {
+    background-color: #ffffffff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    border-top: 3px solid;
+    border-top-color: #911111;
+}
+
+.config-report-filename {
+    padding-top: 10px;
+    clear: both !important;
+}
+
+.config-view-sidebar-expanded {
+    margin-right: 600px !important;
+    -webkit-transition: margin-right 0.3s ease-in-out;
+    -o-transition: margin-right 0.3s ease-in-out;
+    transition: margin-right 0.3s ease-in-out;
+}
+
+.command-stat-date {
+    margin-bottom: 15px;
+}
+
+.fx-group-config-bar-inner-div {
+  padding: 10px;
+}
+
+.peer-item-events {
+    margin-top: 15px;
+}
+
+fx-peer-event-view div[uib-carousel] .carousel-indicators .active {
+    background-color: grey;
+}
+
+fx-peer-event-view div[uib-carousel] .carousel-control {
+    color: lightgrey;
+}
+
+fx-peer-event-view div[uib-carousel] .carousel-indicators li {
+    border-color: grey;
+}
+
+fx-peer-event-view div[uib-carousel] .carousel-indicators {
+    bottom: -20px
+}
+
+fx-peer-event-view div[uib-slide] {
+    height: 100%;
+}
+
+fx-peer-event-view fx-spinner {
+    margin: 0 auto;
+    display: table;
+}
+
+fx-peer-event-view table {
+    height: 100%;
+}

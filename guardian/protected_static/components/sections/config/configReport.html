@@ -1,0 +1,35 @@
+<div>
+  <label>Audit Log Report</label>
+  <div ng-if="!configReportService.isWaiting()">
+    <fx-column class="pull-left">
+      <fx-button callback="configReportService.showReportFilter">
+        Report Filter
+      </fx-button>
+    </fx-column>
+    <fx-column class="pull-left">
+      <fx-button callback="generate">
+        {{ displayStates.generate }}
+      </fx-button>
+    </fx-column>
+  </div>
+  <div ng-if="configReportService.isWaiting()">
+    <label id="progress-bar-label">
+      {{ displayStates.wait }}
+    </label>
+    <uib-progressbar class="progress-striped" value="progress.currentProgress" title="Log Report Generation Progress">
+      {{ progress.currentProgress | number: 2 }} %
+    </uib-progressbar>
+  </div>
+  <form method="get" action="{{'/guardian/download/' + reportFile}}" target="_blank" ng-if="configReportService.canDownload()">
+    <button type="submit" class="btn btn-md btn-default pull-left">
+      {{ displayStates.download }}
+    </button>
+  </form>
+  <div ng-if="configReportService.canDownload()" class="config-report-filename">
+    <fx-input
+      label="Report Filename"
+      type="text"
+      value="reportFile">
+    </fx-input>
+  </div>
+</div>

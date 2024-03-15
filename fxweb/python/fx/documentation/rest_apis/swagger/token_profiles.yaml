@@ -1,0 +1,332 @@
+openapi: 3.0.0
+info:
+  version: '0.0.0'
+  title: 'Token Profiles'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    ***
+    ### Important Notes
+    ***
+
+security:
+  - bearerToken: []
+
+paths:
+  '/token-profiles':
+    post:
+      tags:
+        - CRUD Operations
+      summary: 'Create a single Token Profile'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Token
+        + **Host API Commands**
+          + TKGA
+        + **Permissions**
+          + Class permission - Tokenization
+          + Object permission - Add
+        ***
+        ### Additional Notes
+        ***
+        + If `paddingLength` is supplied, it must be greater than the sum of [preserveLeading + preserveTrailing + 2].
+        + `luhnCheck` can only be enabled when decimal is the only `tokenFormat` enabled.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTokenProfile'
+            examples:
+              'Create single Token Profile':
+                $ref: '#/components/examples/CreateTokenProfile'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTokenProfileResponse'
+              examples:
+                'Create single Token Profile':
+                  $ref: '#/components/examples/CreateTokenProfileResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    get:
+      tags:
+        - CRUD Operations
+      summary: 'Retrieve a single Token Profile, or a list of Token Profiles'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Token
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          + Class permission - Tokenization
+          + Object permission - 
+        ***
+        ### Additional Notes
+        ***
+        +
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content: {}
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    put:
+      tags:
+        - CRUD Operations
+      summary: 'Update a single Token Profile'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Token
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          + Class permission - Tokenization
+          + Object permission - 
+        ***
+        ### Additional Notes
+        ***
+        +
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {}
+            examples: {}
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+
+    delete:
+      tags:
+        - CRUD Operations
+      summary: 'Delete a single Token Profile'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Token
+        + **Host API Commands**
+          + TKGD
+        + **Permissions**
+          + Class permission - Tokenization
+          + Object permission - Delete
+        ***
+        ### Additional Notes
+        ***
+        +
+      parameters:
+        - name: id
+          description: UUID of the Token Profile
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+
+  schemas:
+    CreateTokenProfile:
+      type: object
+      properties:
+        algorithm:
+          type: string
+          enum: ['FF1','FF3-1']
+          default: 'FF3-1'
+          description: 'Format-preserving encryption algorithm.'
+        keyId:
+          type: string
+          format: uuid
+          description: 'ID of the AES key to use for encryption.'
+        luhnCheck:
+          type: boolean
+          default: false
+          description: 'Perform Luhn recalculation?'
+        name:
+          type: string
+          description: 'Name for new token generation profile.'
+        owner:
+          type: string
+          description: 'Owner of the object.'
+        paddingLength:
+          type: integer
+          minimum: 0
+          maximum: 4096
+          description: 'Masked length (will always add padding)'
+        permissions:
+          $ref: '#/components/schemas/ObjectPermissions'
+        prefix:
+          type: string
+          minLength: 0
+          maxLength: 32
+          description: 'Static leading characters.'
+        preserveLeading:
+          type: integer
+          minimum: 0
+          maximum: 4096
+          description: 'Preserve N amount of leading characters.'
+        preserveTrailing:
+          type: integer
+          minimum: 0
+          maximum: 4096
+          description: 'Preserve N amount of trailing characters.'
+        tokenFormat:
+          $ref: '#/components/schemas/TokenFormatOptions'
+        verificationLength:
+          type: integer
+          minimum: 0
+          maximum: 4096
+          default: 0
+          description: 'Only detokenization the last N amount of digits for verify only users.'
+      required:
+        - name
+    CreateTokenProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: 'UUID of the newly created Token Profile.'
+          required:
+            - id
+    RetrieveTokenProfile:
+      type: object
+      properties: {}
+    UpdateTokenProfile:
+      type: object
+      properties: {}
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+    ObjectPermissions:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ObjectPermissions'
+    TokenFormatOptions:
+      type: object
+      properties:
+        Decimal:
+          type: boolean
+          default: true
+        Hex:
+          type: boolean
+        Lowercase:
+          type: boolean
+        Uppercase:
+          type: boolean
+        Space:
+          type: boolean
+        Underscore:
+          type: boolean
+        Dash:
+          type: boolean
+        Period:
+          type: boolean
+        At:
+          type: boolean
+        Slash:
+          type: boolean
+        BackSlash:
+          type: boolean
+        Comma:
+          type: boolean
+        Symbols:
+          type: boolean
+      description: 'Listing of allow namespaces (Decimal by default).'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    CreateTokenProfile:
+      value:
+        algorithm: 'FF3-1'
+        keyId: 'RW5jcnlwdGlvbiBLZXkgIzE='
+        luhnCheck: false
+        name: 'Futurex Token Profile'
+        owner: 'Engineering'
+        paddingLength: 256
+        permissions:
+          'Encryption Users': 'Use'
+          'Key Managers': 'Modify'
+          'Test Group': 'Use'
+        prefix: 'ABCDEFG0123456789'
+        preserveLeading: 100
+        preserveTrailing: 100
+        tokenFormat:
+          Decimal: true
+          Hex: true
+          Underscore: true
+          Dash: true
+          Slash: false
+        verificationLength: 512
+    CreateTokenProfileResponse:
+      value:
+        status: 'Success'
+        message: 'Successfully created new Token Profile.'
+        response:
+          id: 'RnV0dXJleCBUb2tlbiBQcm9maWxl'
+    RetrieveTokenProfile:
+      value: {}
+    UpdateTokenProfile:
+      value: {}

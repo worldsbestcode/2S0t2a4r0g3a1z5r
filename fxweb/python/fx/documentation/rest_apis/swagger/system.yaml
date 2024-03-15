@@ -1,0 +1,2662 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'System'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + Each /system API endpoint is related to a system configuration option
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/system':
+    get:
+      tags:
+        - System Application
+      summary: 'Retrieve server application information'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveServerInfo'
+              examples:
+                'Retrieve system information':
+                  $ref: '#/components/examples/RetrieveServerInfo'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+  
+  '/system/upload':
+    put:
+      tags:
+        - System Application
+      summary: 'Upload new application ISO'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadServerISO'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/autobackup':
+    get:
+      tags:
+        - Automated Backup Settings
+      summary: 'Retrieve Automated Backup settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN automated_backup
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAutoBackup'
+              examples:
+                'Retrieve Automated Backup settings':
+                  $ref: '#/components/examples/RetrieveAutoBackup'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Automated Backup Settings
+      summary: 'Update automated backup settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN automated_backup
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAutoBackup'
+            examples:
+              'Update Automated Backup settings':
+                $ref: '#/components/examples/UpdateAutoBackup'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/certificates':
+    get:
+      tags:
+        - X.509 Certificate Settings
+      summary: 'Retrieve X.509 Certificate settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN x509
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveCertSettings'
+              examples:
+                'Retrieve X.509 Certificate settings':
+                  $ref: '#/components/examples/RetrieveCertSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - X.509 Certificate Settings
+      summary: 'Update X.509 Certificate settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN x509
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCertSettings'
+            examples:
+              'Update X.509 Certificate settings':
+                $ref: '#/components/examples/UpdateCertSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/datetime':
+    get:
+      tags:
+        - Date & Time Settings
+      summary: 'Retrieve system date, time, and timezone information'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveDateTime'
+              examples:
+                '/system/datetime':
+                  $ref: '#/components/examples/RetrieveDateTime'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Date & Time Settings
+      summary: 'Update system date, time, and timezone settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDateTime'
+            examples:
+              'Update system date and time':
+                $ref: '#/components/examples/UpdateDateTime'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ftp':
+    get:
+      tags:
+        - FTP Settings
+      summary: 'Retrieve system FTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN ftp, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveFtpSettings'
+              examples:
+                '/config/ftp':
+                  $ref: '#/components/examples/RetrieveFtpSettings'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - FTP Settings
+      summary: 'Update system FTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN ftp, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFtpSettings'
+            examples:
+              update:
+                $ref: '#/components/examples/UpdateFtpSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ftp/test':
+    post:
+      tags:
+        - FTP Settings
+      summary: 'Test provided FTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN ftp, OP test
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestFtpSettings'
+            examples:
+              'test':
+                $ref: '#/components/examples/TestFtpSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/hsm':
+    get:
+      tags:
+        - System HSM Firmware
+      summary: 'Retrieve current firmware information'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN features, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveHsmInfo'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/hsm/upload':
+    put:
+      tags:
+        - System HSM Firmware
+      summary: 'Upload new HSM firmware file.'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadHsmFirmware'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/kmip':
+    get:
+      tags:
+        - KMIP Settings
+      summary: 'Retrieve KMIP system settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN kmip, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveKmipSettings'
+              examples:
+                'Retrieve KMIP settings':
+                  $ref: '#/components/examples/RetrieveKmipSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - KMIP Settings
+      summary: 'Update KMIP system settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN kmip, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateKmipSettings'
+            examples:
+              'Update KMIP settings':
+                $ref: '#/components/examples/UpdateKmipSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ldap':
+    get:
+      tags:
+        - LDAP Configuration
+      summary: 'Retrieve LDAP system settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LDAP, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveLdapSettings'
+              examples:
+                'Retrieve LDAP settings':
+                  $ref: '#/components/examples/RetrieveLdapSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - LDAP Configuration
+      summary: 'Update system LDAP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LDAP, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLdapSettings'
+            examples:
+              'Update LDAP settings':
+                $ref: '#/components/examples/UpdateLdapSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ldap/test':
+    post:
+      tags:
+        - LDAP Configuration
+      summary: 'Test provided LDAP configuration'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LDAP, OP test
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestLdapConfig'
+            examples:
+              'Test LDAP configuration':
+                $ref: '#/components/examples/TestLdapConfig'
+      responses:
+        # Will require review
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/network':
+    get:
+      tags:
+        - Network Settings
+      summary: 'Retrieve system Network settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN network, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNetworkSettings'
+              examples:
+                'Retrieve Network settings':
+                  $ref: '#/components/examples/RetrieveNetworkSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Network Settings
+      summary: 'Update system Network settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN network, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNetworkSettings'
+            examples:
+              'Update Network settings':
+                $ref: '#/components/examples/UpdateNetworkSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ntp':
+    get:
+      tags:
+        - NTP Settings
+      summary: 'Retrieve system NTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN ntp, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveNtpSettings'
+              examples:
+                'Retrieve NTP settings':
+                  $ref: '#/components/examples/RetrieveNtpSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - NTP Settings
+      summary: 'Update system NTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN otp, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNtpSettings'
+            examples:
+              'Update NTP settings':
+                $ref: '#/components/examples/UpdateNtpSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ocsp':
+    get:
+      tags:
+        - OCSP Settings
+      summary: 'Retrieve system OCSP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN ocsp, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveOcspSettings'
+              examples:
+                'Retrieve OCSP settings':
+                  $ref: '#/components/examples/RetrieveOcspSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - OCSP Settings
+      summary: 'Update system OCSP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN ocsp, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOcspSettings'
+            examples:
+              'Retrieve OCSP settings':
+                $ref: '#/components/examples/UpdateOcspSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/password-policy':
+    get:
+      tags:
+        - Password Security Policy
+      summary: 'Retrieve system Password Policy'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN pass_sec, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePasswordPolicy'
+              examples:
+                'Retrieve system Password Policy':
+                  $ref: '#/components/examples/RetrievePasswordPolicy'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Password Security Policy
+      summary: 'Update system Password Policy'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN pass_sec, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordPolicy'
+            examples:
+              'Update system Password Policy':
+                $ref: '#/components/examples/UpdatePasswordPolicy'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/permissions':
+    get:
+      tags:
+        - Permissions
+      summary: 'Retrieve system Permission settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN perm, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + Permission objects are dynamically generated by the back-end.
+          These objects and their options will not be statically typed.
+          Only _settings_ can be updated for each permission object.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSystemPermissions'
+              examples:
+                'Retrieve system Permissions':
+                  $ref: '#/components/examples/RetrieveSystemPermissions'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Permissions
+      summary: 'Update system permission settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN perm, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSystemPermissions'
+            examples:
+              'Update system Permissions':
+                $ref: '#/components/examples/UpdateSystemPermissions'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/ra-settings':
+    get:
+      tags:
+        - Registration Authority Settings
+      summary: 'Retrieve system Registration Authority settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN regauth, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveRegauthSettings'
+              examples:
+                'Retrieve Regauth settings':
+                  $ref: '#/components/examples/RetrieveRegauthSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Registration Authority Settings
+      summary: 'Update registration authority settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN regauth, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRegauthSettings'
+            examples:
+              'update':
+                $ref: '#/components/examples/UpdateRegauthSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/security':
+    # WIP: Host API command still in design
+    get:
+      tags:
+        - Security Settings
+      summary: 'Retrieve system Security settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN security, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **Host API Command is a WIP**
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSecuritySettings'
+              examples:
+                'Retrieve system Security settings':
+                  $ref: '#/components/examples/RetrieveSecuritySettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Security Settings
+      summary: 'Update system Security settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN security, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **Host API Command is a WIP**
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSecuritySettings'
+            examples:
+              'Update Security settings':
+                $ref: '#/components/examples/UpdateSecuritySettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/security/modes':
+    get:
+      tags:
+        - Security Modes
+      summary: 'Retrieve system Security Modes'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN secure_mode, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSecurityModes'
+              examples:
+                'Retrieve system Security Modes':
+                  $ref: '#/components/examples/RetrieveSecurityModes'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Security Modes
+      summary: 'Update system Security Modes'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN secure_mode, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSecurityModes'
+            examples:
+              'Enable FIPS Security Mode':
+                $ref: '#/components/examples/EnableFipsMode'
+              'Enable PCI Security Mode':
+                $ref: '#/components/examples/EnablePciMode'
+              'Disable both Security Modes':
+                $ref: '#/components/examples/DisableBothModes'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSecurityModes'
+              examples:
+                'Update system Security Modes':
+                  $ref: '#/components/examples/UpdateSecurityModes'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/smtp':
+    get:
+      tags:
+        - SMTP Settings
+      summary: 'Retrieve system SMTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN smtp, OP get
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSmtpSettings'
+              examples:
+                'Retrieve SMTP settings':
+                  $ref: '#/components/examples/RetrieveSmtpSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - SMTP Settings
+      summary: 'Update system SMTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN smtp, OP set
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSmtpSettings'
+            examples:
+              'update':
+                $ref: '#/components/examples/UpdateSmtpSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/system/smtp/test':
+    post:
+      tags:
+        - SMTP Settings
+      summary: 'Test SMTP settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestSmtpConfig'
+            examples:
+              'Test SMTP settings':
+                $ref: '#/components/examples/TestSmtpConfig'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    RetrieveServerInfo:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                product:
+                  type: string
+                version:
+                  type: string
+                serialNumber:
+                  type: string
+              required:
+                - product
+                - version
+                - serialNumber
+    UploadServerISO:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
+    AutoBackupSettings:
+      type: object
+      properties:
+        frequency:
+          type: string
+          description: 'Frequency to perform backup in weeks.'
+        enabled:
+          type: boolean
+          description: 'Enable, or disable, automated backups.'
+        printers:
+          type: boolean
+          description: 'Backup printer settings.'
+        cards:
+          type: boolean
+          description: 'Backup card settings.'
+        sshKeys:
+          type: boolean
+          description: 'Backup SSH keys.'
+    RetrieveAutoBackup:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/AutoBackupSettings'
+                - required:
+                  - frequency
+                  - enabled
+                  - printers
+                  - cards
+                  - sshKeys
+    UpdateAutoBackup:
+      $ref: '#/components/schemas/AutoBackupSettings'
+    CertSettings:
+      type: object
+      properties:
+        pkiCacheSize:
+          # Needs clarification. Is this in bits, bytes, MB?
+          type: integer
+          minimum: 0
+          description: ''
+        allowDuplicateNames:
+          type: boolean
+          description: 'Allow duplicate common names per PKI tree.'
+        appendRandom64Bit:
+          type: boolean
+          description: 'Append 64-bit random data to serial.'
+        allowInvalidCerts:
+          type: boolean
+          description: 'Allow invalid certificates to generate signatures.'
+        expireNotification:
+          type: integer
+          minimum: 0
+          description: 'Notify X days before certificate expires.'
+    RetrieveCertSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/CertSettings'
+                - required:
+                  - pkiCacheSize
+                  - allowDuplicateNames
+                  - appendRandom64Bit
+                  - allowInvalidCerts
+                  - expireNotification
+    UpdateCertSettings:
+      $ref: '#/components/schemas/CertSettings'
+    RetrieveDateTime:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/UpdateDateTime'
+                - type: object
+                  properties:
+                    timezoneOffset:
+                      type: integer
+                      description: ''
+                    availableZones:
+                      type: array
+                      items:
+                        type: string
+                      description: ''
+              required:
+                - dateTime
+                - timezone
+                - timezoneOffset
+                - availableZones
+    UpdateDateTime:
+      type: object
+      properties:
+        dateTime:
+          type: string
+          format: date-time
+          description: ''
+        timezone:
+          type: string
+          description: ''
+          default: 'Coordinated Universal Time'
+      required:
+        - dateTime
+    FtpSettings:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+        port:
+          type: string
+        timeout:
+          type: integer
+          format: seconds
+        mode:
+          type: string
+          enum: ['Clear','User','PKI']
+        authUsername:
+          type: string
+        authPassword:
+          type: string
+          format: 'Base64'
+    RetrieveFtpSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/FtpSettings'
+                - type: object
+                  properties:
+                    pkiPubKey:
+                      type: string
+                      format: base64
+                      description: 'Base64 encoded public key.'
+                - required:
+                  - ipAddress
+                  - port
+                  - timeout
+                  - mode
+                  - authUsername
+                  - authPassword
+    UpdateFtpSettings:
+      $ref: '#/components/schemas/FtpSettings'
+    TestFtpSettings:
+      allOf:
+        - $ref: '#/components/schemas/FtpSettings'
+        - required:
+          - ipAddress
+          - port
+          - timeout
+          - mode
+          - authUsername
+          - authPassword
+    RetrieveHsmInfo:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                version:
+                  type: string
+                  description: ''
+              required:
+                - version
+    UploadHsmFirmware:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+          description: ''
+      required:
+        - file
+    KmipSettings:
+      type: object
+      properties:
+        symmetricFormat:
+          type: string
+          enum: ['Fx','Raw']
+          description: ''
+        rsaFormat:
+          type: string
+          enum: ['Fx','PKCS1','PKCS8','Transparent']
+          description: ''
+        includeIndexes:
+          type: boolean
+          description: ''
+        deleteContainer:
+          type: boolean
+          description: ''
+        timestampFilter:
+          type: object
+          properties:
+            filterByDate:
+              type: boolean
+              description: ''
+            startDate:
+              type: string
+              format: 'YYYY-MM-DD'
+              description: ''
+            endDate:
+              type: string
+              format: 'YYYY-MM-DD'
+              description: ''
+            filterByTime:
+              type: boolean
+              description: ''
+            startTime:
+              type: string
+              format: 'HH:MM:SS'
+              default: '00:00:00'
+              description: ''
+            endTime:
+              type: string
+              format: 'HH:MM:SS'
+              default: '00:00:00'
+              description: ''
+            dayOfWeek:
+              type: array
+              items:
+                type: string
+                enum: ['monday','tuesday','wednesday','thursday','friday']
+                description: ''
+          description: ''
+        arrivalFilter:
+          type: object
+          properties:
+            filterByDate:
+              type: boolean
+              description: ''
+            startDate:
+              type: string
+              format: 'YYYY-MM-DD'
+              description: ''
+            endDate:
+              type: string
+              format: 'YYYY-MM-DD'
+              description: ''
+            filterByTime:
+              type: boolean
+              description: ''
+            startTime:
+              type: string
+              format: 'HH:MM:SS'
+              default: '00:00:00'
+              description: ''
+            endTime:
+              type: string
+              format: 'HH:MM:SS'
+              default: '00:00:00'
+              description: ''
+            dayOfWeek:
+              type: array
+              items:
+                type: string
+                enum: ['monday','tuesday','wednesday','thursday','friday']
+                description: ''
+          description: ''
+    RetrieveKmipSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/KmipSettings'
+                - required:
+                  - symmetricFormat
+                  - rsaFormat
+                  - includeIndexes
+                  - deleteContainer
+                  - timestampFilter
+                  - arrivalFilter
+    UpdateKmipSettings:
+      $ref: '#/components/schemas/KmipSettings'
+    LdapSettings:
+      type: object
+      properties:
+        scheme:
+          type: string
+          enum: ['ldap','ldaps']
+          description: ''
+        hostname:
+          type: string
+          description: ''
+        version:
+          type: integer
+          minimum: 1
+          maximum: 3
+          description: ''
+        adminUserBind:
+          # Can be a username or distinguished name
+          type: string
+          description: ''
+        adminPassBind:
+          type: string
+          format: 'Base64'
+          description: ''
+        failoverServers:
+          type: array
+          items:
+            type: string
+          description: ''
+        userBase:
+          type: string
+          description: ''
+        usernameAttr:
+          type: string
+          description: ''
+        userPassAttr:
+          type: string
+          description: ''
+        checkGroupPerms:
+          type: boolean
+          description: ''
+        groupPerms:
+          type: object
+          properties:
+            groupBase:
+              type: string
+              description: ''
+            groupAttr:
+              type: string
+              description: ''
+            dynamicGroup:
+              type: boolean
+              description: ''
+            groupName:
+              type: string
+              description: ''
+            member:
+              type: boolean
+              description: ''
+            memberAttr:
+              type: string
+              description: ''
+          description: ''
+        authType:
+          type: string
+          enum: ['Bind','Search','Compare']
+          description: ''
+    RetrieveLdapSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/LdapSettings'
+                - required:
+                  - scheme
+                  - hostname
+                  - version
+                  - adminUserBind
+                  - adminPassBind
+                  - failoverServer
+                  - userBase
+                  - usernameAttr
+                  - userPassAttr
+                  - checkGroupPerms
+                  - groupPerms
+                  - authType
+    UpdateLdapSettings:
+      $ref: '#/components/schemas/LdapSettings'
+    TestLdapConfig:
+      allOf:
+        - type: object
+          properties:
+            username:
+              type: string
+              description: ''
+        - $ref: '#/components/schemas/LdapSettings'
+        - required:
+          - username
+          - scheme
+          - hostname
+          - version
+          - adminUserBind
+          - adminPassBind
+          - failoverServer
+          - userBase
+          - usernameAttr
+          - userPassAttr
+          - checkGroupPerms
+          - groupPerms
+          - authType
+    NetworkSettings:
+      type: object
+      properties:
+        hostname:
+          type: string
+          description: ''
+        primaryDns:
+          type: string
+          description: ''
+        secondaryDns:
+          type: string
+          description: ''
+        tertiaryDns:
+          type: string
+          description: ''
+        maxConnections:
+          type: integer
+          description: ''
+        writeTimeout:
+          type: integer
+          format: milliseconds
+          default: 100
+          description: ''
+        peeringSize:
+          # Needs clarification
+          type: integer
+          default: 1000
+          description: ''
+        enableKeepAlive:
+          type: boolean
+          description: ''
+        keepAliveTime:
+          type: integer
+          format: seconds
+          description: ''
+        keepAliveProbes:
+          type: integer
+          description: ''
+        keepAliveInterface:
+          type: integer
+          format: seconds
+          description: ''
+    RetrieveNetworkSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/NetworkSettings'
+                - required:
+                  - hostname
+                  - primaryDns
+                  - secondaryDns
+                  - tertiaryDns
+                  - maxConnections
+                  - writeTimeout
+                  - peeringSize
+                  - enableKeepAlive
+                  - keepAliveTime
+                  - keepAliveInterface
+    UpdateNetworkSettings:
+      $ref: '#/components/schemas/NetworkSettings'
+    NtpSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: ''
+        syncOnStartup:
+          type: boolean
+          description: ''
+        host:
+          type: string
+          description: ''
+    RetrieveNtpSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/NtpSettings'
+                - required:
+                  - enabled
+                  - syncOnStartup
+                  - host
+    UpdateNtpSettings:
+      $ref: '#/components/schemas/NtpSettings'
+    OcspSettings:
+      type: object
+      properties:
+        requireSignature:
+          type: boolean
+          description: ''
+        requestCertTree:
+          # Needs clarification
+          type: string
+          description: ''
+        requestCertName:
+          # Needs clarification
+          type: string
+          description: ''
+        signResponse:
+          type: boolean
+          description: ''
+        responseSigner:
+          type: string
+          enum: ['Issuer','Specific certificate']
+          description: ''
+        responseCertTree:
+          # Needs clarification
+          type: string
+          description: ''
+        responseCertName:
+          type: string
+          description: ''
+        responseCertHash:
+          type: string
+          enum: ['SHA1','SHA224','SHA256','SHA384','SHA512']
+          description: ''
+        includeCerts:
+          type: boolean
+          description: ''
+        responseIdType:
+          type: string
+          enum: ['Name','Key']
+          description: ''
+        requireNonce:
+          type: boolean
+          description: ''
+    RetrieveOcspSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/OcspSettings'
+                - required:
+                  - requireSignature
+                  - requestCertTree
+                  - requestCertName
+                  - signResponse
+                  - responseSigner
+                  - responseCertTree
+                  - responseCertName
+                  - responseCertHash
+                  - includeCerts
+                  - responseIdType
+                  - requireNonce
+    UpdateOcspSettings:
+      $ref: '#/components/schemas/OcspSettings'
+    PasswordPolicy:
+      type: object
+      properties:
+        maxAttempts:
+          type: integer
+          description: ''
+        lockPeriod:
+          type: string
+          description: ''
+        passHistory:
+          type: integer
+          description: ''
+        historyPeriod:
+          type: string
+          description: ''
+        expiration:
+          type: string
+          description: ''
+    RetrievePasswordPolicy:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/PasswordPolicy'
+                - required:
+                  - maxAttempts
+                  - lockPeriod
+                  - passHistory
+                  - historyPeriod
+                  - expiration
+    UpdatePasswordPolicy:
+      $ref: '#/components/schemas/PasswordPolicy'
+    SystemPermissions:
+      type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: ''
+              description:
+                type: string
+                description: ''
+              setting:
+                type: string
+                enum: ['']
+                description: ''
+              settingOptions:
+                type: array
+                items:
+                  type: string
+                description: ''
+    RetrieveSystemPermissions:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/SystemPermissions'
+                - required:
+                  - permissions
+    UpdateSystemPermissions:
+      type: object
+      properties:
+        permissions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: ''
+              setting:
+                type: string
+                enum: ['']
+                description: ''
+            required:
+              - type
+              - setting
+      required:
+        - permissions
+    RegauthSettings:
+      type: object
+      properties:
+        allowAnonymous:
+          type: boolean
+        approvalType:
+          type: string
+          enum: ['Group','User']
+        anonymousWcce:
+          type: boolean
+        wccePolicy:
+          # Issuance policy alias; Needs clarification
+          type: string
+    RetrieveRegauthSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/RegauthSettings'
+                - required:
+                  - allowAnonymous
+                  - approvalType
+                  - annonymousWcce
+                  - wccePolicy
+    UpdateRegauthSettings:
+      $ref: '#/components/schemas/RegauthSettings'
+    SecuritySettings: {}
+    RetrieveSecuritySettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/SecuritySettings'
+                # - required:
+    UpdateSecuritySettings:
+      $ref: '#/components/schemas/SecuritySettings'
+    SecurityModes:
+      type: object
+      properties:
+        fips:
+          type: boolean
+        pci:
+          type: boolean
+    RetrieveSecurityModes:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/SecurityModes'
+                - required:
+                  - fips
+                  - pci
+    UpdateSecurityModes:
+      $ref: '#/components/schemas/SecurityModes'
+    SmtpSettings:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          description: ''
+        port:
+          type: string
+          description: ''
+        senderEmail:
+          type: string
+          format: email
+          description: ''
+        enableAuth:
+          type: boolean
+          description: ''
+        authUsername:
+          type: string
+          description: ''
+        authPassword:
+          type: string
+          format: 'Base64'
+          description: ''
+        enableTls:
+          type: boolean
+          description: ''
+    RetrieveSmtpSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/SmtpSettings'
+                - required:
+                  - ipAddress
+                  - port
+                  - senderEmail
+                  - enableAuth
+                  - authUsername
+                  - authPassword
+                  - enableTls
+    UpdateSmtpSettings:
+      $ref: '#/components/schemas/SmtpSettings'
+    TestSmtpConfig:
+      allOf:
+        - type: object
+          properties:
+            recipientEmail:
+              type: string
+              format: email
+              description: ''
+        - $ref: '#/components/schemas/SmtpSettings'
+        - required:
+          - recipientEmail
+          - ipAddress
+          - port
+          - senderEmail
+          - enableAuth
+          - authUsername
+          - authPassword
+          - enableTls
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    RetrieveServerInfo:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          product: 'Key Management System'
+          version: '4.0.1'
+          serialNumber: '123456789ABCDEF'
+    RetrieveAutoBackup:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          frequency: '3 Weeks'
+          enabled: true
+          printers: false
+          cards: true
+          sshKeys: true
+    UpdateAutoBackup:
+      value:
+        frequency: '2 Weeks'
+        printers: true
+    RetrieveCertSettings:
+      value:
+        response:
+          pkiCacheSize: 256
+          allowDuplicateNames: false
+          appendRandom64Bit: true
+          allowInvalidCerts: false
+          expireNotification: 7
+    UpdateCertSettings:
+      value:
+          allowDuplicateNames: true
+          allowInvalidCerts: true
+          expireNotification: 5
+    RetrieveDateTime:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          dateTime: '2019-11-21T19:26:29.762Z'
+          timezone: 'America/Chicago'
+          timezoneOffset: -6
+          availableZones:
+            - 'Africa/Abidjan'
+            - 'America/Anchorage'
+            - 'America/Juneau'
+    UpdateDateTime:
+      value:
+        dateTime: '2019-11-21T19:26:29.762Z'
+        timezone: 'America/Anchorage'
+    RetrieveFtpSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          ipaddress: '192.168.0.100'
+          port: '9090'
+          timeout: 10000
+          mode: 'PKI'
+          authUsername: 'User'
+          authPassword: 'Present'
+          pkiPubKey: 'V2VzdGVyb3M='
+    UpdateFtpSettings:
+      value:
+        timeout: 20000
+        mode: 'PKI'
+        authUsername: 'User'
+        authPassword: 'V2VzdGVyb3M='
+    TestFtpSettings:
+      value:
+        ipaddress: '192.168.0.100'
+        port: '9090'
+        timeout: 20000
+        mode: 'PKI'
+        authUsername: 'User'
+        authPassword: 'Present'
+        pkiPubKey: 'V2VzdGVyb3M='
+    RetrieveHsmInfo:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          version: '5.0.0'
+    RetrieveKmipSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          symmetricFormat: 'Fx'
+          rsaFormat: 'PKCS8'
+          includeIndexes: true
+          deleteContainer: false
+          timestampFilter:
+            filterByDate: true
+            startDate: '2020-01-01'
+            endDate: '2020-01-02'
+            filterByTime: true
+            startTime: '08:00:00'
+            endTime: '17:00:00'
+            dayOfWeek: ['monday','wednesday','friday']
+          arrivalFilter:
+            filterByDate: true
+            startDate: '2020-01-01'
+            endDate: '2020-01-02'
+            filterByTime: true
+            startTime: '08:00:00'
+            endTime: '17:00:00'
+            dayOfweek: ['monday','wednesday','friday']
+    UpdateKmipSettings:
+      value:
+        symmetricFormat: 'Fx'
+        rsaFormat: 'PKCS8'
+        includeIndexes: true
+        deleteContainer: false
+        timestampFilter:
+          filterByDate: true
+          startDate: '2020-01-01'
+          endDate: '2020-01-02'
+          filterByTime: true
+          startTime: '08:00:00'
+          endTime: '17:00:00'
+          dayOfWeek: ['monday','wednesday','friday']
+        arrivalFilter:
+          filterByDate: true
+          startDate: '2020-01-01'
+          endDate: '2020-01-02'
+          filterByTime: true
+          startTime: '08:00:00'
+          endTime: '17:00:00'
+          dayOfweek: ['monday','wednesday','friday']
+    RetrieveLdapSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          scheme: 'ldap'
+          hostname: 'https://ldap.internal.server.com:8000'
+          version: 3
+          adminUserBind: 'Futurex'
+          adminPassBind: 'Present'
+          failoverServers:
+            - '127.0.0.2:8000'
+            - '127.0.0.3:8000'
+            - '127.0.0.4:8000'
+          userBase: ''
+          usernameAttr: ''
+          userPassAttr: ''
+          checkGroupPerms: true
+          groupPerms:
+            groupBase: ''
+            groupAttr: ''
+            dynamicGroup: ''
+            groupName: 'Futurex'
+            member: ''
+            memberAttr: ''
+          authType: 'Compare'
+    UpdateLdapSettings:
+      value:
+        scheme: 'ldap'
+        hostname: 'https://ldap.internal.server.com:8000'
+        version: 3
+        adminUserBind: 'Futurex'
+        adminPassBind: 'V2VzdGVyb3M='
+        failoverServers:
+          - '127.0.0.2:8000'
+          - '127.0.0.3:8000'
+          - '127.0.0.4:8000'
+        userBase: ''
+        usernameAttr: ''
+        userPassAttr: ''
+        checkGroupPerms: true
+        groupPerms:
+          groupBase: ''
+          groupAttr: ''
+          dynamicGroup: ''
+          groupName: 'Futurex'
+          member: ''
+          memberAttr: ''
+        authType: 'Compare'
+    TestLdapConfig:
+      value:
+        username: 'User1'
+        scheme: 'ldap'
+        hostname: 'https://ldap.internal.server.com:8000'
+        version: 3
+        adminUserBind: 'Futurex'
+        adminPassBind: 'V2VzdGVyb3M='
+        failoverServers:
+          - '127.0.0.2:8000'
+          - '127.0.0.3:8000'
+          - '127.0.0.4:8000'
+        userBase: ''
+        usernameAttr: ''
+        userPassAttr: ''
+        checkGroupPerms: true
+        groupPerms:
+          groupBase: ''
+          groupAttr: ''
+          dynamicGroup: ''
+          groupName: 'Futurex'
+          member: ''
+          memberAttr: ''
+        authType: 'Compare'
+    RetrieveNetworkSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          hostname: 'servername'
+          primaryDns: ''
+          secondaryDns: ''
+          tertiaryDns: ''
+          maxConnections: 100
+          writeTimeout: 100
+          peeringSize: 1000
+          enableKeepalive: true
+          keepaliveTime: 120
+          keepaliveProbes: 5
+          keepaliveInterface: 120
+    UpdateNetworkSettings:
+      value:
+        hostname: 'servername'
+        primaryDns: ''
+        secondaryDns: ''
+        tertiaryDns: ''
+        maxConnections: 100
+        writeTimeout: 100
+        peeringSize: 1000
+        enableKeepalive: true
+        keepaliveTime: 120
+        keepaliveProbes: 5
+        keepaliveInterface: 120
+    RetrieveNtpSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          enabled: true
+          syncOnStartup: true
+          host: '127.0.0.1'
+    UpdateNtpSettings:
+      value:
+        enabled: true
+        syncOnStartup: true
+        host: '127.0.0.1'
+    RetrieveOcspSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          requireSignature: true
+          requestCertTree: 'My Certs'
+          requestCertName: 'Signing Cert'
+          signResponse: true
+          responseSigner: 'Issuer'
+          responseCertTree: 'Issuer Certs'
+          responseCertName: 'Issuer Signing Cert'
+          responseCertHash: 'SHA256'
+          includeCerts: true
+          responseIdType: 'Name'
+          requireNonce: true
+    UpdateOcspSettings:
+      value:
+        requireSignature: true
+        requestCertTree: 'My Certs'
+        requestCertName: 'Signing Cert'
+        signResponse: true
+        responseSigner: 'Issuer'
+        responseCertTree: 'Issuer Certs'
+        responseCertName: 'Issuer Signing Cert'
+        responseCertHash: 'SHA256'
+        includeCerts: true
+        responseIdType: 'Name'
+        requireNonce: true
+    RetrievePasswordPolicy:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          maxAttempts: 5
+          lockPeriod: '2 Minutes'
+          passHistory: 3
+          historyPeriod: '30 Days'
+          expiration: '60 Days'
+    UpdatePasswordPolicy:
+      value:
+        maxAttempts: 5
+        lockPeriod: '2 Minutes'
+        passHistory: 3
+        historyPeriod: '30 Days'
+        expiration: '60 Days'
+    RetrieveSystemPermissions:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          permissions:
+            - type: 'PKICERT'
+              description: 'PKI Certificates'
+              setting: 'Owner'
+              settingOptions:
+                - 'Owner'
+                - 'Individual'
+                - 'Container'
+                - 'None'
+            - type: 'CERTAUTHORITY'
+              description: 'PKI trees'
+              setting: 'Individual'
+              settingOptions:
+                - 'Owner'
+                - 'Individual'
+                - 'None'
+    UpdateSystemPermissions:
+      value:
+        permissions:
+          - type: 'PKICERT'
+            setting: 'Owner'
+          - type: 'CERTAUTHORITY'
+            setting: 'Individual'
+    RetrieveRegauthSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          allowAnonymous: true
+          approvalType: 'User'
+          anonymousWcce: true
+          wccePolicy: ''
+    UpdateRegauthSettings:
+      value:
+        allowAnonymous: true
+        approvalType: 'User'
+        anonymousWcce: true
+        wccePolicy: ''
+    RetrieveSecuritySettings: {}
+    UpdateSecuritySettings: {}
+    RetrieveSecurityModes:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          fips: true
+          pci: false
+    UpdateSecurityModeResponse:
+      value:
+        status: 'Success'
+        message: ''
+        fips: true
+        pci: false
+        response:
+          jobId: 'abcdef89012356def76765'
+    RetrieveSmtpSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          ipAddress: '127.0.0.1'
+          port: '8080'
+          senderEmail: 'example@futurex.com'
+          enableAuth: true
+          authUsername: 'User'
+          authPassword: 'Present'
+          enableTls: 'true'
+    UpdateSmtpSettings:
+      value:
+        ipAddress: '127.0.0.1'
+        port: '8080'
+        senderEmail: 'example@futurex.com'
+        enableAuth: true
+        authUsername: 'User'
+        authPassword: 'V2VzdGVyb3M='
+        enableTls: 'true'
+    TestSmtpConfig:
+      value:
+        sendTo: 'receiver@email.com'
+        ipAddress: '127.0.0.1'
+        port: '8080'
+        senderEmail: 'example@futurex.com'
+        enableAuth: true
+        authUsername: 'User'
+        authPassword: 'V2VzdGVyb3M='
+        enableTls: 'true'

@@ -1,0 +1,24 @@
+<div class="content-wrapper height-wrapper" ng-controller="configViewController as ctrl"
+  ng-class="{'config-view-sidebar-expanded': fxAppService.isRightSidebarShown()}">
+    <section class="content-header">
+      <h1>
+          {{ localProductName }}
+        <small>Configuration</small>
+      </h1>
+    </section>
+
+   <section class="content" >
+       <fx-spinner id='config-spinner' name='configSpinner'></fx-spinner>
+        <fx-container-list-view
+            current-selection="configModel.currentSelection"
+            groups="configModel.balancedGroups"
+            group-header-mapping="mappings.groupHeaderMapping"
+            child-header-mapping="mappings.deviceHeaderMapping"
+            group-template-url="directives/guardianGroup.html"
+            child-template-url="directives/guardianDevice.html"
+            list-row-template-url="directives/guardianListRow.html">
+        </fx-container-list-view>
+      <fx-bottom-config-bar>
+      </fx-bottom-config-bar>
+   </section>
+</div>

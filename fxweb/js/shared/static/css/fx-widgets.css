@@ -1,0 +1,33 @@
+/* CSS for fx widgets */
+
+.fx-widget-required-text {
+  color: red;
+  font-size: smaller;
+}
+
+/* fx-raw-file */
+.fx-textarea {
+  width: 100%;
+  font-family: monospace;
+}
+
+.fx-raw-file-textarea {
+  height: 200px !important;
+}
+
+/* fx-select-arr-obj */
+.fx-select-arr-obj-fill-width {
+  width: 100%;
+}
+
+.nested-obj-sel-text {
+    margin-left: 15px;
+}
+
+.dropdown-toggle {
+    overflow: hidden;
+}
+
+.dropdown-menu li:hover {
+    background-color: lightgray;
+}

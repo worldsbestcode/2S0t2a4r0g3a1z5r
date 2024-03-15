@@ -1,0 +1,81 @@
+<header class="main-header" ng-controller="headerCtrl">
+	<div class="logo">
+		<div class="logo-lg">
+			<img src="/guardian/static/images/Futurex_Logo_Bright.png" class="fx-logo">
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+				<span class="sidebar-logo"><i class="fa fa-bars"></i></span>
+			</a>
+		</div>
+		<div class="logo-mini">
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+				<span class="sidebar-logo"><i class="fa fa-bars"></i></span>
+			</a>
+		</div>
+	</div>
+	<nav class="navbar navbar-static-top">
+		<img src="/guardian/static/images/certificate.png" height="25px">
+		<span class="navbar-inline">Guardian Web View</span>
+		<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav">
+				<li class="dropdown user user-menu">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-users"></i>
+						<span class="hidden-xs">{{fxAppService.getLoginData().name}}</span>
+						<i class="fa fa-caret-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<!-- User image -->
+						<li class="user-header">
+							<i class="fa fa-users" style="color: white; font-size: 60pt;"></i>
+							<p>{{fxAppService.getLoginData().name}}</p>
+						</li>
+						<!-- Menu Footer-->
+						<li class="user-footer">
+							<div class="pull-right">
+								<a href="/logout" class="btn btn-default btn-flat">Sign out</a>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li ng-class="{'hidden': !rightSidebarEnabled || !fxAppService.isRightSidebarShown()}">
+					<a href="#" class="control-sidebar-btn" data-toggle='control-sidebar'>
+						<i class="fa fa-times"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>
+
+<aside class="main-sidebar" ng-controller="sidebarCtrl">
+	<section class="sidebar">
+		<ul class="sidebar-menu">
+			<li class="treeview" ng-class="{'active': fxAppService.getView() === 'nodesView' }">
+				<a href="#" ng-click="fxAppService.setView('nodesView');">
+					<i class="fa fa-bar-chart"></i>
+					<span style="margin: 0;">Nodes View</span>
+				</a>
+			</li>
+			<li class="treeview" ng-class="{'active': fxAppService.getView() === 'configView' }">
+				<a href="#" ng-click="fxAppService.setView('configView');">
+					<i class="fa fa-cogs"></i>
+					<span style="margin: 0;">Configuration View</span>
+				</a>
+			</li>
+			<li class="treeview" ng-class="{'active': fxAppService.getView() === 'peerView' }">
+				<a href="#" ng-click="fxAppService.setView('peerView');">
+					<i class="fa fa-users"></i>
+					<span style="margin: 0;">Peer View</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<div class="sidebar-footer">
+        <a href="https://www.futurex.com/support">
+		    <div class="sidebar-footer-logo">
+			    <span class="sidebar-footer-logo-text">XCEPTIONAL SUPPORT</span>
+			    <img class="sidebar-footer-logo-image" src="/guardian/static/images/xceptional-support.png">
+		    </div>
+        </a>
+	</div>
+</aside>

@@ -1,0 +1,75 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add Group</h4>
+</div>
+<div class="modal-body">
+  <fx-box>
+    <fx-row>
+      <fx-column width="12">
+        <div>
+          <fx-input-mask
+            form-invalid="formInvalid.name"
+            label="Name"
+            required="true"
+            autofocus="true"
+            regex="true"
+            csvregex="false"
+            forceregex="false"
+            mask="{{nameRegex()}}"
+            value="formdata.groupName"
+            disabled="{{fieldDisabled()}}">
+          </fx-input-mask>
+        </div>
+        <div>
+          <fx-input-mask
+            form-invalid="formInvalid.description"
+            label="Description"
+            regex="true"
+            csvregex="false"
+            forceregex="false"
+            mask="{{descriptionRegex()}}"
+            value="formdata.groupDescription"
+            disabled="{{fieldDisabled()}}">
+          </fx-input-mask>
+        </div>
+      </fx-column>
+    </fx-row>
+    <fx-row>
+      <fx-column width="12">
+       <div>
+         <fx-guardian-group-options description="Group Options"
+                                    balancing-enabled="formdata.groupBalancingEnabled"
+                                    guardian-peering-enabled="formdata.guardianPeeringEnabled"
+                                    should-show-ports="formdata.shouldShowPorts"
+                                    group-type="formdata.objectType">
+                                    
+         </fx-guardian-group-options>
+       </div>
+      </fx-column>
+    </fx-row>
+    <fx-row>
+      <fx-column width="12">
+        <div ng-repeat="config in formdata.ports" ng-if="formdata.shouldShowPorts">
+          <fx-guardian-ports
+            form-invalid="formInvalid.ports[config.type]"
+            description="{{config.name}}"
+            required="{{{true: 'true', false: null}[config.required]}}"
+            force-tls="{{{true: 'true', false: null}[config.forceTls]}}"
+            port-info="config"
+            port="config.port"
+            port-config="portConfig"
+            related-ports="formdata.ports"
+            enabled="config.enabled"
+            header-size="config.headerSize"
+            connection-type="config.connectionType"
+            tls-config-id="config.tlsConfigId"
+            disabled="">
+          </fx-guardian-ports>
+        </div>
+      </fx-column>
+    </fx-row>
+  </fx-box>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn" data-ng-click="cancel()">Cancel</button>
+  <button type="button" class="btn btn-primary" data-ng-click="submit()" ng-disabled="disableSubmit">OK</button>
+</div>

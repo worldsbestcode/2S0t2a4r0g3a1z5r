@@ -1,0 +1,27 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0.0'
+  title: 'Logout'
+  description: '# Logout API'
+
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Futurex/logout/1.0.0
+
+paths:
+  /logout:
+    post:
+      tags:
+        - Logout
+      summary: 'Logout response'
+      description: 'Logout'
+      responses:
+        default:
+          $ref: '#/components/responses/302-Found'
+
+components:
+  responses:
+    302-Found:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/302-Found'

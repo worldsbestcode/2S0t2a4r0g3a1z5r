@@ -1,0 +1,8 @@
+<div class="list-view-row">
+    <div class="list-view-column list-view-object"  ng-repeat="columnName in rowColumns" ng-if="rowObject" ng-style="{'width': calcWidth()}">
+        {{ rowObject[columnName] }}
+    </div>
+    <div class="list-view-column list-view-heading" ng-repeat="columnName in rowColumns" ng-if="!rowObject" ng-style="{'width': calcWidth()}">
+        {{ columnName }}
+    </div>
+</div>

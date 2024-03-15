@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "FWUsage",
+    "description": "Key usages used by the firmware",
+    "enum": [
+        "None",
+        "All",
+        "Encrypt & Decrypt",
+        "Encrypt",
+        "Decrypt",
+        "Generate & Verify MAC",
+        "Genertate MAC / Sign-only",
+        "Verify MAC / Verify-only",
+        "Derive",
+        "Asymmetric Sign & Verify",
+        "Asymmetric Wrap",
+        "Asymmetric Unwrap",
+        "Asymmetric Wrap & Unwrap"
+    ]
+}

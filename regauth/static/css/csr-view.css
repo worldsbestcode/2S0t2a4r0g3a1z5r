@@ -1,0 +1,126 @@
+/* CSR view */
+
+.csr-view-content {
+  padding-right: 0px;
+}
+
+.fx-layout-csr-form {
+  margin-left: 15px;
+  margin-right: 30px;
+}
+
+.csr-form-button {
+  width: 100px;
+}
+
+.csr-form-textarea {
+  height: 9em !important;
+}
+
+.csr-form-infobox, .submitter-form-infobox {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 1.66em;
+}
+
+.csr-form-infobox-item, .submitter-form-infobox-item {
+  margin-left: 8px;
+}
+
+.csr-form-infobox-first-item, .submitter-form-infobox-first-item {
+  margin-top: 8px;
+}
+
+.csr-form-infobox-last-item, .submitter-form-infobox-last-item {
+  margin-bottom: 8px;
+}
+
+.csr-form-infobox-item-text, .submitter-form-infobox-item-text {
+  font-weight: 600;
+}
+
+.csr-form-upload-text {
+  color: #777;
+  font-weight: 400;
+}
+
+.csr-form-inject-button {
+  width: 200px;
+}
+
+.csr-form-download-dropdown {
+  min-width: 250px !important;
+  max-width: 250px !important;
+}
+
+.csr-form-tabs {
+  vertical-align: top;
+}
+
+.csr-form-tabs-ul {
+  margin: 0;
+}
+
+.csr-form-tabs-li {
+  min-width: 100px;
+  max-width: 100px;
+  min-height: 40px;
+  max-height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.csr-form-submit-buttons {
+  min-width: 200px;
+}
+
+.csr-form-top-row {
+  width: 100%;
+  height: 85px;
+  padding: 0;
+  margin: 0;
+  margin-top: -15px;
+  margin-left: -15px;
+}
+
+.csr-form-row {
+  text-align: center;
+  margin-top: 3em;
+}
+
+.csr-form-column {
+  display: inline-block;
+  min-width: 500px;
+  max-width: 500px;
+}
+
+.csr-form-wide-column {
+  max-width: 800px;
+}
+
+@media (max-width: 767px) {
+  .csr-form-row {
+    text-align: center;
+    margin-top: 3em;
+  }
+
+  .csr-form-column {
+    display: inline-block;
+    min-width: auto;
+    max-width: auto;
+    width: 100%;
+  }
+}
+
+.csr-form-button-selarr {
+    min-width: 250px;
+}
+
+.csr-form-button-download {
+    width: 200px;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+}

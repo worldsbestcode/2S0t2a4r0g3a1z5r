@@ -1,0 +1,113 @@
+.name {
+    pointer-events: none;
+    font: 15px sans-serif;
+    font-weight: bold;
+    color: gray;
+    text-anchor: right;
+    z-index: 100;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.status {
+    pointer-events: none;
+    font: 13px sans-serif;
+    color: gray;
+    text-anchor: right;
+    z-index: 100;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.node_image {
+    pointer-events: none;
+    width: 22px;
+    height: 22px;
+}
+
+.extra_info_inner {
+    z-index: 100;
+    font-size: 15px;
+    color: white;
+    font-family: "Helvetica";
+    background: gray;
+    padding: 13px;
+    line-height: 30%;
+    border-bottom: 5px solid red;
+}
+
+*.unselectable {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.circle,
+.circle-glow {
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: move;
+}
+
+.circle {
+    stroke-width: 5px;
+    z-index: 10;
+    fill: #4c6477;
+}
+
+.circle-glow {
+    fill: rgba(0, 0, 0, 0.0);
+    stroke-width: 3px;
+}
+
+.node:hover .circle,
+.node:hover .circle-glow {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.link {
+    stroke: #999;
+    z-index: 0;
+}
+
+.link,
+.link-glow {
+    stroke-opacity: 0.6;
+}
+
+.link-glow,
+.circle-glow {
+    filter: url(#blur-filter);
+    stroke: aqua;
+    z-index: 20;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    padding-bottom: -10%;
+    vertical-align: top;
+    overflow: hidden;
+    width: 100%
+}
+
+body.main {
+    margin: 0px;
+    border-left: 5px solid grey;
+    border-right: 5px solid grey;
+}
+
+body.main:before, body.main:after {
+    content: "";
+    position: fixed;
+    background: grey;
+    left: 0;
+    right: 0;
+    height: 5px;
+}
+
+body.main:before {
+    top: 0;
+}
+
+body.main:after {
+    bottom: 0;
+}

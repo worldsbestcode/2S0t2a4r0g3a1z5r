@@ -1,0 +1,59 @@
+<div ng-show="groups.length" ng-switch="ctrl.allExpanded();">
+    <button ng-switch-when="true" class="btn btn-default" ng-click="ctrl.collapseAll();">
+        <span><i class="fa fa-compress"></i> Collapse All</span>
+    </button>
+    <button ng-switch-default class="btn btn-default" ng-click="ctrl.expandAll();">
+        <span><i class="fa fa-expand"></i> Expand All</span>
+    </button>
+</div>
+
+<uib-accordion close-others=false>
+    <div class="list view-group list-view-header-group" uib-accordion-group is-open="false" is-disabled="true">
+        <uib-accordion-heading>
+            <fx-list-row 
+                row-columns="ctrl.groupDisplayColumns" 
+                content-type="listRow">
+            </fx-list-row>
+        </uib-accordion-heading>
+    </div>
+    <div class="list-view-group" uib-accordion-group is-open="group.isOpen" ng-repeat="group in groups">
+        <uib-accordion-heading>
+            <fx-list-row
+                update-selection="ctrl.updateSelection"
+                is-open="group.isOpen"
+                row-object="group"
+                row-columns="ctrl.groupHeaderColumns"
+                content-type="listRow">
+            </fx-list-row>
+        </uib-accordion-heading>
+        <fx-list-content
+          content="group.contentRows"
+          content-object="group"
+          content-type="group">
+        </fx-list-content>
+        <div class="list-view-group list-view-header-group" ng-if="group.children.length" class="row" uib-accordion-group is-open="false" is-disabled="true">
+            <uib-accordion-heading>
+                <fx-list-row 
+                    row-columns="ctrl.childDisplayColumns"
+                    content-type="listRow">
+                </fx-list-row>
+            </uib-accordion-heading>
+        </div>
+        <div class="list-view-group" uib-accordion-group is-open="child.isOpen" ng-repeat="child in group.children">
+            <uib-accordion-heading>
+                <fx-list-row
+                    update-selection="ctrl.updateSelection"
+                    is-open="child.isOpen"
+                    row-object="child"
+                    row-columns="ctrl.childHeaderColumns"
+                    content-type="listRow">
+                </fx-list-row>
+            </uib-accordion-heading>
+            <fx-list-content
+              content="child.contentRows"
+              content-object="child"
+              content-type="child">
+            </fx-list-content>
+        </div>
+    </div>
+</uib-accordion>

@@ -1,0 +1,82 @@
+.wizard-bread-container {
+  background: var(--secondary-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  max-width: 100rem;
+}
+
+.wizard-bread-image-container {
+  height: 4rem;
+  width: 4rem;
+  background: var(--primary-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.wizard-bread-image {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
+.wizard-bread-name {
+  font-weight: 700;
+  font-size: 18px;
+  margin-right: 4rem;
+  white-space: nowrap;
+  max-width: 40ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wizard-page-container {
+  text-align: center;
+  width: fit-content;
+  margin: auto;
+  padding: 0 2rem;
+}
+
+.wizard-page-name {
+  font-weight: 700;
+  font-size: 28px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wizard-page-description {
+  color: var(--secondary-text-color);
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.wizard-button-container-dummy {
+  /* wizard-button-container height */
+  height: 115px;
+}
+.wizard-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 2rem;
+  border-top: 1px solid var(--border-color);
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--primary-background-color);
+
+  z-index: 2;
+}

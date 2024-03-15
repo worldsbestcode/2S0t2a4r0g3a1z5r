@@ -1,0 +1,7 @@
+<div id="node-image-frame">
+<img id="node-image" ng-src="{{nodeImgSrc}}"/>
+</div>
+<div class="node-text-info">
+    <pre ng-show="nodeInfo || dynamicNodeInfo">{{nodeInfo}}{{dynamicNodeInfo}}</pre>
+    <pre ng-show="!nodeInfo && !dynamicNodeInfo">Device Info loading...</pre>
+</div>

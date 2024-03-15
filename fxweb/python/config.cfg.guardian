@@ -1,0 +1,18 @@
+[base]
+server_type = guardian
+db_name = rk
+
+[log]
+level = info
+
+[comm]
+socktype = client
+context_tag = ST
+context_receive = SR
+
+[flask]
+uwsgi = True
+debug = False
+static_folder = ''
+template_folder = ''
+url = /

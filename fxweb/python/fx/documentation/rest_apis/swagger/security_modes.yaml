@@ -1,0 +1,312 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'Security Modes'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/security/fips-mode':
+    get:
+      tags:
+        - FIPS Security Mode
+      summary: 'Retrieve FIPS security mode status'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN secure_mode
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveFipsMode'
+              examples:
+                'Retrieve FIPS Mode':
+                  $ref: '#/components/examples/RetrieveFipsMode'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - FIPS Security Mode
+      summary: 'Update FIPS security mode'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN secure_mode
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFipsMode'
+            examples:
+              'Enable FIPS Mode':
+                $ref: '#/components/examples/EnableFipsMode'
+              'Disable FIPS Mode':
+                $ref: '#/components/examples/DisableFipsMode'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateFipsModeResponse'
+              examples:
+                'Update FIPS Mode':
+                  $ref: '#/components/examples/UpdateFipsModeResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/security/pci-mode':
+    get:
+      tags:
+        - PCI Security Mode
+      summary: 'Retrieve PCI security mode status'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN secure_mode
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePciMode'
+              examples:
+                'Retrieve PCI Mode':
+                  $ref: '#/components/examples/RetrievePciMode'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - PCI Security Mode
+      summary: 'Update PCI security mode'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN secure_mode
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePciMode'
+            examples:
+              'Enable PCI Mode':
+                $ref: '#/components/examples/EnablePciMode'
+              'Disable PCI Mode':
+                $ref: '#/components/examples/DisablePciMode'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePciModeResponse'
+              examples:
+                'Update PCI Mode':
+                  $ref: '#/components/examples/UpdatePciModeResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    RetrieveFipsMode:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              $ref: '#/components/schemas/BareStatusObject'
+    UpdateFipsMode:
+      $ref: '#/components/schemas/BareStatusObject'
+    UpdateFipsModeResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                jobId:
+                  type: string
+                  format: UUID
+                  description: ''
+    RetrievePciMode:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              $ref: '#/components/schemas/BareStatusObject'
+    UpdatePciMode:
+      $ref: '#/components/schemas/BareStatusObject'
+    UpdatePciModeResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                jobId:
+                  type: string
+                  format: UUID
+                  description: ''
+    BareStatusObject:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: ''
+      required:
+        - enabled
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    RetrieveFipsMode:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          enabled: true
+    EnableFipsMode:
+      value:
+        enabled: true
+    DisableFipsMode:
+      value:
+        enabled: false
+    UpdateFipsModeResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          jobId: 'abcdef89012356def76765'
+    RetrievePciMode:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          enabled: true
+    EnablePciMode:
+      value:
+        enabled: true
+    DisablePciMode:
+      value:
+        enabled: false
+    UpdatePciModeResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          jobId: 'defghi09823b24f5t'

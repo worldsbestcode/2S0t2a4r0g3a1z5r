@@ -1,0 +1,44 @@
+<div>
+  <fx-input
+    label="Command Report"
+    type="text"
+    value="userFilename">
+  </fx-input>
+  <div class="command-stat-date">
+    <label> Date Start </label>
+    <div>
+      <input type="text"
+        class="form-control"
+        uib-datepicker-popup="yyyy-MM-dd"
+        ng-model="selectedDate.begin"
+        is-open="commandStatBeginDateOpened"
+        ng-click="commandStatBeginDateOpened = !commandStatBeginDateOpened"
+        show-button-bar=false>
+    </div>
+  </div>
+  <div class="command-stat-date">
+    <label> Date End </label>
+    <div>
+      <input type="text"
+        class="form-control"
+        uib-datepicker-popup="yyyy-MM-dd"
+        ng-model="selectedDate.end"
+        is-open="commandStatEndDateOpened"
+        ng-click="commandStatEndDateOpened = !commandStatEndDateOpened"
+        show-button-bar=false>
+    </div>
+  </div>
+  <fx-column class="pull-left">
+    <fx-button callback="downloadCommandReport" class="pull-left">
+      <div ng-if="!generating">
+        Download
+      </div>
+      <div ng-if="generating">
+        <i class="fa fa-spinner fa-spin"></i> Generating...
+      </div>
+    </fx-button>
+    <fx-button callback="cancelDownload"  ng-if="generating">
+      Cancel
+    </fx-button>
+  </fx-column>
+</div>

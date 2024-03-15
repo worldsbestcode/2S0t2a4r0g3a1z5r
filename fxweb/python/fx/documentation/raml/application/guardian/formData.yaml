@@ -1,0 +1,8 @@
+#%RAML 0.8
+
+description: Used for form interactions that require a server response
+post:
+  description: Request form data from the server
+  responses:
+    200:
+      description: POST <<resourcePathName>> Response

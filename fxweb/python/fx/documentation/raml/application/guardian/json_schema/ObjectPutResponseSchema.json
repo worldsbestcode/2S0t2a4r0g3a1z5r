@@ -1,0 +1,8 @@
+{ "$schema": "http://json-schema.org/schema",
+  "title": "Object PUT Response Body",
+  "description": "JSON format for Object PUT Response Body",
+  "type": "object",
+  "properties": {
+    "result": { "type": "string" }
+  }
+}

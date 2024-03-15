@@ -1,0 +1,18 @@
+<div>
+	<label ng-if="$ctrl.label">
+		{{$ctrl.label}}
+		<span ng-if="$ctrl.required" class="fx-widget-required-text"> *</span>
+	</label>
+	<div class="btn-group btn-block">
+    <button
+      class="btn btn-block {{$ctrl.buttonClasses || 'btn-default btn-md' }} dropdown-toggle"
+      data-toggle="dropdown"
+      ng-disabled="$ctrl.disabled">
+			<span class="pull-left">{{selectedFilter($ctrl.selected);}}</span>
+			<span class="fa fa-caret-down pull-right"></span>
+		</button>
+		<ul class="dropdown-menu btn-block">
+			<li ng-repeat="(id, name) in $ctrl.options" class="cursor-pointer" ng-click="$ctrl.selected=id;">&nbsp;{{name}}</li>
+		</ul>
+	</div>
+</div>

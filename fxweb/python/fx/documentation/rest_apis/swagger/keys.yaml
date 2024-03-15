@@ -1,0 +1,1172 @@
+openapi: 3.0.0
+info:
+  version: "1.1.1"
+  title: 'Keys'
+  description: |-
+    # Key Management
+    **Please Note - Some features of the API are only available on certain devices.<br>
+    Specific device functionality is still a WIP.**
+
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Futurex/keys/1.1.1
+
+security:
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/keys':
+    post:
+      tags:
+        - General key management
+      summary: 'Create a random key, or import a key'
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/CreateRandomKey'
+                - $ref: '#/components/schemas/CreateImportedKey'
+            examples:
+              'Create Random Key':
+                $ref: '#/components/examples/CreateRandomKey'
+              'Import Key':
+                $ref: '#/components/examples/CreateImportedKey'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RandomKeyResponse'
+                  - $ref: '#/components/schemas/ImportedKeyResponse'
+              examples:
+                'Random Key Response':
+                  $ref: '#/components/examples/RandomKeyResponse'
+                'Import Key Response':
+                  $ref: '#/components/examples/ImportedKeyResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    get:
+      tags:
+        - General key management
+      summary: 'Retrieve a paginated list of keys, or export a key'
+      description: |
+        **No parameters**
+        * Retrieve a paginated list of top-level Keys (i.e. Keys without a Key Group)
+        
+        **List Parameters**
+        * *page* - Specific page to be returned (default: 1)
+        * *pageCount* - Number of items per page to be returned (default: 50)
+        * *filter* - Retrieve a filtered list of Key Groups
+        
+        **Export Parameters**
+        * *id* - UUID of the Key to export.
+        * *hostname* - Name of host to use
+        * *transferKey* - Name of transfer key to use
+        * *format* - Format of the output (i.e. Cryptogram, AKB, TR31, etc.)
+        * *useCbc* - Use CBC encryption
+        * *checksumLength* - Change the length of the checksum (4, 5, or 6 only)
+        * *returnKeyGroup* - Include the key group with the response
+        
+        **Please note** - Either hostname or transferKey can be specified one at a 
+          time when exporting a key. Both values will not be accepted. If neither
+          are specified the major key will be used.
+        
+        Filter Property | Description
+        ----------------|------------
+        **type** (string) | Type of object to be filtered (i.e. key)
+        **attribute** (string) | The attribute to be filtered (e.g. name or key type)
+        **value** (string) | The value to be used for evaluation
+        **negate** (boolean) | Logic to be used for evaluation (i.e. "is" or "is not")
+        **match** (string, ['partial','exact']) | Partial or exact match
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageCount'
+        - $ref: '#/components/parameters/ObjectFilter'
+        - name: id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: keyGroup
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: export
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Export option'
+        - name: hostname
+          in: query
+          schema:
+            type: string
+          description: 'Export option'
+        - name: transferKey
+          in: query
+          schema:
+            type: string
+          description: 'Export option'
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: ['Cryptogram','AKB','TR31','clear']
+            default: 'Cryptogram'
+          description: 'Export option'
+        - name: useCbc
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Export option'
+        - name: checksumLength
+          in: query
+          schema:
+            type: integer
+            enum: [4,5,6]
+            default: 4
+          description: 'Export option'
+        - name: returnKeyGroup
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Export option'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                # Either return a paginated list of Keys
+                # Or, return a single Key to be exported
+                oneOf:
+                  - $ref: '#/components/schemas/GetKeyList'
+                  - $ref: '#/components/schemas/ExportKey'
+              examples:
+                'List Keys':
+                  $ref: '#/components/examples/GetKeyList'
+                'Export Key':
+                  $ref: '#/components/examples/ExportKey'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - General key management
+      summary: 'Update a single key, or translate keys'
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/UpdateKey'
+                - $ref: '#/components/schemas/TranslateKeys'
+            examples:
+              'Update Key':
+                $ref: '#/components/examples/UpdateKey'
+              'Translate Keys':
+                $ref: '#/components/examples/TranslateKeys'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    delete:
+      tags:
+        - General key management
+      summary: 'Delete specified key'
+      description: |
+        **Parameters**
+        * *id* - The UUID of the key to be deleted (required)
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/keys/major':
+    post:
+      tags:
+        - Major key management
+      summary: 'Generate major key'
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/RandomizeKey'
+                - $ref: '#/components/schemas/LoadFullMajorKey'
+                - $ref: '#/components/schemas/LoadMajorKeyComponent'
+                - $ref: '#/components/schemas/LoadMajorKeyFragment'
+              discriminator:
+                propertyName: 'action'
+                mapping:
+                  randomize: '#/components/schemas/RandomizeKey'
+                  fullKey: '#/components/schemas/UploadFullKey'
+                  component: '#/components/schemas/UploadKeyComponent'
+                  fragment: '#/components/schemas/uploadKeyFragment'
+            examples:
+              'Randomize Major Key':
+                $ref: '#/components/examples/RandomizeKey'
+              'Load Full Key':
+                $ref: '#/components/examples/LoadFullMajorKey'
+              'Load Key Component':
+                $ref: '#/components/examples/LoadMajorKeyComponent'
+              'Load Key Fragment':
+                $ref: '#/components/examples/LoadMajorKeyFragment'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RandomizeResponse'
+                  - $ref: '#/components/schemas/LoadMajorKeyResponse'
+              examples:
+                'Randomize Major Key':
+                  $ref: '#/components/examples/RandomizeResponse'
+                'Load Full Key':
+                  $ref: '#/components/examples/LoadMajorKeyResponse'
+                'Load Key Component':
+                  $ref: '#/components/examples/LoadMajorKeyResponse'
+                'Load Key Fragment':
+                  $ref: '#/components/examples/LoadMajorKeyResponse'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    get:
+      tags:
+        - Major key management
+      summary: 'Retrieve available major key types, or specific key details'
+      description: |-
+        **No Parameters** - Return a list of available key types
+        **identifier** - Retrieve information related to specified major key
+      parameters:
+        - name: identifier
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/MajorKeyId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - allOf:
+                    # Return available major key types
+                    - $ref: '#/components/schemas/ResponseBase'
+                    - type: object
+                      properties:
+                        responseData:
+                          $ref: '#/components/schemas/AvailableMajorKeys'
+                  - allOf:
+                    # Return fully loaded key details
+                    - $ref: '#/components/schemas/ResponseBase'
+                    - type: object
+                      properties:
+                        responseData:
+                          $ref: '#/components/schemas/KeyLoaded'
+                  - allOf:
+                    # Return partially loaded key details
+                    - $ref: '#/components/schemas/ResponseBase'
+                    - type: object
+                      properties:
+                        responseData:
+                          $ref: '#/components/schemas/KeyPartialLoad'
+                  - allOf:
+                    # Return unloaded key details
+                    - $ref: '#/components/schemas/ResponseBase'
+                    - type: object
+                      properties:
+                        responseData:
+                          $ref: '#/components/schemas/KeyNotLoaded'
+              examples:
+                'Retrieve Available Major Keys':
+                  $ref: '#/components/examples/GetAvailableTypes'
+                'Retrieve Fully Loaded Key':
+                  $ref: '#/components/examples/GetLoadedKey'
+                'Retrieve Partially Loaded Key':
+                  $ref: '#/components/examples/GetPartialKey'
+                'Retrieve Unloaded Key':
+                  $ref: '#/components/examples/GetUnloadedKey'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    delete:
+      tags:
+        - Major key management
+      summary: 'Clear major key'
+      description: |-
+        **identifier** - Identifier of the key to be cleared
+      parameters:
+        - name: keyId
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/MajorKeyId'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/keys/major/checksums':
+    get:
+      tags:
+        - Major key management
+      summary: 'Retrieve the checksum for each major key identifier'
+      description: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetChecksums'
+              examples:
+                'Retrieve Major Key Checksums':
+                  $ref: '#/components/examples/GetChecksums'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  parameters:
+    page:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/parameters/page'
+    pageCount:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/parameters/pageCount'
+    ObjectFilter:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/parameters/ObjectFilter'
+
+  schemas:
+    RequestBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/RequestBase'
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+    PaginationBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/PaginationBase'
+    DateTimePeriod:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/DateTimePeriod'
+    TranslateKeys:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              type: object
+              properties:
+                format:
+                  type: string
+                  enum: ['AES-KWP','TR-31']
+              required:
+                - format
+    AvailableMajorKeys:
+      type: object
+      properties:
+        availableKeys:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              id:
+                type: string
+            required:
+              - name
+              - shortCode
+    MajorKeyId:
+      type: string
+      enum: ['MFK','PMK','BAK','SCEK']
+    MajorKeyTypes:
+      type: string
+      enum: ['Empty','DES','2TDES','3TDES','AES128','AES192','AES256']
+    SharedKeyValues:
+      type: object
+      properties:
+        keyId:
+          $ref: '#/components/schemas/MajorKeyId'
+        status:
+          type: string
+          enum: ['Loaded', 'Not Loaded', 'Partial Load']
+    KeyLoaded:
+      allOf:
+        - $ref: '#/components/schemas/SharedKeyValues'
+        - type: object
+          properties:
+            checksum:
+              type: string
+            keyType:
+              $ref: '#/components/schemas/MajorKeyTypes'
+    KeyPartialLoad:
+      allOf:
+        - $ref: '#/components/schemas/SharedKeyValues'
+        - type: object
+          properties:
+            keyType:
+              $ref: '#/components/schemas/MajorKeyTypes'
+            partsLoaded:
+              type: integer
+              minimum: 1
+              maximum: 12
+            totalParts:
+              type: integer
+              minimum: 2
+              maximum: 12
+            keyPart:
+              type: string
+              enum: ['Component','Fragment']
+            translate:
+              type: boolean
+    KeyNotLoaded:
+      allOf:
+        - $ref: '#/components/schemas/SharedKeyValues'
+        - type: object
+          properties:
+            partsLoaded:
+              type: integer
+              default: 0
+            availableTypes:
+              type: array
+              items:
+                $ref: '#/components/schemas/MajorKeyTypes'
+    UploadMajorKey:
+      type: object
+      properties:
+        keyId:
+          $ref: '#/components/schemas/MajorKeyId'
+        keyType:
+          $ref: '#/components/schemas/MajorKeyTypes'
+        translate:
+          type: boolean
+        # Need clarification on remaining options
+      required:
+        - identifier
+        - keyType
+        - numApprovals
+        - translate
+    LoadFullMajorKey:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              allOf:
+                - $ref: '#/components/schemas/UploadMajorKey'
+                - type: object
+                  properties:
+                    component:
+                      type: string
+                      format: 'HEX'
+                    partEncrypted:
+                      type: boolean
+                    ephemeralId:
+                      # Only if partEncrypted is True
+                      type: string
+                  required:
+                    - component
+                    - partEncrypted
+    LoadMajorKeyComponent:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              allOf:
+                - $ref: '#/components/schemas/UploadMajorKey'
+                - type: object
+                  properties:
+                    totalParts:
+                      type: integer
+                      minimum: 2
+                      maximum: 12
+                    component:
+                      type: string
+                      format: 'HEX'
+                    partEncrypted:
+                      type: boolean
+                    ephemeralId:
+                      # Only if partEncrypted is True
+                      type: string
+                  required:
+                    - totalParts
+                    - component
+                    - partEncrypted
+    LoadMajorKeyFragment:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              allOf:
+                - $ref: '#/components/schemas/UploadMajorKey'
+                - type: object
+                  properties:
+                    fragment:
+                      type: string
+                  required:
+                    - fragment
+    LoadMajorKeyResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            responseData:
+              type: object
+              properties:
+                jobId:
+                  type: string
+                  format: 'HEX'
+                checksum:
+                  type: string
+                  format: 'HEX'
+                expiration:
+                  type: string
+                  format: 'YYYY-MM-DD HH:MM:SS'
+    RandomizeKey:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            keyId:
+              $ref: '#/components/schemas/MajorKeyId'
+            keyType:
+              $ref: '#/components/schemas/MajorKeyTypes'
+            returnFragments:
+              type: boolean
+            fragmentsRequired:
+              # Only send if returnFragments is True
+              type: integer
+              minimum: 1
+              maximum: 12
+            fragmentsToReturn:
+              # Only send if returnFragments is True
+              type: integer
+              minimum: 1
+              maximum: 12
+          required:
+            - identifier
+            - keyType
+            - returnFragments
+    RandomizeResponse:
+      # Only returned if returnFragments is True
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            fragments:
+              type: array
+              items:
+                type: string
+                format: 'HEX'
+    GetChecksums:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            responseData:
+              type: object
+              properties:
+                mfk:
+                  type: string
+                  format: 'HEX'
+                pmk:
+                  type: string
+                  format: 'HEX'
+                bak:
+                  type: string
+                  format: 'HEX'
+                scek:
+                  type: string
+                  format: 'HEX'
+          required:
+            - message
+            - responseData
+
+    # Symmetric Key Schemas
+    CreateRandomKey:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              $ref: '#/components/schemas/RandomKey'
+    RandomKeyResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            responseData:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                checksum:
+                  type: string
+                  format: hex
+                keyblock:
+                  type: string
+                  format: hex
+              required:
+                - id
+                - checksum
+                - keyblock
+          required:
+            - message
+            - responseData
+    RandomKey:
+      type: object
+      properties:
+        keyGroupId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        keyType:
+          $ref: '#/components/schemas/KeyType'
+        majorKey:
+          $ref: '#/components/schemas/MajorKey'
+        algorithm:
+          $ref: '#/components/schemas/KeyAlgorithm'
+        keyUsage:
+          $ref: '#/components/schemas/KeyUsage'
+        clearExport:
+          type: boolean
+          default: false
+        validityPeriod:
+          $ref: '#/components/schemas/DateTimePeriod'
+        owner:
+          type: string
+          default: ''
+        mailAddress:
+          type: string
+          default: ''
+        attributes:
+          $ref: '#/components/schemas/KeyAttributes'
+        tr31Header:
+          type: string
+          default: ''
+        akbHeader:
+          type: string
+          default: ''
+      required:
+        - keyGroupId
+        - name
+        - keyType
+        - majorKey
+        - algorithm
+        - keyUsage
+    CreateImportedKey:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              $ref: '#/components/schemas/ImportedKey'
+    ImportedKeyResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            responseData:
+              type: object
+              properties:
+                id:
+                  $ref: '#/components/schemas/KeyId'
+              required:
+                - id
+          required:
+            - message
+            - responseData
+    ImportedKey:
+      type: object
+      properties:
+        keyGroupId:
+          $ref: '#/components/schemas/KeyGroupId'
+        name:
+          $ref: '#/components/schemas/KeyName'
+        keyType:
+          $ref: '#/components/schemas/KeyType'
+        validityPeriod:
+          $ref: '#/components/schemas/DateTimePeriod'
+        owner:
+          type: string
+          default: ''
+        mailAddress:
+          type: string
+          default: ''
+        attributes:
+          $ref: '#/components/schemas/KeyAttributes'
+        keyblock:
+          $ref: '#/components/schemas/KeyBlock'
+        checksum:
+          $ref: '#/components/schemas/KeyChecksum'
+        checksumAlgorithm:
+          $ref: '#/components/schemas/KeyChecksumAlgorithm'
+      required:
+        - name
+        - keyType
+        - keyblock
+        - checksum
+        - checksumAlgorithm
+
+    GetKeyList:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            responseData:
+              allOf:
+                - $ref: '#/components/schemas/PaginationBase'
+                - type: object
+                  properties:
+                    keys:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/KeyListItem'
+    KeyListItem:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/KeyId'
+        name:
+          $ref: '#/components/schemas/KeyName'
+        keyGroupName:
+          $ref: '#/components/schemas/KeyGroupName'
+        algorithm:
+          $ref: '#/components/schemas/KeyAlgorithm'
+        keyType:
+          $ref: '#/components/schemas/KeyType'
+        checksum:
+          $ref: '#/components/schemas/KeyChecksum'
+        validityPeriod:
+          $ref: '#/components/schemas/DateTimePeriod'
+
+    ExportKey:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            responseData:
+              type: object
+              properties:
+                id:
+                  $ref: '#/components/schemas/KeyId'
+                name:
+                  $ref: '#/components/schemas/KeyName'
+                keyGroupName:
+                  $ref: '#/components/schemas/KeyGroupName'
+                keyBlock:
+                  $ref: '#/components/schemas/KeyBlock'
+                checksum:
+                  $ref: '#/components/schemas/KeyChecksum'
+                modifier:
+                  $ref: '#/components/schemas/KeyModifier'
+                keyUsage:
+                  $ref: '#/components/schemas/KeyUsage'
+                securityUsage:
+                  $ref: '#/components/schemas/KeySecurityUsage'
+                majorKey:
+                  $ref: '#/components/schemas/MajorKey'
+                keyType:
+                  $ref: '#/components/schemas/KeyType'
+                validityPeriod:
+                  $ref: '#/components/schemas/DateTimePeriod'
+                attributes:
+                  $ref: '#/components/schemas/KeyAttributes'
+              required:
+                - id
+                - name
+
+    UpdateKey:
+      allOf:
+        - $ref: '#/components/schemas/RequestBase'
+        - type: object
+          properties:
+            requestData:
+              type: object
+              properties:
+                id:
+                  $ref: '#/components/schemas/KeyId'
+                name:
+                  $ref: '#/components/schemas/KeyName'
+                keyBlock:
+                  $ref: '#/components/schemas/KeyBlock'
+                checksum:
+                  $ref: '#/components/schemas/KeyChecksum'
+                ksn:
+                  type: string
+                  format: hex
+                ksnIncrement:
+                  type: integer
+                  minimum: 1
+                  maximum: 99
+                validityPeriod:
+                  $ref: '#/components/schemas/DateTimePeriod'
+                checksumAlgorithm:
+                  $ref: '#/components/schemas/KeyChecksumAlgorithm'
+                atrributes:
+                  $ref: '#/components/schemas/KeyAttributes'
+
+    # Common key properties:
+    KeyType:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyType'
+    KeyUsage:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyUsage'
+    MajorKey:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/MajorKey'
+    KeyAlgorithm:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyAlgorithm'
+    KeyId:
+      type: string
+      format: uuid
+    KeyName:
+      type: string
+    KeyGroupId:
+      type: string
+      format: uuid
+    KeyGroupName:
+      type: string
+      default: ''
+    KeyChecksum:
+      type: string
+      format: hex
+    KeyChecksumAlgorithm:
+      type: string
+      enum: ['Financial', 'CMAC']
+      default: 'Financial'
+    KeyModifier:
+      type: string
+      format: hex
+    KeyBlock:
+      type: string
+      format: hex
+    KeySecurityUsage:
+      type: string
+      enum: ['None','Private','Sensitive','Immutable','Password Export',
+             'Clear key export','Anonymous Signing']
+    KeyAttributes:
+      type: array
+      items:
+        type: object
+        properties:
+          attribute:
+            type: string
+          value:
+            type: string
+        required:
+          - key
+          - value
+
+
+  examples:
+    TranslateKeys:
+      value:
+        action: 'translate'
+        requestData:
+          format: 'TR-31'
+    GetAvailableTypes:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          availableKeys:
+            - name: 'Major File Key'
+              id: 'MFK'
+            - name: 'Platform Master Key'
+              id: 'PMK'
+            - name: 'Backup Key'
+              id: 'BAK'
+            - name: 'Smartcard Encryption key'
+              id: 'SCEK'
+    GetLoadedKey:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          keyId: 'MFK'
+          status: 'Loaded'
+          checksum: '01AB'
+          keyType: 'DES3'
+    GetPartialKey:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          keyId: 'BAK'
+          status: 'Partial Load'
+          keyType: 'AES256'
+          partsLoaded: 2
+          totalParts: 3
+          keyPart: 'fragment'
+          translate: true
+    GetUnloadedKey:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          keyId: 'PMK'
+          status: 'Not Loaded'
+          partsLoaded: 0
+          availableTypes:
+            - 'AES256'
+    LoadFullMajorKey:
+      value:
+        action: 'fullKey'
+        requestData:
+          identifier: 'MFK'
+          keyType: '3TDES'
+          translate: false
+          component: 'DC9EA248DE6FB715EF5F6B430D976EF30806C39479F669B1'
+          partEncrypted: true
+          ephemeralId: '123A'
+    LoadMajorKeyComponent:
+      value:
+        action: 'component'
+        requestData:
+          identifier: 'MFK'
+          keyType: '3TDES'
+          translate: true
+          totalParts: 4
+          component: 'DC9EA248DE6FB715EF5F6B430D976EF30806C39479F669B1'
+          partEncrypted: true
+          ephemeralId: '123B'
+    LoadMajorKeyFragment:
+      value:
+        action: 'fragment'
+        requestData:
+          identifier: 'BAK'
+          keyType: 'AES256'
+          translate: true
+          fragment: 'MOFN:5:1:6:6:0:32:AB213A41C341ABD2E113DAC4243341324422AAA1BB2EA34DEFFEBCAE1234346A:04AB89C2'
+    LoadMajorKeyResponse:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          jobId: '123A'
+          checksum: '123456789ABCDEF'
+          expiration: '2020-01-01 23:59:59'
+    RandomizeKey:
+      value:
+        action: 'randomize'
+        requestData:
+          identifier: 'MFK'
+          keyType: '3TDES'
+          returnFragments: true
+          fragmentsRequired: 4
+          fragmentsToReturn: 4
+    RandomizeResponse:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          fragments:
+            - '12345A'
+            - '67890B'
+            - 'AEFBC1'
+            - 'CDE456'
+    GetChecksums:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          mfk: 'AE80'
+          pmk: 'Not Loaded'
+          bak: 'B089'
+          scek: 'Not Loaded'
+    CreateRandomKey:
+      value:
+        action: 'randomKey'
+        requestData:
+          keyGroupId: '4368696c6420666f6c646572'
+          name: 'Encryption Key #1'
+          keyType: 'Data encryption key'
+          majorKey: 'PMK'
+          algorithm: 'AES256'
+          keyUsage: 'Encrypt/Decrypt'
+          clearExport: false
+          validityPeriod:
+            start: '2020-02-10 19:00:00'
+            end : '2020-04-10 19:00:00'
+          owner: 'Futurex'
+          mailAddress: 'Mailing Address #101, Bulverde, TX 78163'
+          attributes:
+            - attribute: 'Generated By'
+              value: 'User'
+            - attribute: 'Type'
+              value: 'Futurex Key'
+          tr31Header: 'B0016M0TN00E0001770004ABCD'
+          akbHeader: '1PUNE000'
+    RandomKeyResponse:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          id: 'RW5jcnlwdGlvbiBLZXkgIzE='
+          checksum: 'FCBA'
+          keyblock: '9C15F58F69EB6FF9F0AF72B0CA7B2AC7FCBAB77F9DBEAC'
+    CreateImportedKey:
+      value:
+        action: 'importKey'
+        requestData:
+          keyGroupId: '4368696c6420666f6c646572'
+          name: 'User Imported Key'
+          keyType: 'Key encryption key'
+          validityPeriod:
+            start: '2020-02-10 19:00:00'
+            end: '2021-02-10 19:00:00'
+          owner: 'Futurex'
+          mailAddress: 'Mailing Address #101, Bulverde, TX 78163'
+          attributes:
+            - attribute: 'Generated By'
+              value: 'User'
+            - attribute: 'Type'
+              value: 'Imported Key'
+          keyblock: '74B4C82CF111BF3BAAD6AA4E5560B1569B97D3AD52586A34FA259E68EACAAC9585DA00005F76B7D24109313705F194BE8FFF6D149C987C5E'
+          checksum: '884F'
+          checksumAlgorithm: 'Financial'
+    ImportedKeyResponse:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          id: 'VXNlciBJbXBvcnRlZCBLZXk='
+    GetKeyList:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          keys:
+            - id: 'a2V5LWVDb21tZXJjZQ=='
+              name: 'eCommerce'
+              keyGroupName: 'Root key store'
+              algorithm: 'AES256'
+              keyType: 'Data encryption key'
+              checksum: '4615'
+              validityPeriod:
+                start: '1970-01-02 00:00:00'
+                end: '7999-12-31 00:00:00'
+            - id: 'a2V5LVRlc3QgMg=='
+              name: 'Test 2'
+              keyGroupName: 'Root key store'
+              algorithm: '3TDES'
+              keyType: 'Derivation key'
+              checksum: '8270'
+              validityPeriod:
+                start: '1970-01-02 00:00:00'
+                end: '7999-12-31 00:00:00'
+    ExportKey:
+      value:
+        status: 'success'
+        message: ''
+        responseData:
+          id: 'a2V5LWVDb21tZXJjZQ=='
+          name: 'eCommerce'
+          keyGroupName: 'Root key store'
+          keyBlock: 'CD9458FE2F279B125F2449174B195FDF99EF72217229F678151D537A5A76A77830BAE4084109B97B2A1067DD1EAA6A99BA3B66A451B4FE74'
+          checksum: 'BBD5'
+          modifier: '0x0A'
+          keyUsage: ''
+          securityUsage: 'Private'
+          majorKey: 'MFK'
+          keyType: 'Derivation key'
+          validityPeriod:
+            start: '1970-01-02 00:00:00'
+            end: '7999-12-31 00:00:00'
+          attributes:
+            - attribute: 'Web Key'
+              value: 'eCommerce'
+    UpdateKey:
+      value:
+        action: 'update'
+        requestData:
+          id: 'a2V5LVRlc3QgMg=='
+          name: 'Test 2'
+          validityPeriod:
+            start: '2020-01-01 23:59:59'
+            end: '2021-01-01 00:00:00'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'

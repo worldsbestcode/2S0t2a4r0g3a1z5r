@@ -1,0 +1,399 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: 'Database'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/database':
+    get:
+      tags:
+        - Database
+      summary: 'Retrieve system Database information'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DBAS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveDBInfo'
+              examples:
+                'Retrieve database information':
+                  $ref: '#/components/examples/RetrieveDBInfo'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/database/initialize':
+    post:
+      tags:
+        - Database
+      summary: 'Initialize system Database'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DBAS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + User will disconnect after some time during database initialization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitializeDB'
+            examples:
+              'Initialize database':
+                $ref: '#/components/examples/InitializeDB'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/database/backup':
+    post:
+      tags:
+        - Database Backup
+      summary: 'Create new Database backup'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DBAS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDBBackup'
+            examples:
+              'Create new database backup':
+                $ref: '#/components/examples/CreateDBBackup'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    get:
+      tags:
+        - Database Backup
+      summary: 'Retrieve list of database backups'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DBAS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveDBBackupList'
+              examples:
+                'Retrieve list of database backups':
+                  $ref: '#/components/examples/RetrieveDBBackupList'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/database/backup/restore':
+    put:
+      tags:
+        - Database Backup
+      summary: 'Restore specified database backup'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + DBAS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreDBBackup'
+            examples:
+              'Restore database backup (auto backup)':
+                $ref: '#/components/examples/RestoreAutoBackup'
+              'Restore database backup (new backup)':
+                $ref: '#/components/examples/RestoreBackupFile'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    RetrieveDBInfo:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                dateCreated:
+                  type: string
+                  format: date-time
+                  description: ''
+                lastRestore:
+                  type: string
+                  format: date-time
+                  description: ''
+                lastBackup:
+                  type: string
+                  format: date-time
+                  description: ''
+              required:
+                - dateCreated
+                - lastRestore
+                - lastBackup
+    InitializeDB:
+      type: object
+      properties:
+        initialize:
+          type: boolean
+          description: ''
+      required:
+        - initialize
+    CreateDBBackup:
+      type: object
+      properties:
+        savePrinters:
+          type: boolean
+          description: ''
+        saveCards:
+          type: boolean
+          description: ''
+        saveSshKeys:
+          type: boolean
+          description: ''
+      required:
+        - savePrinters
+        - saveCards
+        - saveSshKeys
+    RetrieveDBBackupList:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                backups:
+                  type: array
+                  items:
+                    type: string
+                  description: ''
+              required:
+                - backups
+    RestoreDBBackup:
+      oneOf:
+        - $ref: '#/components/schemas/RestoreAutoBackup'
+        - $ref: '#/components/schemas/RestoreBackupFile'
+    RestoreAutoBackup:
+      type: object
+      properties:
+        backupName:
+          type: string
+          description: ''
+        # Might have additional properties
+        # Needs clarification
+      required:
+        - filename
+    RestoreBackupFile:
+      type: object
+      properties:
+        restoreEthernet:
+          type: boolean
+          default: true
+          description: ''
+        restoreTls:
+          type: boolean
+          default: true
+          description: ''
+        restorePorts:
+          type: boolean
+          default: true
+          description: ''
+        restorePeers:
+          type: boolean
+          default: true
+          description: ''
+        backupFile:
+          type: string
+          format: base64
+          description: ''
+        backupHash:
+          type: string
+          description: 'SHA-256 hash of backup'
+      required:
+        - restoreEthernet
+        - restoreTls
+        - restorePorts
+        - restorePeers
+        - backupFile
+        - backupHash
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    RetrieveDBInfo:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          dateCreated: '2019-11-21T19:42:33.769Z'
+          lastRestore: '2019-11-21T19:42:33.769Z'
+          lastBackup: '2019-11-21T19:42:33.769Z'
+    InitializeDB:
+      value:
+        initialize: true
+    CreateDBBackup:
+      value:
+        savePrinters: true
+        saveCards: true
+        saveSshKeys: true
+    RetrieveDBBackupList:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          backups:
+            - 'Backup-1'
+            - 'Backup-2'
+            - 'Backup-3'
+    RestoreAutoBackup:
+      value:
+        backupName: 'Backup-2'
+    RestoreBackupFile:
+      value:
+        restoreEthernet: true
+        restoreTls: true
+        restorePorts: false
+        restorePeers: false
+        backupFile: '<base64_encoded_backup>'
+        backupHash: '<SHA-256_hash>'

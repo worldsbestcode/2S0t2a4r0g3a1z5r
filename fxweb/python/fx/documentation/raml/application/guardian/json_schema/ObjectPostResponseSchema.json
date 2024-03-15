@@ -1,0 +1,38 @@
+{ "$schema": "http://json-schema.org/schema",
+  "title": "Object POST Response Body",
+  "description": "JSON format for Object POST Response Body",
+  "type": "object",
+  "properties": {
+    "objectData": {
+      "type": "object",
+      "properties": {
+        "CERTAUTHORITY": {
+            "type" : "array",
+            "items": { "$ref": "json_schema/CertificateAuthority.json"}
+        },
+        "CERT_REQ": { 
+            "type" : "array",
+            "items" : {"$ref": "json_schema/CertRequest.json"}
+        },
+        "FILTER": {
+            "type": "array",
+            "items": {"$ref": "json_schema/Filter.json"}
+        },
+        "PKICERT": {
+            "type": "array",
+            "items": {"$ref": "json_schema/PKICert.json"}
+        },
+        "REG_AUTH": { 
+            "type": "array",
+            "items": {"$ref": "json_schema/RegAuthority.json"}
+        },
+        "X509CERT": {
+            "type": "array",
+            "items": {"$ref": "json_schema/X509Cert.json"}
+        },
+        "message": { "type": "string" },
+        "result": { "type": "boolean" }
+      }
+    }
+  }
+}

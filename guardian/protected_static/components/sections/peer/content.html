@@ -1,0 +1,19 @@
+<div class="content-wrapper height-wrapper" ng-controller="peerViewController as ctrl">
+    <section class="content-header">
+      <h1>
+          {{ localProductName }}
+        <small>Peers</small>
+      </h1>
+    </section>
+
+    <section class="content">
+      <fx-container-list-view
+          current-selection="peerModel.currentSelection"
+          groups="peerModel.peers"
+          group-header-mapping="mappings.peerHeaderMapping"
+          group-template-url="directives/peerItem.html"
+          child-header-mapping="{}"
+          >
+      </fx-container-list-view>
+    </section>
+</div>

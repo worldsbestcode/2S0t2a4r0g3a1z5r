@@ -1,0 +1,30 @@
+<div>
+	<label ng-if="$ctrl.label">
+		{{$ctrl.label}}
+		<span ng-if="$ctrl.required" class="fx-widget-required-text"> *</span>
+	</label>
+
+	<div ng-if="!$ctrl.groupmode || $ctrl.groupmode === 'false'">
+		<div class="btn-group btn-block">
+			<button class="btn btn-block btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="$ctrl.disabled">
+				<span class="pull-left">{{getKey($ctrl.selected);}}</span>
+				<span class="fa fa-caret-down pull-right"></span>
+			</button>
+			<ul class="dropdown-menu btn-block">
+				<li ng-repeat="(k, v) in $ctrl.options track by $index" class="cursor-pointer" ng-click="$ctrl.selected=selectedPair(k, v);">&nbsp;{{k}}</li>
+			</ul>
+		</div>
+	</div>
+
+	<div ng-if="$ctrl.groupmode === 'true'" class="input-group">
+		<div class="input-group-btn">
+			<button aria-expanded="false" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-disabled="$ctrl.disabled">
+				{{getKey($ctrl.selected);}}&nbsp;&nbsp;<span class="fa fa-caret-down"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<li ng-repeat="(k, v) in $ctrl.options track by $index" class="cursor-pointer" ng-click="$ctrl.selected=selectedPair(k, v);">&nbsp;{{k}}</li>
+			</ul>
+		</div>
+		<div ng-transclude></div>
+	</div>
+</div>

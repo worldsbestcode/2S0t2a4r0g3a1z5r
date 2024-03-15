@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "FWMajorKeySlot",
+    "description": "Major Keys used by the firmware",
+    "enum": [
+        "Clear",
+        "MFK",
+        "KEK",
+        "BEK",
+        "PMFK",
+        "SCEK",
+        "PMK",
+        "FTK"
+    ]
+}

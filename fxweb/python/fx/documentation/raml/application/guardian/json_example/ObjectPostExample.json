@@ -1,0 +1,22 @@
+{
+  "method": "retrieve",
+  "objectType": "Filter",
+  "quantity": 10,
+  "request": {
+    "manager": "KEYS",
+    "chunk": 0,
+    "chunkSize": 100,
+    "chunkCount": 1,
+    "matchCount": 1,
+    "flags": [
+      "INACTIVE_INCLUDE",
+      "GUI_QUERY",
+      "DESCENDANTS",
+      "NO_COUNT"
+    ],
+    "filterType": "IDENTIFIERS",
+    "sortAscending": false,
+    "distinctOn": "name",
+    "objectIDs": {}
+  }
+}

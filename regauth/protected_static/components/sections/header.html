@@ -1,0 +1,117 @@
+<header class="main-header" ng-controller="headerCtrl">
+	<div class="logo">
+		<div class="logo-lg">
+			<img src="/regauth/static/images/Futurex_Logo_Bright.png" class="fx-logo">
+			<a href="#" data-toggle="offcanvas" role="button">
+				<span class="sidebar-logo"><i class="fa fa-chevron-left"></i></span>
+			</a>
+		</div>
+		<div class="logo-mini">
+			<a href="#" data-toggle="offcanvas" role="button">
+				<span class="sidebar-logo"><i class="fa fa-chevron-right"></i></span>
+			</a>
+		</div>
+	</div>
+	<nav class="navbar navbar-static-top">
+		<img src="/regauth/static/images/certificate.png" height="25px">
+		<span class="navbar-inline">Registration Authorities</span>
+		<div class="navbar-custom-menu">
+			<ul class="nav navbar-nav">
+				<li class="dropdown user user-menu">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-users"></i>
+						<span class="hidden-xs">{{fxAppService.getLoginData().name}}</span>
+						<i class="fa fa-caret-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<!-- User image -->
+						<li class="user-header">
+							<i class="fa fa-users header-user-icon"></i>
+							<p>{{fxAppService.getLoginData().name}}</p>
+						</li>
+						<!-- Menu Footer-->
+						<li class="user-footer">
+							<div class="pull-right">
+								<a href="/regauth/v1/logout" class="btn btn-default btn-flat">Sign out</a>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li ng-class="{'hidden': !(fxAppService.getView() >= fxAppService.getViews()['csrViewPending'] &&
+				                           fxAppService.getView() <= fxAppService.getViews()['csrViewFilter'])}">
+					<a href="#" class="control-sidebar-btn" data-toggle='control-sidebar'>
+						<i ng-if="rightSidebarShown" class="fa fa-chevron-right"></i>
+						<i ng-if="!rightSidebarShown" class="fa fa-chevron-left"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</header>
+
+<aside class="main-sidebar" ng-controller="sidebarCtrl">
+	<section class="sidebar">
+		<ul class="sidebar-menu">
+			<li class="treeview"
+				ng-class="{'active': fxAppService.getView() === fxAppService.getViews()['submitView']}"
+				ng-if="fxAppService.getLoginData().permissions.submitter">
+				<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['submitView']);">
+					<i class="fa fa-upload"></i>
+					<span class="header-left-sidebar-top-level-item">Submit</span>
+				</a>
+			</li>
+			<li class="treeview"
+				ng-class="{'active': fxAppService.getView() >= fxAppService.getViews()['csrViewPending'] &&
+				                     fxAppService.getView() <= fxAppService.getViews()['csrViewFilter']}">
+				<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['csrViewAll']); fxAppService.setLoading();">
+					<i class="fa fa-check" ng-if="fxAppService.getLoginData().permissions.vetter"></i>
+					<span class="header-left-sidebar-top-level-item" ng-if="fxAppService.getLoginData().permissions.vetter">Approve</span>
+
+					<i class="fa fa-eye" ng-if="!fxAppService.getLoginData().permissions.vetter"></i>
+					<span class="header-left-sidebar-top-level-item" ng-if="!fxAppService.getLoginData().permissions.vetter">View</span>
+				</a>
+				<ul class="treeview-menu" ng-if="!fxAppService.isAnonymous()">
+					<li class="left-sidebar-menu-subitem" ng-class="{'active': fxAppService.getView() === fxAppService.getViews()['csrViewAll']}">
+						<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['csrViewAll']); fxAppService.setLoading();">
+							<i class="fa fa-globe"></i>
+							<span> All</span>
+						</a>
+					</li>
+					<li class="left-sidebar-menu-subitem" ng-class="{'active': fxAppService.getView() === fxAppService.getViews()['csrViewPending']}">
+						<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['csrViewPending']); fxAppService.setLoading();">
+							<i class="fa fa-clock-o"></i>
+							<span> Pending</span>
+						</a>
+					</li>
+					<li class="left-sidebar-menu-subitem" ng-class="{'active': fxAppService.getView() === fxAppService.getViews()['csrViewSigned']}">
+						<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['csrViewSigned']); fxAppService.setLoading();">
+							<i class="fa fa-check-circle"></i>
+							<span> Signed</span>
+						</a>
+					</li>
+					<li class="left-sidebar-menu-subitem" ng-class="{'active': fxAppService.getView() === fxAppService.getViews()['csrViewDenied']}">
+						<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['csrViewDenied']); fxAppService.setLoading();">
+							<i class="fa fa-times-circle"></i>
+							<span> Denied</span>
+						</a>
+					</li>
+					<li class="left-sidebar-menu-subitem" ng-class="{'active': fxAppService.getView() === fxAppService.getViews()['csrViewFilter']}"
+						ng-show="fxAppService.getView() === fxAppService.getViews()['csrViewFilter']">
+						<a href="#" ng-click="fxAppService.setView(fxAppService.getViews()['csrViewFilter']);">
+							<i class="fa fa-filter"></i>
+							<span> Filter</span>
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</section>
+	<div class="sidebar-footer">
+		<a href="https://www.futurex.com/support" target="_blank" rel="noopener noreferrer">
+			<div class="sidebar-footer-logo">
+				<span class="sidebar-footer-logo-text">XCEPTIONAL SUPPORT</span>
+				<img class="sidebar-footer-logo-image" src="/regauth/static/images/xceptional-support.png">
+			</div>
+		</a>
+	</div>
+</aside>

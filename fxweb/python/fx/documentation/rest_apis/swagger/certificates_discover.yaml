@@ -1,0 +1,1702 @@
+openapi: 3.0.0
+info:
+  version: "0.1.0"
+  title: 'Certificates'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    ***
+    ### Important Notes
+    ***
+    + Only PKI certificate signing requests will be available upon initial release
+
+security:
+  - bearerToken: []
+
+paths:
+  '/certificates':
+    get:
+      tags:
+       - Certificates
+      summary: 'Retrieve certificate details'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Registration Authority
+        + **Host API Commands**
+          + RAGP
+        + **Permissions**
+          + Approval group view permissions **OR** Uploader of certificate request
+        ***
+        ### Additional Notes
+        ***
+        + Both requestType and requestId URL query parameters are required
+        + The following conditions **must** be met in order to retrieve the PKI PKCS #12
+          + Steps were taken that allowed for PKCS #12 to be exported upon creation (see POST /api/certificates/requests Additional Notes)
+          + The certificate PKCS #12 has been previously exported through the Host API or Remote Key client
+
+      parameters:
+        - name: requestType
+          in: query
+          schema:
+            type: string
+            # Will include CSR and Object Signing certs in a later version
+            enum: ['PKI']
+          required: true
+        - name: requestId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPkiCertResponse'
+              examples:
+                'Retrieve PKI Certificate':
+                  $ref: '#/components/examples/GetPkiRequest'
+                'Retrieve PKI Certificate (Export PKCS #12)':
+                  $ref: '#/components/examples/GetPkiRequestExportPKCS12'
+                'Retrieve PKI Certificate (saved PKI Key)':
+                  $ref: '#/components/examples/GetPkiRequestSavePkiKey'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/signing-requests':
+    post:
+      tags:
+        - Certificate Signing Requests
+      summary: 'Create new certificate signing request'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + Registration Authority
+        + **Host API Commands**
+          + RAUP
+          + RASX
+        + **Permissions**
+          + Certificate Management - Upload
+          + Certificate Object - Use
+        ***
+        ### Additional Notes
+        ***
+        + The following conditions **must** be met in order to retrieve the PKCS #12 upon creation
+          + exportPkcs12 must be enabled
+          + PKI certificate request must be signed under a certificate with a "0 approvers" issuance policy
+          + RASX Host API command must be enabled
+        + A passphrase will not be returned with the response if randomPassphrase is enabled
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePkiRequest'
+            examples:
+              'Create PKI signing request':
+                $ref: '#/components/examples/CreatePkiRequest'
+              'Create PKI signing request (export PKCS #12)':
+                $ref: '#/components/examples/CreatePkiRequestExportPKCS12'
+              'Create PKI signing request (generated passphrase)':
+                $ref: '#/components/examples/CreatePkiRequestGenPassword'
+              'Create PKI signing request (save PKI Key)':
+                $ref: '#/components/examples/CreatePkiRequestSavePkiKey'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertRequestResponse'
+              examples:
+                'Create PKI signing request':
+                  $ref: '#/components/examples/CreateCertRequestResponse'
+                'Create PKI signing request (export PKCS #12)':
+                  $ref: '#/components/examples/CreateCertRequestResponseExportPKCS12'
+                'Create PKI signing (generated passphrase)':
+                  $ref: '#/components/examples/CreateCertRequestResponse'
+                'Create PKI signing request (save PKI key)':
+                  $ref: '#/components/examples/CreateCertRequestResponseSavePkiKey'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/rsa-encrypt':
+    post:
+      tags:
+        - RSA Crypto Operations
+      summary: 'Encrypt data with a RSA certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + DataProtection
+        + **Host API Commands**
+          + RKRE
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RSAEncryptRequest'
+            examples:
+              'RSA encrypt':
+                $ref: '#/components/examples/RSAEncryptRequest'
+              'RSA encrypt (Cert ID)':
+                $ref: '#/components/examples/RSAEncryptRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RSAEncryptResponse'
+              examples:
+                'RSA encrypt response':
+                  $ref: '#/components/examples/RSAEncryptResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/rsa-decrypt':
+    post:
+      tags:
+        - RSA Crypto Operations
+      summary: 'Decrypt data with a RSA certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + DataProtection
+        + **Host API Commands**
+          + RKRD
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RSADecryptRequest'
+            examples:
+              'RSA decrypt':
+                $ref: '#/components/examples/RSADecryptRequest'
+              'RSA decrypt (Cert ID)':
+                $ref: '#/components/examples/RSADecryptRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RSADecryptResponse'
+              examples:
+                'RSA decrypt response':
+                  $ref: '#/components/examples/RSADecryptResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/rsa-sign':
+    post:
+      tags:
+        - RSA Crypto Operations
+      summary: 'Sign data with a RSA certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + CA
+        + **Host API Commands**
+          + RKGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/GenerateSignature'
+            examples:
+              'Generate RSA signature':
+                $ref: '#/components/examples/RSASignatureRequest'
+              'GEnerate RSA signature (Cert ID)':
+                $ref: '#/components/examples/SignatureRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateSignatureResponse'
+              examples:
+                'RSA signature response':
+                  $ref: '#/components/examples/RSASignatureResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/rsa-verify':
+    post:
+      tags:
+        - RSA Crypto Operations
+      summary: 'Verify signature with a RSA certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + DataProtection
+        + **Host API Commands**
+          + RKRV
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RSAVerifyRequest'
+            examples:
+              'Verify RSA signature':
+                $ref: '#/components/examples/RSAVerifyRequest'
+              'Verify RSA signature (Cert ID)':
+                $ref: '#/components/examples/RSAVerifyRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RSAVerifyResponse'
+              examples:
+                'Verify RSA signature response':
+                  $ref: '#/components/examples/RSAVerifyResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/ecc-encrypt':
+    post:
+      tags:
+        - ECC Crypto Operations
+      summary: 'Encrypt data with an ECC certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + DataProtection
+        + **Host API Commands**
+          + RKVE
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ECCEncryptRequest'
+            examples:
+              'ECC encrypt':
+                $ref: '#/components/examples/ECCEncryptRequest'
+              'ECC encrypt (Cert ID)':
+                $ref: '#/components/examples/ECCEncryptRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ECCEncryptResponse'
+              examples:
+                'ECC encrypt response':
+                  $ref: '#/components/examples/ECCEncryptResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/ecc-decrypt':
+    post:
+      tags:
+        - ECC Crypto Operations
+      summary: 'Decrypt data with an ECC certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + DataProtection
+        + **Host API Commands**
+          + RKVD
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ECCDecryptRequest'
+            examples:
+              'ECC decrypt':
+                $ref: '#/components/examples/ECCDecryptRequest'
+              'ECC decrypt (Cert ID)':
+                $ref: '#/components/examples/ECCDecryptRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ECCDecryptResponse'
+              examples:
+                'ECC decrypt response':
+                  $ref: '#/components/examples/ECCDecryptResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/ecc-sign':
+    post:
+      tags:
+        - ECC Crypto Operations
+      summary: 'Sign data with an ECC certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + CA
+        + **Host API Commands**
+          + RKGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateSignature'
+            examples:
+              'Generate ECC signature':
+                $ref: '#/components/examples/ECCSignatureRequest'
+              'Generate ECC signature (Cert ID)':
+                $ref: '#/components/examples/SignatureRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateSignatureResponse'
+              examples:
+                'ECC signature response':
+                  $ref: '#/components/examples/ECCSignatureResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/certificates/ecc-verify':
+    post:
+      tags:
+        - ECC Crypto Operations
+      summary: 'Verify signature with an ECC certificate'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + DataProtection
+        + **Host API Commands**
+          + RKVV
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + One of the following combinations is required when making a request
+          + pkiTree **and** certCommonName - looks up certificate by common name
+          + pkiTree **and** certAlias - looks up certificate by alias
+          + certId - looks up certificate by ID
+        + The certId can only be used if **savePkiKey** was set to **true** upon creation
+          + **certId** is supplied in the **POST /certificate-requests** response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ECCVerifyRequest'
+            examples:
+              'Verify ECC signature':
+                $ref: '#/components/examples/ECCVerifyRequest'
+              'Verify ECC signature (Cert ID)':
+                $ref: '#/components/examples/ECCVerifyRequestKeyPair'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ECCVerifyResponse'
+              examples:
+                'Verify ECC signature response':
+                  $ref: '#/components/examples/ECCVerifyResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+
+
+  schemas:
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+    Subject:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Subject object ID'
+        asn1Type:
+          type: integer
+          description: 'ASN1 type'
+        data:
+          type: string
+          format: hex
+          description: 'Hex encoded subject data'
+      required:
+        - id
+        - asn1Type
+        - data
+
+    V3Extension:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'V3 Extension object ID'
+        data:
+          type: string
+          format: hex
+          description: 'Hex encoded extension data'
+        critical:
+          type: boolean
+          default: false
+          description: 'Mark extension as critical'
+      required:
+        - id
+        - data
+        - critical
+
+    SharedCertProps:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of the PKI Tree to use'
+        signingCert:
+          type: string
+          description: 'Name of X.509 certificate used to sign new leaf certificate'
+        requestName:
+          type: string
+          description: 'Name of request'
+        requestType:
+          type: string
+          # @TODO: Remove stub once CSR and Object Signing are implemented
+          # enum: ['PKI','CSR','Object Signing']
+          enum: ['PKI']
+          description: 'Type of request'
+        hashType:
+          type: string
+          enum: ['MD5','RIPEMD','SHA-1','SHA-224','SHA-256','SHA-384','SHA-512']
+          description: 'Hashing algorithm to use'
+        approvalGroup:
+          type: string
+          description: 'Approval group to use'
+        ldapUsername:
+          type: string
+          description: 'Username for remote LDAP authentication'
+        ldapPassword:
+          type: string
+          format: hex
+          description: 'Password for remote LDAP authentication'
+      required:
+        - pkiTree
+        - signingCert
+        - requestName
+        - requestType
+        - hashType
+        - approvalGroup
+
+    # PKI Certificate Signing Request
+    CreatePkiRequest:
+      allOf:
+        - $ref: '#/components/schemas/SharedCertProps'
+        - type: object
+          properties:
+            pkiOptions:
+              $ref: '#/components/schemas/PkiOptions'
+          required:
+            - pkiOptions
+    PkiOptions:
+      type: object
+      properties:
+        extensionProfile:
+          type: string
+          description: 'V3 extension profile name'
+        keyType:
+          type: string
+          enum: ['RSA 2048','ECC 521']
+          description: 'Key type to generate'
+        randomPassphrase:
+          type: boolean
+          default: false
+          description: 'Create a randomized passphrase for PKCS #12'
+        passphrase:
+          type: string
+          format: hex
+          description: 'Required if genCertPass is false'
+        subject:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subject'
+          description: 'Custom subject'
+        certExpiration:
+          type: string
+          format: 'YYYY-MM-DD hh:mm:ss'
+          description: 'Signed certificate expiration date'
+        v3Extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/V3Extension'
+          description: 'User-defined extensions'
+        savePkiKey:
+          type: boolean
+          default: false
+          description: 'Save PKI key pair on HSM'
+        exportPkcs12:
+          type: boolean
+          default: false
+          description: 'Export hex encoded PKCS #12'
+      required:
+        - extensionProfile
+        - keyType
+        - subject
+    CertRequestResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                requestId:
+                  type: string
+                  format: uuid
+                  description: 'ID reference to newly created certificate request'
+                approvalsRemaining:
+                  type: integer
+                  minimum: 0
+                  maximum: 5
+                  description: 'Number of approvals remaining'
+                pkcs12:
+                  type: string
+                  format: hex
+                  description: 'Hex encoded PKCS #12'
+                certId:
+                  type: string
+                  format: uuid
+                  description: 'ID reference to newly created certificate key pair'
+              required:
+                - requestId
+                - approvalsRemaining
+
+    # CSR Certificate Signing Request
+    CreateCsrRequest:
+      allOf:
+        - $ref: '#/components/schemas/SharedCertProps'
+        - type: object
+          properties:
+            csrOptions:
+              $ref: '#/components/schemas/CsrOptions'
+          required:
+            - csrOptions
+    CsrOptions:
+      type: object
+      properties:
+        extensionProfile:
+          type: string
+        signingRequest: {} # Needs further investigation
+        certExpiration:
+          type: string
+          format: 'YYYY-MM-DD hh:mm:ss'
+        subject:
+          $ref: '#/components/schemas/Subject'
+        v3Extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/V3Extension'
+
+    # Object Signing Certificate Signing Request
+    CreateObjectSigningRequest:
+      allOf:
+        - $ref: '#/components/schemas/SharedCertProps'
+        - type: object
+          properties:
+            objectSignOptions:
+              $ref: '#/components/schemas/ObjectSignOptions'
+          required:
+            - objectSignOptions
+    ObjectSignOptions:
+      type: object
+      properties:
+        hashType:
+          type: string
+          format: hex
+        padding:
+          type: string
+          enum: ['PKCS #1','PSS','X9.31']
+        pssSaltLength:
+          type: integer
+          minimum: 1
+          maximum: 256
+          description: 'Required if padding is PSS'
+      required:
+        - hashType
+        - padding
+
+    # Generate Signature
+    GenerateSignature:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Required if certId is not supplied'
+        certCommonName:
+          type: string
+          description: 'Required if pkiTree is supplied, and certAlias is not supplied'
+        certAlias:
+          type: string
+          description: 'Required if pkiTree is supplied, and certCommonName is not supplied'
+        certId:
+          type: string
+          description: 'Required if pkiTree is not supplied'
+        dataIsHashed:
+          type: boolean
+          description: 'Specify whether or not provided data is hashed'
+        hashType:
+          type: string
+          enum: ['SHA-1','MD5','RIPEMD-160','SHA-224','SHA-256','SHA-384','SHA-512']
+          description: 'Hashing algorithm to be used'
+        padding:
+          type: string
+          enum: ['PKCS1','PSS','X9.31']
+          description: 'Padding type to use'
+        data:
+          type: string
+          format: hex
+          description: 'Data used to generate signature.'
+      required:
+        - dataIsHashed
+        - hashType
+        - data
+    GenerateSignatureResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: string
+                  format: hex
+                  description: 'Generated signature'
+              required:
+                - result
+
+    # RSA Encryption
+    RSAEncryptRequest:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of PKI Tree to use (required if certId is not supplied)'
+        certCommonName:
+          type: string
+          description: 'Certificate common name (required if pkiTree is supplied, and certAlias is not supplied)'
+        certAlias:
+          type: string
+          description: 'Certificate alias (required if pkiTree is supplied, and certCommonName is not supplied)'
+        certId:
+          type: string
+          description: 'ID reference to certificate key pair (required if pkiTree is not supplied)'
+        hashType:
+          type: string
+          enum: ['SHA-1', 'SHA-256', 'SHA-512']
+          default: 'SHA-256'
+          description: 'Hash type for OAEP padding'
+        data:
+          type: string
+          format: hex
+          description: 'Data to encrypt'
+      required:
+        - data
+    RSAEncryptResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: string
+                  format: hex
+                  description: 'Encrypted data'
+              required:
+                - result
+
+    # RSA Decryption
+    RSADecryptRequest:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of PKI Tree to use (required if certId is not supplied)'
+        certCommonName:
+          type: string
+          description: 'Certificate common name (required if pkiTree is supplied, and certAlias is not supplied)'
+        certAlias:
+          type: string
+          description: 'Certificate alias (required if pkiTree is supplied, and certCommonName is not supplied)'
+        certId:
+          type: string
+          description: 'ID reference to certificate key pair (required if pkiTree is not supplied)'
+        hashType:
+          type: string
+          enum: ['SHA-1', 'SHA-256', 'SHA-512']
+          default: 'SHA-256'
+          description: 'Hash type for OAEP padding'
+        data:
+          type: string
+          format: hex
+          description: 'Data to decrypt'
+      required:
+        - data
+    RSADecryptResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: string
+                  format: hex
+                  description: 'Decrypted data'
+              required:
+                - result
+
+    # RSA Verify
+    RSAVerifyRequest:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of PKI Tree to use (required if certId is not supplied)'
+        certCommonName:
+          type: string
+          description: 'Certificate common name (required if pkiTree is supplied, and certAlias is not supplied)'
+        certAlias:
+          type: string
+          description: 'Certificate alias (required if pkiTree is supplied, and certCommonName is not supplied)'
+        certId:
+          type: string
+          description: 'ID reference to certificate key pair (required if pkiTree is not supplied)'
+        dataIsHashed:
+          type: boolean
+          description: 'Specify whether or not data is hashed'
+        hashType:
+          type: string
+          enum: ['None','SHA-1','SHA-224','SHA-256','SHA-384','SHA-512']
+          default: 'SHA-256'
+          description: 'Hash type to apply to input data or digest info'
+        padding:
+          type: string
+          enum: ['None','PKCS #1','PSS','X9.31']
+          default: 'PKCS #1'
+          description: 'Padding type to use'
+        saltLength:
+          type: integer
+          minimum: 0
+          default: 'Hash size'
+          description: 'Salt length (required if padding is set to PSS)'
+        data:
+          type: string
+          format: hex
+          description: 'Data used to generate signature'
+        signature:
+          type: string
+          format: hex
+          description: 'Signature to verify'
+      required:
+        - dataIsHashed
+        - data
+        - signature
+    RSAVerifyResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: boolean
+                  description: 'Result of verification'
+              required:
+                - result
+
+    # ECC Encryption
+    ECCEncryptRequest:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of PKI Tree to use (required if certId is not supplied)'
+        certCommonName:
+          type: string
+          description: 'Certificate common name (required if pkiTree is supplied, and certAlias is not supplied)'
+        certAlias:
+          type: string
+          description: 'Certificate alias (required if pkiTree is supplied, and certCommonName is not supplied)'
+        certId:
+          type: string
+          description: 'ID reference to certificate key pair (required if pkiTree is not supplied)'
+        derivedKeyHashType:
+          type: string
+          enum: ['SHA-1','SHA-244','SHA-256','SHA-384','SHA-512']
+          default: 'SHA-256'
+          description: 'Hash type used for symmetric key derivation'
+        iterationCount:
+          type: integer
+          minimum: 1
+          maximum: 4294967295
+          default: 1
+          description: 'Iteration count used for symmetric key derivation'
+        data:
+          type: string
+          format: hex
+          description: 'Data to encrypt'
+        sharedInfo:
+          type: string
+          format: hex
+          description: '"Shared Info" used for symmetric key derivation'
+      required:
+        - data
+        - sharedInfo
+    ECCEncryptResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: string
+                  format: hex
+                  description: 'Encrypted data'
+                ephemeralPublicKey:
+                  type: string
+                  format: hex
+                  description: 'Ephemeral public key used to derive symmetric key'
+              required:
+                - result
+                - ephemeralPublicKey
+
+    # ECC Decryption
+    ECCDecryptRequest:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of PKI Tree to use (required if certId is not supplied)'
+        certCommonName:
+          type: string
+          description: 'Certificate common name (required if pkiTree is supplied, and certAlias is not supplied)'
+        certAlias:
+          type: string
+          description: 'Certificate alias (required if pkiTree is supplied, and certCommonName is not supplied)'
+        certId:
+          type: string
+          description: 'ID reference to certificate key pair (required if pkiTree is not supplied)'
+        derivedKeyHashType:
+          type: string
+          enum: ['SHA-1','SHA-244','SHA-256','SHA-384','SHA-512']
+          default: 'SHA-256'
+          description: 'Hash type used for symmetric key derivation'
+        iterationCount:
+          type: integer
+          minimum: 1
+          maximum: 4294967295
+          default: 1
+          description: 'Iteration count used for symmetric key derivation'
+        data:
+          type: string
+          format: hex
+          description: 'Data to decrypt'
+        sharedInfo:
+          type: string
+          format: hex
+          description: '"Shared Info" used for symmetric key derivation'
+        ephemeralPublicKey:
+          type: string
+          format: hex
+          description: 'Ephemeral public key used to derive symmetric key'
+      required:
+        - data
+        - sharedInfo
+        - ephemeralPublicKey
+    ECCDecryptResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: string
+                  format: hex
+                  description: 'Decrypted clear data'
+              required:
+                - result
+
+    # ECC Verify
+    ECCVerifyRequest:
+      type: object
+      properties:
+        pkiTree:
+          type: string
+          description: 'Name of PKI Tree to use (required if certId is not supplied)'
+        certCommonName:
+          type: string
+          description: 'Certificate common name (required if pkiTree is supplied, and certAlias is not supplied)'
+        certAlias:
+          type: string
+          description: 'Certificate alias (required if pkiTree is supplied, and certCommonName is not supplied)'
+        certId:
+          type: string
+          description: 'ID reference to certificate key pair (required if pkiTree is not supplied)'
+        dataIsHashed:
+          type: boolean
+          description: 'Specify whether or not data is hashed'
+        hashType:
+          type: string
+          enum: ['None','SHA-1','SHA-224','SHA-256','SHA-384','SHA-512']
+          default: 'SHA-256'
+          description: 'Hash type to apply to data or digest info'
+        data:
+          type: string
+          format: hex
+          description: 'Data used to generate signature'
+        signature:
+          type: string
+          format: hex
+          description: 'Signature to be verified'
+      required:
+        - dataIsHashed
+        - data
+        - signature
+    ECCVerifyResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                result:
+                  type: boolean
+                  description: 'Result of verification'
+              required:
+                - result
+
+    # GET Schemas
+    GetSharedCertProps:
+      type: object
+      properties:
+        certId:
+          type: string
+          description: 'ID reference to the PKI key used for crypto operations.'
+        requestName:
+          type: string
+          description: 'Name of certificate request'
+        signingStatus:
+          type: string
+          enum: ['pending','approved','signed','denied','revoked']
+          description: 'Approval status'
+        signingCert:
+          type: string
+          description: 'Name of signing certificate'
+        numApprovals:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 'Number of approvals received'
+        approvalsRequired:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 'Total number of approvals required'
+        approvalsRemaining:
+          type: integer
+          minimum: 0
+          maximum: 5
+          description: 'Number of approvals remaining'
+        hashType:
+          type: string
+          enum: ['MD5','RIPEMD','SHA-1','SHA-224','SHA-256','SHA-384','SHA-512']
+          description: 'Hashing algorithm used'
+      required:
+        - requestName
+        - status
+        - signedCert
+        - numApprovals
+        - approvalsRequired
+        - approvalsRemaining
+        - hashType
+
+    GetPkiCertResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/GetSharedCertProps'
+                - type: object
+                  properties:
+                    pkiOptions:
+                      $ref: '#/components/schemas/GetPkiCertProps'
+                  required:
+                    - pkiOptions
+          required:
+            - response
+    GetPkiCertProps:
+      type: object
+      properties:
+        extensionProfile:
+          type: string
+        certExpiration:
+          type: string
+          format: 'YYYY-MM-DD'
+        subject:
+          $ref: '#/components/schemas/Subject'
+        v3Extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/V3Extension'
+        keyType:
+          type: string
+          enum: ['RSA 2048','ECC 521']
+        signedCert:
+          type: string
+          format: hex
+        pkcs12:
+          type: string
+          format: hex
+      required:
+        - extensionProfile
+        - certExpiration
+        - subject
+        - v3Extensions
+        - keyType
+
+    GetCsrRequest:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/GetSharedCertProps'
+                - type: object
+                  properties:
+                    csrOptions:
+                      $ref: '#/components/schemas/GetCsrProps'
+                  required:
+                    - csrOptions
+          required:
+            - response
+    GetCsrProps:
+      type: object
+      properties:
+        extensionProfile:
+          type: string
+        certExpiration:
+          type: string
+          format: 'YYYY-MM-DD'
+        subject:
+          $ref: '#/components/schemas/Subject'
+        v3Extensions:
+          $ref: '#/components/schemas/V3Extension'
+        keyType:
+          type: string
+          enum: ['RSA 2048','ECC 521']
+        signedCert:
+          type: string
+          format: hex
+        pkcs10Csr:
+          type: string
+          format: hex
+
+    GetObjectSignRequest:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/GetSharedCertProps'
+                - type: object
+                  properties:
+                    objectSignOptions:
+                      $ref: '#/components/schemas/GetObjectSignProps'
+                  required:
+                    - objectSignOptions
+          required:
+            - response
+    GetObjectSignProps:
+      type: object
+      properties:
+        hashType:
+          type: string
+          format: hex
+        padding:
+          type: string
+          enum: ['PKCS1','PSS','X931']
+        pssSaltLength:
+          type: integer
+          minimum: 1
+          maximum: 256
+          description: 'Returned if padding is PSS'
+        hashSignature:
+          type: string
+          format: hex
+          description: 'Returned if approved'
+      required:
+        - hashType
+        - padding
+
+
+  examples:
+    CreatePkiRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        signingCert: 'PKI Signing Cert'
+        requestName: 'Engineering Cert'
+        requestType: 'PKI'
+        hashType: 'SHA-256'
+        approvalGroup: 'PKI Approval Group'
+        pkiOptions:
+          extensionProfile: 'TLS Certificate'
+          keyType: 'RSA 2048'
+          passphrase: '73757065725f736563726574313233'
+          subject:
+            - id: '2.5.4.3'
+              asn1Type: 12
+              data: '436F6D6D6F6E4E616D6548657265'
+          certExpiration: '2021-01-01 00:00:00'
+    CreatePkiRequestGenPassword:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        signingCert: 'PKI Signing Cert'
+        requestName: 'Engineering Cert'
+        requestType: 'PKI'
+        hashType: 'SHA-256'
+        approvalGroup: 'PKI Approval Group'
+        pkiOptions:
+          extensionProfile: 'TLS Certificate'
+          keyType: 'RSA 2048'
+          randomPassphrase: true
+          subject:
+            - id: '2.5.4.3'
+              asn1Type: 12
+              data: '436F6D6D6F6E4E616D6548657265'
+          certExpiration: '2021-01-01 00:00:00'
+    CreatePkiRequestSavePkiKey:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        signingCert: 'PKI Signing Cert'
+        requestName: 'Engineering Cert'
+        requestType: 'PKI'
+        hashType: 'SHA-256'
+        approvalGroup: 'PKI Approval Group'
+        pkiOptions:
+          extensionProfile: 'TLS Certificate'
+          keyType: 'RSA 2048'
+          savePkiKey: true
+          passphrase: '73757065725f736563726574313233'
+          subject:
+            - id: '2.5.4.3'
+              asn1Type: 12
+              data: '436F6D6D6F6E4E616D6548657265'
+          certExpiration: '2021-01-01 00:00:00'
+    CreatePkiRequestExportPKCS12:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        signingCert: 'PKI Signing Cert'
+        requestName: 'Engineering Cert'
+        requestType: 'PKI'
+        hashType: 'SHA-256'
+        approvalGroup: 'PKI Approval Group'
+        pkiOptions:
+          extensionProfile: 'TLS Certificate'
+          keyType: 'RSA 2048'
+          randomPassphrase: true
+          exportPkcs12: true
+          subject:
+            - id: '2.5.4.3'
+              asn1Type: 12
+              data: '436F6D6D6F6E4E616D6548657265'
+          certExpiration: '2021-01-01 00:00:00'
+    CreateCertRequestResponse:
+      value:
+        status: 'Success'
+        message: 'Successfully created new entry'
+        response:
+          approvalsRemaining: 0
+          requestId: '0097827342341'
+    CreateCertRequestResponseSavePkiKey:
+      value:
+        status: 'Success'
+        message: 'Successfully created new entry'
+        response:
+          approvalsRemaining: 0
+          requestId: '0097827342341'
+          certId: '0097827342341'
+    CreateCertRequestResponseExportPKCS12:
+      value:
+        status: 'Success'
+        message: 'Successfully created new entry'
+        response:
+          approvalsRemaining: 0
+          requestId: '0097827342341'
+          pkcs12: '30820C9B02010330820C6106092A864886F70D010701A0820C5204820C4E30...3A973DF710408D7759369F34F058F02020400'
+    GetPkiRequest:
+      value:
+        status: 'Success'
+        message: 'Success'
+        response:
+          requestName: 'Engineering Cert'
+          status: 'approved'
+          signingCert: 'PKI Signing Cert'
+          numApprovals: 0
+          approvalsRequired: 0
+          approvalsRemaining: 0
+          hashType: 'SHA-256'
+          pkiOptions:
+            extensionProfile: 'TLS Certificate'
+            certExpiration: '2021-01-01'
+            subject:
+              - id: '2.5.4.3'
+                asn1Type: 12
+                data: '436F6D6D6F6E4E616D6548657265'
+            v3Extensions:
+              - id: 'Authority Key Identifier'
+                data: 'SHA-256'
+                critical: false
+              - id: 'Key Usage'
+                data: '030202C4'
+                critical: false
+            keyType: 'RSA 2048'
+    GetPkiRequestExportPKCS12:
+      value:
+        status: 'Success'
+        message: 'Success'
+        response:
+          requestName: 'Engineering Cert'
+          status: 'approved'
+          signingCert: 'PKI Signing Cert'
+          numApprovals: 0
+          approvalsRequired: 0
+          approvalsRemaining: 0
+          hashType: 'SHA-256'
+          pkiOptions:
+            extensionProfile: 'TLS Certificate'
+            certExpiration: '2021-01-01'
+            subject:
+              - id: '2.5.4.3'
+                asn1Type: 12
+                data: '436F6D6D6F6E4E616D6548657265'
+            v3Extensions:
+              - id: 'Authority Key Identifier'
+                data: 'SHA-256'
+                critical: false
+              - id: 'Key Usage'
+                data: '030202C4'
+                critical: false
+            keyType: 'RSA 2048'
+            signedCert: '308202FF308201E7A00302010202074DF6990000008C300D06092A864...A7740D96065EAB448026464DC0EEC19D731E278025531E9'
+            pkcs12: '0820C9B02010330820C6106092A864886F70D010701A0820C5204820C4E30...3A973DF710408D7759369F34F058F02020400'
+    GetPkiRequestSavePkiKey:
+      value:
+        status: 'Success'
+        message: 'Success'
+        response:
+          certId: '0097827342341'
+          requestName: 'Engineering Cert'
+          status: 'approved'
+          signingCert: 'PKI Signing Cert'
+          numApprovals: 0
+          approvalsRequired: 0
+          approvalsRemaining: 0
+          hashType: 'SHA-256'
+          pkiOptions:
+            extensionProfile: 'TLS Certificate'
+            certExpiration: '2021-01-01'
+            subject:
+              - id: '2.5.4.3'
+                asn1Type: 12
+                data: '436F6D6D6F6E4E616D6548657265'
+            v3Extensions:
+              - id: 'Authority Key Identifier'
+                data: 'SHA-256'
+                critical: false
+              - id: 'Key Usage'
+                data: '030202C4'
+                critical: false
+            keyType: 'RSA 2048'
+    RSAEncryptRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'Engineer Encrypt/Decrypt Cert'
+        hashType: 'SHA-256'
+        data: '46f702d73656372657420646174612074686174E'
+    RSAEncryptRequestKeyPair:
+      value:
+        certId: '0097827342341'
+        hashType: 'SHA-256'
+        data: '46f702d73656372657420646174612074686174E'
+    RSAEncryptResponse:
+      value:
+        status: 'Success'
+        message: 'Encryption successful'
+        response:
+          result: '34B3FBCBE034CE3D1B60F1B342C61140C2339224C999E2C...99048A3199A13BAC529E3345B859AF462AD'
+    RSADecryptRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'Engineer Encrypt/Decrypt Cert'
+        hashType: 'SHA-256'
+        data: '34B3FBCBE034CE3D1B60F1B342C61140C2339224C999E2C...99048A3199A13BAC529E3345B859AF462AD'
+    RSADecryptRequestKeyPair:
+      value:
+        certId: '0097827342341'
+        hashType: 'SHA-256'
+        data: '34B3FBCBE034CE3D1B60F1B342C61140C2339224C999E2C...99048A3199A13BAC529E3345B859AF462AD'
+    RSADecryptResponse:
+      value:
+        status: 'Success'
+        message: 'Decryption successful'
+        response:
+          result: '46F702D73656372657420646174612074686174E'
+    RSAVerifyRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'RSA Sign/Verify Cert'
+        dataIsHashed: false
+        hashType: 'SHA-512'
+        padding: 'PSS'
+        data: '46f702d73656372657420646174612074686174E'
+        signature: '9440081237801A45330E58D42D2020F87...005FFFDD49364CCFA469E23A8F42AF879FDEEB'
+    RSAVerifyRequestKeyPair:
+      value:
+        certId: '0097827342341'
+        dataIsHashed: false
+        hashType: 'SHA-256'
+        padding: 'PKCS #1'
+        data: '46f702d73656372657420646174612074686174E'
+        signature: '3A85E649126A3410E51F5B573166150C53878FA235...9FA35D6995A0FF92BB09DFDA2CD46703BA5C2'
+    RSAVerifyResponse:
+      value:
+        status: 'Success'
+        message: 'Valid signature'
+        response:
+          result: true
+    ECCEncryptRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'ECC Encrypt/Decrypt Cert'
+        derivedKeyHashType: 'SHA-256'
+        iterationCount: 200
+        data: '46f702d73656372657420646174612074686174E'
+        sharedInfo: '53686172656420696e666f20666f7220656e63727970742f64656372797074'
+    ECCEncryptRequestKeyPair:
+      value:
+        certId: '2201E9E40A98EC37'
+        derivedKeyHashType: 'SHA-256'
+        iterationCount: 200
+        data: '46f702d73656372657420646174612074686174E'
+        sharedInfo: '53686172656420696e666f20666f7220656e63727970742f64656372797074'
+    ECCEncryptResponse:
+      value:
+        status: 'Success'
+        message: 'Encryption successful'
+        response:
+          result: '0B6AAAE20A3122B72F6DAE24E6262CAFC53BDBD940A801527A2D8DC434B89D92'
+          ephemeralPublicKey: '3059301306072A8648CE3D020106082A8648CE3D030107034200041C9575F04B0BB3E2D301C4A7AA15B6725F1528221C80BD799219E448F35E4394B27431066BC968D53EADA28769D025D8A5365F04DC63C524CEDDFFFF3705892A'
+    ECCDecryptRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'ECC Encrypt/Decrypt Certs'
+        derivedKeyHashType: 'SHA-256'
+        iterationCount: 200
+        data: '0B6AAAE20A3122B72F6DAE24E6262CAFC53BDBD940A801527A2D8DC434B89D92'
+        sharedInfo: '53686172656420696e666f20666f7220656e63727970742f64656372797074'
+        ephemeralPublicKey: '3059301306072A8648CE3D020106082A8648CE3D030107034200041C9575F04B0BB3E2D301C4A7AA15B6725F1528221C80BD799219E448F35E4394B27431066BC968D53EADA28769D025D8A5365F04DC63C524CEDDFFFF3705892A'
+    ECCDecryptRequestKeyPair:
+      value:
+        certId: '2201E9E40A98EC37'
+        derivedKeyHashType: 'SHA-256'
+        iterationCount: 200
+        data: '0B6AAAE20A3122B72F6DAE24E6262CAFC53BDBD940A801527A2D8DC434B89D92'
+        sharedInfo: '53686172656420696e666f20666f7220656e63727970742f64656372797074'
+        ephemeralPublicKey: '3059301306072A8648CE3D020106082A8648CE3D030107034200041C9575F04B0BB3E2D301C4A7AA15B6725F1528221C80BD799219E448F35E4394B27431066BC968D53EADA28769D025D8A5365F04DC63C524CEDDFFFF3705892A'
+    ECCDecryptResponse:
+      value:
+        status: 'Success'
+        message: 'Decryption successful'
+        response:
+          result: '46F702D73656372657420646174612074686174E'
+    ECCVerifyRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certAlias: 'ECCSignVerify'
+        dataIsHashed: false
+        hashType: 'SHA-256'
+        data: '46f702d73656372657420646174612074686174E'
+        signature: '3045022016EF43F7A13F9E3D9160F8BC16E261320A079AFCFAF10D53F4B8AFEE5B2936CD022100D3E32545DDC064ECACCBB3AA13EFBAB920328E414049044DCD0F589E5698ED59'
+    ECCVerifyRequestKeyPair:
+      value:
+        certId: '2201E9E40A98EC37'
+        dataIsHashed: false
+        hashType: 'SHA-256'
+        data: '46f702d73656372657420646174612074686174E'
+        signature: '3045022016EF43F7A13F9E3D9160F8BC16E261320A079AFCFAF10D53F4B8AFEE5B2936CD022100D3E32545DDC064ECACCBB3AA13EFBAB920328E414049044DCD0F589E5698ED59'
+    ECCVerifyResponse:
+      value:
+        status: 'Success'
+        message: 'Valid signature'
+        response:
+          result: true
+    RSASignatureRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'RSA Sign/Verify Cert'
+        dataIsHashed: false
+        hashType: 'RIPEMD-160'
+        padding: 'PKCS #1'
+        data: '46f702d73656372657420646174612074686174E'
+    RSASignatureResponse:
+      value:
+        status: 'Success'
+        message: 'Successfully generated signature'
+        response:
+          result: '9440081237801A45330E58D42D2020F87...005FFFDD49364CCFA469E23A8F42AF879FDEEB'
+    ECCSignatureRequest:
+      value:
+        pkiTree: 'Futurex PKI Certs'
+        certCommonName: 'ECC Sign/Verify Cert'
+        dataIsHashed: false
+        hashType: 'SHA-256'
+        padding: 'PKCS #1'
+        data: '46f702d73656372657420646174612074686174E'
+    ECCSignatureResponse:
+      value:
+        status: 'Success'
+        message: 'Successfully generated signature'
+        response:
+          result: '3045022016EF43F7A13F9E3D9160F8BC16E261320A079AFCFAF10D53F4B8AFEE5B2936CD022100D3E32545DDC064ECACCBB3AA13EFBAB920328E414049044DCD0F589E5698ED59'
+    SignatureRequestKeyPair:
+      value:
+        certId: '0097827342341'
+        dataIsHashed: false
+        hashType: 'SHA-512'
+        padding: 'PSS'
+        data: '46f702d73656372657420646174612074686174E'
+
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'

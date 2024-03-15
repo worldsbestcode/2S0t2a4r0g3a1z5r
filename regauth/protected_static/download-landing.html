@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+        <title>Download PKCS#12</title>
+
+        <!-- ES6-Shim 0.35.3 - JS -->        <script type="text/javascript" src="/regauth/static/libs/es6-shim/es6-shim.min.js"></script>
+        <!-- Font Awesome 4.6.3 - CSS -->    <link rel="stylesheet" type="text/css" href="/regauth/static/libs/FontAwesome-4.6.3/css/font-awesome.min.css">
+        <!-- jQuery 2.2.0 - JS -->           <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+        <!-- Async 2.0.0 - JS -->            <script type="text/javascript" src="/regauth/static/libs/Async-2.0.0/async.min.js"></script>
+        <!-- Bootstrap 3.3.6 - JS -->        <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Bootstrap 3.3.6 - CSS -->       <link rel="stylesheet" type="text/css" href="/regauth/static/libs/AdminLTE-2.3.3/bootstrap/css/bootstrap.min.css">
+        <!-- ******* PLUGINS ******* -->
+        <!-- Moment 2.9.0 - JS -->               <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/daterangepicker/moment.min.js"></script>
+        <!-- DateRangePicker 1.3.21 - JS -->     <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- DateRangePicker 1.3.21 - CSS -->    <link rel="stylesheet" type="text/css" href="/regauth/static/libs/AdminLTE-2.3.3/plugins/daterangepicker/daterangepicker-bs3.css">
+        <!-- bootstrap-datetimepicker - JS -->   <script type="text/javascript" src="/regauth/static/libs/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+        <!-- bootstrap-datetimepicker - CSS -->  <link rel="stylesheet" type="text/css" href="/regauth/static/libs/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+        <!-- select2 4.0.1 - JS -->              <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/select2/select2.full.min.js"></script>
+        <!-- select2 4.0.1 - CSS -->             <link rel="stylesheet" type="text/css" href="/regauth/static/libs/AdminLTE-2.3.3/plugins/select2/select2.min.css">
+        <!-- jquery.inputmask.bundle - JS -->    <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/input-mask/jquery.inputmask.bundle.min.js"></script>
+        <!-- bootpag 1.0.7 - JS -->              <script type="text/javascript" src="/regauth/static/libs/bootpag-1.0.7/jquery.bootpag.min.js"></script>
+        <!-- DataTables jQuery 1.10.7 - JS -->   <script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/datatables/jquery.dataTables.min.js"></script>
+        <!-- DataTables Bootstrap 1.10.7 - JS --><script type="text/javascript" src="/regauth/static/libs/AdminLTE-2.3.3/plugins/datatables/dataTables.bootstrap.min.js"></script>
+        <!-- DataTables Bootstrap 1.10.7 - CSS --><link rel="stylesheet" type="text/css" href="/regauth/static/libs/AdminLTE-2.3.3/plugins/datatables/dataTables.bootstrap.css">
+        <!-- NotifyJS 0.4.2 - JS -->             <script type="text/javascript" src="/regauth/static/libs/NotifyJS-0.4.2/dist/notify.js"></script>
+        <!-- ******* END PLUGINS ******* -->
+        <!-- AdminLTE 2.3.3 - JS -->         <script type="text/javascript" src="/regauth/static/libs/libconfig/AdminLTE-2.3.3/js/app.js"></script>
+        <!-- AdminLTE 2.3.3 - CSS -->        <link rel="stylesheet" type="text/css" href="/regauth/static/libs/libconfig/AdminLTE-2.3.3/fonts/OpenSans/OpenSans.css">
+        <!-- AdminLTE 2.3.3 - CSS -->        <link rel="stylesheet" type="text/css" href="/regauth/static/libs/libconfig/AdminLTE-2.3.3/css/AdminLTE.min.css">
+        <!-- AdminLTE 2.3.3 - CSS -->        <link rel="stylesheet" type="text/css" href="/regauth/static/libs/libconfig/AdminLTE-2.3.3/css/skin.css">
+        <!-- AngularJS 1.5.7 - JS -->        <script type="text/javascript" src="/regauth/static/libs/AngularJS-1.5.7/angular.min.js"></script>
+        <!-- ngAnimate 1.5.7 - JS -->        <script type="text/javascript" src="/regauth/static/libs/AngularJS-1.5.7/angular-animate.min.js"></script>
+        <!-- AngularUI Bootstrap 2.5.0 - JS --> <script type="text/javascript" src="/regauth/static/libs/AngularUIBootstrap-2.5.0/ui-bootstrap-tpls-2.5.0.min.js"></script>
+        <!-- ABNTree 0.2.0 - JS -->          <script type="text/javascript" src="/regauth/static/libs/libconfig/ABNTree-0.2.0/dist/abn_tree_directive.js"></script>
+        <!-- ABNTree 0.2.0 - CSS -->         <link rel="stylesheet" type="text/css" href="/regauth/static/libs/libconfig/ABNTree-0.2.0/dist/abn_tree.css">
+        <!-- jsrsasign 7.1.3 - JS -->        <script type="text/javascript" src="/regauth/static/libs/jsrsasign-7.1.3/jsrsasign-all-min.js"></script>
+        <!-- fx-animations - CSS -->         <link rel="stylesheet" type="text/css" href="/regauth/static/css/fx-animations.css">
+        <!-- fx-layout - CSS -->             <link rel="stylesheet" type="text/css" href="/regauth/static/css/fx-layout.css">
+        <!-- fx-widgets - CSS -->            <link rel="stylesheet" type="text/css" href="/regauth/static/css/fx-widgets.css">
+        <!-- fx-app - CSS -->                <link rel="stylesheet" type="text/css" href="/regauth/static/css/fx-app.css">
+        <!-- fx-app-view - CSS -->           <link rel="stylesheet" type="text/css" href="/regauth/static/css/fx-app-view.css">
+        <!-- download-view - CSS -->         <link rel="stylesheet" type="text/css" href="/regauth/static/css/download-view.css">
+
+        <script type="text/javascript" src="/regauth/static/regauth.js"></script>
+    </head>
+    <body class="hold-transition skin-fx sidebar-mini sidebar-collapse" ng-app="fxApp">
+        <fx-header-no-sidebar></fx-header-no-sidebar>
+        <div class="wrapper" ng-controller="contentCtrl">
+            <div class="height-wrapper">
+                <download-view></download-view>
+            </div>
+            <div id="alertModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">{{fxAppModalService.getModalData().alertTitle}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{fxAppModalService.getModalData().alertMessage}}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-sidebar-bg control-sidebar-height-fill"></div>
+    </body>
+</html>

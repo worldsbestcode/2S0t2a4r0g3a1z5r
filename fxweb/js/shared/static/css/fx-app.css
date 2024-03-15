@@ -1,0 +1,43 @@
+/* Common CSS for fx apps */
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.status-text {
+  text-align: center;
+  font-style: italic;
+}
+
+.status-text-left-justified {
+  text-align: left;
+  font-style: italic;
+}
+
+.placeholder-text {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+}
+
+.error-text {
+  color: red;
+  font-size: small !important;
+  font-weight: normal;
+}
+
+.light-blue-text {
+  color: #3c8dbc;
+}
+
+.green-text {
+  color: #00a65a;
+}
+
+.red-text {
+  color: #dd4b39;
+}

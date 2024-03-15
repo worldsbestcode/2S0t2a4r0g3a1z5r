@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "CertificateAuthority",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "pkitype": {
+            "$ref": "PKIType.json"
+        },
+        "objectType": {
+            "enum": ["CERTAUTHORITY"]
+        },
+        "childType": {
+            "enum": ["X509CERT"]
+        }
+    },
+    "allOf": [{"$ref": "ManagedObject.json"}]
+}

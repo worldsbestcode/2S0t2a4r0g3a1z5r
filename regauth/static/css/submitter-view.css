@@ -1,0 +1,146 @@
+/* Submitter view */
+
+.submitter-view-content {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.submitter-form-row {
+  text-align: center;
+  margin-top: 3em;
+}
+
+.submitter-form-column {
+  display: inline-block;
+  min-width: 500px;
+  max-width: 500px;
+  padding: 20px;
+  border: #ccc solid 1px;
+  border-radius: 4px;
+  box-shadow: #aaa 4px 4px 7px;
+}
+
+.submitter-form-wide-column {
+  max-width: 800px;
+}
+
+@media (max-width: 767px) {
+  .submitter-form-row {
+    text-align: center;
+    margin-top: 3em;
+  }
+
+  .submitter-form-column {
+    display: inline-block;
+    min-width: auto;
+    max-width: auto;
+    width: 100%;
+  }
+}
+
+.submitter-form-progress-bar {
+  display: inline-block;
+}
+
+.submitter-form-progress-bar-wrapper {
+  text-align: center;
+}
+
+.submitter-form-progress-bar-row {
+  text-align: center;
+}
+
+.submitter-form-progress-bar-button {
+  display: inline-block;
+  min-width: 150px;
+}
+
+.submitter-form-progress-bar-left-button {
+  float: left;
+}
+
+.submitter-form-progress-bar-right-button {
+  float: right;
+}
+
+.submitter-form-progress-bar-center {
+  width: 400px;
+}
+
+.submitter-form-progress-bar-line {
+  background-color: #282828;
+}
+
+.submitter-form-progress-bar-steps {
+  display: inline-block;
+  border-radius: 5px;
+}
+
+.submitter-form-progress-bar-steps-progress {
+  margin-bottom: 10px;
+  margin-top: -12px;
+  box-shadow: #aaa 3px 3px 7px;
+}
+
+.submitter-form-progress-bar-steps-mini {
+  display: none;
+  width: 100%;
+}
+
+@media (max-width: 969px) {
+  .submitter-form-progress-bar-steps {
+    display: none;
+  }
+
+  .submitter-form-progress-bar-steps-mini {
+    display: inline-block;
+  }
+}
+
+.submitter-form-progress-bar-step {
+  display: inline-block;
+  word-spacing: 9999rem;
+  font-size: 9px;
+  text-align: center;
+}
+
+.submitter-form-progress-bar-step-text {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.submitter-form-progress-bar-step-dot {
+  vertical-align: middle;
+  margin-top: 10px;
+  font-size: 12px;
+  text-shadow: #aaa 3px 3px 7px;
+}
+
+.submitter-form-signing-cert-dropdown {
+  margin-bottom: 1em;
+}
+
+.submitter-form-signing-cert-radio-buttons {
+  text-align: left;
+}
+
+.submitter-form-allow-pki-text {
+  font-size: 8pt;
+}
+
+.submitter-form-radio-option {
+  margin-left: 5pt;
+}
+
+.submitter-form-token {
+  margin-bottom: 1em;
+}
+
+.submitter-form-textarea {
+  height: 13em !important;
+}
+
+.submitter-form-accordion-header {
+  font-size: 14px;
+  height: 14px;
+}

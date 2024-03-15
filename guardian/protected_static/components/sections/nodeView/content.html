@@ -1,0 +1,40 @@
+<div id="node-view-content" class="content-wrapper height-wrapper" ng-controller="nodeViewCtrl as ctrl">
+  <fx-column width="3">
+    <div class="content-header">
+      <h1>
+          {{ localProductName }}
+        <small>Node View</small>
+      </h1>
+    </div>
+  </fx-column>
+  <fx-column width="9">
+    <node-selector selected-node-key="nodeViewService.getCurrentSelectedNodeKey()"></node-selector>
+  </fx-column>
+    <div id="node-view-content-body"
+         class="content"
+         fx-resize-listener
+         whenresize="nodeViewService.manageNodeViewContentLayout">
+        <div id="node-view-content-left-column" class="node-view-content-column">
+            <div id="node-view-content-left-column-top">
+                <fx-spinner name="nodeViewSpinner" id="node-view-spinner"></fx-spinner>
+                <node-graph></node-graph>
+            </div>
+            <div id="node-view-content-left-column-bottom">
+              <fx-column width=6>
+                <div id="node-view-content-left-column-bottom-left">
+                  <node-balancer-stats></node-balancer-stats>
+                </div>
+              </fx-column>
+              <fx-column width=6>
+                <div id="node-view-content-left-column-bottom-right">
+                  <node-stat-box stat-type="tps" chart-height="{{ tpsBoxHeight }}"></node-stat-box>
+                </div>
+              </fx-column>
+            </div>
+        </div>
+        <div id="node-view-content-right-column" class="node-view-content-column">
+            <node-info-box></node-info-box>
+            <node-stats></node-stats>
+        </div>
+    </div>
+</div>

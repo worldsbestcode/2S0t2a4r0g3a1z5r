@@ -1,0 +1,11 @@
+<div class="box box-info">
+    <div class="modal-header">
+        <h3 class="modal-title">{{$resolve.peer.name}}</h3>
+    </div>
+    <div class="modal-body">
+        <fx-peer-event-view peer="$resolve.peer" maxrowcount="100"></fx-peer-event-view>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="cancel()">Close</button>
+    </div>
+</div>

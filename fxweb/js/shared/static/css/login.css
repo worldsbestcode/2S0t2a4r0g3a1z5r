@@ -1,0 +1,51 @@
+/* Login */
+
+.login-page {
+  background: url(../images/login-bg.jpg);
+}
+
+.error-text {
+  color: red;
+}
+
+.context-text {
+  text-align: center;
+  padding: 10px;
+}
+
+.sidebar-login {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.sign-in-button {
+  background: #428bca;
+  color: white;
+}
+
+.cancel-button {
+  padding: 0px;
+}
+
+.cancel-link {
+  color: #666;
+  display: block;
+  width: inherit;
+  height: inherit;
+  padding: 6px 6px;
+}
+
+.cancel-link:hover {
+  color: #333;
+}
+
+/* AdminLTE Overrides */
+.login-box-body, .register-box-body {
+  background: transparent;
+}
+
+.login-logo, .register-logo {
+  margin-left: 20px;
+}

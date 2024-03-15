@@ -1,0 +1,6 @@
+{
+    "rkms": "./config/rkms.js",
+    "guardian": "./config/guardian.js",
+    "regauth": "./config/regauth.js",
+    "kmes": "./config/kmes.js"
+}

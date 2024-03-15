@@ -1,0 +1,439 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'SFTP Events'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/sftp-events':
+    post:
+      tags:
+        - SFTP Events
+      summary: 'Create single (S)FTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + NOTC
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + Users can only create a single key export, database backup export, or log export event at a time.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSftpEvent'
+            examples:
+              'Create single (S)FTP Event (Key Export)':
+                $ref: '#/components/examples/CreateKeyExport'
+              'Create single (S)FTP Event (Database Backup Export)':
+                $ref: '#/components/examples/CreateDbBackupExport'
+              'Create single (S)FTP Event (Log Export)':
+                $ref: '#/components/examples/CreateLogExport'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSftpEventResponse'
+              examples:
+                'Create single SFTP Event':
+                  $ref: '#/components/examples/CreateSftpEventResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    get:
+      tags:
+        - SFTP Events
+      summary: 'Retrieve list of (S)FTP Events, or single (S)FTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + NOTC
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **No parameters** - Returns a list of SFTP event names
+        + **name** - Returns a single SFTP event configuration based on the name
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSftpEvent'
+              examples:
+                'Retrieve list of (S)FTP Events':
+                  $ref: '#/components/examples/RetrieveSftpEventList'
+                'Retrieve single (S)FTP Event':
+                  $ref: '#/components/examples/RetrieveSftpEvent'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - SFTP Events
+      summary: 'Update specified (S)FTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + NOTC
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSftpEvent'
+            examples:
+              'Update single (S)FTP Event':
+                $ref: '#/components/examples/UpdateSftpEvent'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    delete:
+      tags:
+        - SFTP Events
+      summary: 'Delete specified (S)FTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + NOTC
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **name** URL parameter is required
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 'abc098-6151'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    CreateSftpEvent:
+      allOf:
+        - $ref: '#/components/schemas/BareSftpEvent'
+        - required:
+          - name
+          - enabled
+          - eventType
+          - settings
+    CreateSftpEventResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: UUID
+                  description: ''
+              required:
+                - id
+    RetrieveSftpEvent:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/RetrieveSftpEventList'
+                - $ref: '#/components/schemas/RetrieveSingleSftpEvent'
+    RetrieveSftpEventList:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: UUID
+                description: ''
+              name:
+                type: string
+                description: ''
+              eventType:
+                $ref: '#/components/schemas/EventTypeEnum'
+              enabled:
+                type: boolean
+                description: ''
+            required:
+              - id
+              - name
+              - eventType
+              - enabled
+          description: ''
+      required:
+        - events
+    RetrieveSingleSftpEvent:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: ''
+        - $ref: '#/components/schemas/BareSftpEvent'
+        - required:
+          - id
+          - name
+          - enabled
+          - eventType
+          - settings
+    UpdateSftpEvent:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: ''
+        - $ref: '#/components/schemas/BareSftpEvent'
+        - required:
+          - id
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+    KeyExport:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KeyExportEvents'
+    DbBackupExport:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/DbBackupExportEvents'
+    LogExport:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/LogExportEvents'
+    EventTypeEnum:
+      type: string
+      enum: ['Key Export', 'Database Backup Export', 'Log Export']
+      description: ''
+    BareSftpEvent:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ''
+        eventType:
+          $ref: '#/components/schemas/EventTypeEnum'
+        enabled:
+          type: boolean
+          description: ''
+        settings:
+          oneOf:
+            - $ref: '#/components/schemas/KeyExport'
+            - $ref: '#/components/schemas/DbBackupExport'
+            - $ref: '#/components/schemas/LogExport'
+          description: ''
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    CreateKeyExport:
+      value:
+        name: 'Monthly Key Export'
+        enabled: true
+        eventType: 'Key Export'
+        settings:
+          frequency: 3
+          runOn: ['sunday']
+          fileName: 'KeyExportLog.txt'
+          includeHash: false
+          appendDate: true
+          format: 'human readable'
+          includeHeader: true
+          keyLength: 4
+          hostname: 'Futurex_Host'
+          compressFile: true
+    CreateDbBackupExport:
+      value:
+        name: 'Bi-Weekly DB Export'
+        enabled: true
+        eventType: 'Database Backup Export'
+        settings:
+          frequency: 2
+          runOn: ['monday', 'friday']
+          fileName: 'DbBackupLog.txt'
+          includeHash: true
+          appendDate: true
+    CreateLogExport:
+      value:
+        name: 'Weekly Log Export'
+        enabled: true
+        eventType: 'Log Export'
+        settings:
+          frequency: 1
+          runOn: ['tuesday', 'thursday', 'sunday']
+          fileName: 'LogsExport.txt'
+          includeHash: false
+          appendDate: true
+          startDate: '2020-01-01'
+          endDate: '2020-01-30'
+          format: 'human readable'
+          includeHeader: false
+    CreateSftpEventResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          id: 'abc098-6151'
+    RetrieveSftpEventList:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          events:
+            - id: 'abc098-6151'
+              name: 'Monthly Key Export'
+              type: 'Key Export'
+              enabled: true
+            - id: 'def123-9843'
+              name: 'Bi-Weekly DB Export'
+              type: 'Database Backup Export'
+              enabled: true
+            - id: 'ghi765-48935'
+              name: 'Weekly Log Export'
+              type: 'Log Export'
+              enabled: true
+    RetrieveSftpEvent:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          id: 'abc098-6151'
+          name: 'Monthly Key Export'
+          enabled: true
+          eventType: 'Key Export'
+          settings:
+            frequency: 3
+            runOn: ['sunday']
+            fileName: 'KeyExportLog.txt'
+            includeHash: true
+            appendDate: true
+            format: 'human readable'
+            includeHeader: true
+            keyLength: 4
+            hostname: 'Futurex_Host'
+            compressFile: true
+    UpdateSftpEvent:
+      value:
+        id: 'abc098-6151'
+        name: 'Bi-Weekly Key Export'
+        settings:
+          frequency: 2
+          runOn: ['saturday']
+          fileName: 'Bi-Weekly Key Export.txt'
+          includeHash: true
+          keyLength: 4
+          compressFile: true

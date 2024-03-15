@@ -1,0 +1,17 @@
+<div>
+	<label ng-if="$ctrl.label">
+		{{$ctrl.label}}
+		<span ng-if="$ctrl.required" class="fx-widget-required-text"> *</span>
+	</label>
+	<div class="input-group">
+		<div class="input-group-addon">
+			<i class="fa fa-calendar"></i>
+		</div>
+		<input
+			class="form-control daterange pull-right active"
+			type="text"
+			ng-model="$ctrl.plugin.datestring"
+			ng-change="updateFormData();"
+			ng-disabled="$ctrl.disabled">
+	</div>
+</div>

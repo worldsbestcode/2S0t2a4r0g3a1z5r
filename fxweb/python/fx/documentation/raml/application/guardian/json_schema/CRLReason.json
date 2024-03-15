@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "CRLReason",
+    "description": "Reasons that a certificate may be revoked. See https://tools.ietf.org/html/rfc5280#section-5.3.1",
+    "enum": [
+        "unnspecified",
+        "keyCompromise",
+        "affiliationChanged",
+        "superseded",
+        "cessationOfOperation",
+        "certificateHold",
+        "UNUSED",
+        "removeFromCRL",
+        "privilegeWithdrawn",
+        "aACompromise"
+    ]
+}

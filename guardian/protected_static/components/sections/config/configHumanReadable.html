@@ -1,0 +1,15 @@
+<div>
+    <fx-input
+        label="Human Readable Configuration Log"
+        type="text"
+        value="userFilename">
+    </fx-input>
+    <fx-button callback="downloadHumanReadableConfig" class="pull-left">
+        <div ng-if="!generating">
+            Download
+        </div>
+        <div ng-if="generating">
+            <i class="fa fa-spinner fa-spin"></i> One moment...
+        </div>
+    </fx-button>
+</div>

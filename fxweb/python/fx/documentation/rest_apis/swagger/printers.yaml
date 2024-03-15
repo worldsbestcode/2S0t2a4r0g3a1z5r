@@ -1,0 +1,384 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'Printers'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  /printers:
+    post:
+      tags:
+        - Printer Management
+      summary: 'Create single Printer'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + PRNT
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePrinter'
+            examples:
+              'Create single Printer':
+                $ref: '#/components/examples/CreatePrinter'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePrinterResponse'
+              examples:
+                'Create single Printer':
+                  $ref: '#/components/examples/CreatePrinterResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+          
+    get:
+      tags:
+        - Printer Management
+      summary: 'Retrieve list of Printers, or single Printer'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + PRNT
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **No parameters** - Retrieve list of installed and available printers
+        + **name** - Retrieve single printer
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+            example: 'acef6847-9002'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePrinter'
+              examples:
+                'Retrieve list of Printers':
+                  $ref: '#/components/examples/RetrievePrinterList'
+                'Retrieve single Printer':
+                  $ref: '#/components/examples/RetrievePrinter'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    put:
+      tags:
+        - Printer Management
+      summary: 'Update single Printer'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + PRNT
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePrinter'
+            examples:
+              'Update single Printer':
+                $ref: '#/components/examples/UpdatePrinter'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+          
+    delete:
+      tags:
+        - Printer Management
+      summary: 'Delete single Printer'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + PRNT
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 'tlpy893021-hy764555'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    CreatePrinter:
+      allOf:
+        - $ref: '#/components/schemas/BarePrinter'
+        - required:
+          - name
+          - hostAddress
+          - port
+          - description
+          - location
+          - driver
+    CreatePrinterResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: UUID
+                  description: 'Unique ID of the newly created Printer.'
+              required:
+                - id
+    RetrievePrinter:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/RetrievePrinterList'
+                - $ref: '#/components/schemas/RetrieveSinglePrinter'
+    RetrievePrinterList:
+      type: object
+      properties:
+        printers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: UUID
+                description: ''
+              name:
+                type: string
+                description: ''
+              location:
+                type: string
+                description: ''
+              available:
+                type: boolean
+                default: false
+                description: ''
+            required:
+              - id
+              - name
+              - hostAddress
+              - location
+              - available
+      required:
+        - installed
+        - available
+    RetrieveSinglePrinter:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: ''
+        - $ref: '#/components/schemas/CreatePrinter'
+        - required:
+          - id
+    UpdatePrinter:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: 'Unique ID of the target Printer.'
+        - $ref: '#/components/schemas/BarePrinter'
+        - required:
+          - id
+    BarePrinter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ''
+        hostAddress:
+          type: string
+          description: ''
+        port:
+          type: integer
+          description: ''
+        description:
+          type: string
+          description: ''
+        location:
+          type: string
+          description: ''
+        driver:
+          type: string
+          enum: ['Generic','Microline']
+          description: ''
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    CreatePrinter:
+      value:
+        name: 'Engineering Printer'
+        hostAddress: '127.0.0.1'
+        port: '8900'
+        description: 'Local printer'
+        location: 'Engineering'
+        driver: 'Generic'
+    CreatePrinterResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          id: 'acef6847-9002'
+    RetrievePrinterList:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          printers:
+            - id: 'acef6847-9002'
+              name: 'Engineering Printer'
+              location: 'Engineering'
+              available: true
+            - id: 'tlpy893021-hy764555'
+              name: 'Executive Printer'
+              location: 'Main building'
+              available: false
+            - id: 'ne600093lim-11135'
+              name: 'Marketing Printer'
+              location: 'Main building'
+              available: true
+    RetrievePrinter:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          id: 'acef6847-9002'
+          name: 'Engineering Printer'
+          hostAddress: '127.0.0.1'
+          port: '8900'
+          description: 'Local printer'
+          location: 'Engineering'
+          driver: 'Generic'
+    UpdatePrinter:
+      value:
+        id: 'acef6847-9002'
+        name: 'Application Printer'
+        hostAddress: '127.0.0.2'
+        port: '8909'

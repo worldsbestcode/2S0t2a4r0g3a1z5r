@@ -1,0 +1,12 @@
+<div class="form-group">
+	<label ng-if="$ctrl.label">{{$ctrl.label}}</label>
+	<div class="input-group" ng-if="$ctrl.iconclass">
+		<div class="input-group-addon"><i class="fa fa-{{$ctrl.iconclass}}"></i></div>
+		<select multiple class="select2" data-placeholder="{{$ctrl.placeholder}}" ng-model="$ctrl.selectedContainer.selected" ng-disabled="$ctrl.disabled">
+			<option ng-repeat="option in $ctrl.options track by $index">{{option}}</option>
+		</select>
+	</div>
+	<select multiple class="select2" data-placeholder="{{$ctrl.placeholder}}" ng-model="$ctrl.selectedContainer.selected" ng-if="!ctrl.iconclass" ng-disabled="$ctrl.disabled">
+		<option ng-repeat="option in $ctrl.options track by $index">{{option}}</option>
+	</select>
+</div>

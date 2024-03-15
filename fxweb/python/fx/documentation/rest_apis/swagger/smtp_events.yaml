@@ -1,0 +1,421 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'SMTP Events'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/smtp-events':
+    post:
+      tags:
+        - SMTP Events
+      summary: 'Create single SMTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN smtp
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + Not all events are required. However, at least one event is 
+          required to create an email notification.
+        + All log options are required if creating a log export event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSmtpEvent'
+            examples:
+              'Create single SMTP Event (Example 1)':
+                $ref: '#/components/examples/CreateSmtpEvent1'
+              'Create single SMTP Event (Example 2)':
+                $ref: '#/components/examples/CreateSmtpEvent2'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSmtpEventResponse'
+              examples:
+                'Create single SMTP Event':
+                  $ref: '#/components/examples/CreateSmtpEventResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    get:
+      tags:
+        - SMTP Events
+      summary: 'Retrieve list of SMTP Events, or single SMTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN smtp
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **No parameters** - Return list SMTP Events
+        + **id** - Return details about a single SMTP Event
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: string
+          example: '38b9sdd3248-a23'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSmtpEvent'
+              examples:
+                'Retrieve list of SMTP Events':
+                  $ref: '#/components/examples/RetrieveSmtpEventList'
+                'Retrieve single SMTP Event':
+                  $ref: '#/components/examples/RetrieveSmtpEvent'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - SMTP Events
+      summary: 'Update single SMTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN smtp
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSmtpEvent'
+            examples:
+              'Update single SMTP Event':
+                $ref: '#/components/examples/UpdateSmtpEvent'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    delete:
+      tags:
+        - SMTP Events
+      summary: 'Delete single SMTP Event'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + SETT, FN smtp
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **id** - SMTP Event to be deleted
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    CreateSmtpEvent:
+      allOf:
+        - $ref: '#/components/schemas/BareSmtpEvent'
+        - required:
+          - name
+          - enabled
+          - sendTo
+          - subject
+          - template
+          - events
+    CreateSmtpEventResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: UUID
+                  description: 'Unique ID of newly created SMTP Event.'
+              required:
+                - id
+    RetrieveSmtpEvent:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/RetrieveSmtpEventList'
+                - $ref: '#/components/schemas/RetrieveSingleSmtpEvent'
+    RetrieveSmtpEventList:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            type: string
+      required:
+        - events
+    RetrieveSingleSmtpEvent:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: 'Unique ID of SMTP Event.'
+        - $ref: '#/components/schemas/BareSmtpEvent'
+        - required:
+          - id
+          - name
+          - enabled
+          - sendTo
+          - subject
+          - template
+          - notificationMap
+          - events
+    UpdateSmtpEvent:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+              description: 'Unique ID of SMTP Event.'
+        - $ref: '#/components/schemas/BareSmtpEvent'
+        - required:
+          - id
+    BareSmtpEvent:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Name of SMTP Event.'
+        enabled:
+          type: boolean
+          description: 'Status of SMTP Event.'
+        sendTo:
+          type: string
+          format: 'email'
+          description: 'Receipient email address.'
+        subject:
+          type: string
+          description: 'Subject of email notification.'
+        template:
+          type: string
+          description: ''
+        events:
+          allOf:
+            - $ref: '#/components/schemas/KSNEvents'
+            - $ref: '#/components/schemas/X509Events'
+            - type: object
+              properties:
+                logExport:
+                  $ref: '#/components/schemas/LogExportEvents'
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+    KSNEvents:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/KSNEvents'
+    X509Events:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/X509Events'
+    LogExportEvents:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/LogExportEvents'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    CreateSmtpEvent1:
+      value:
+        name: 'Objects Nearing Expiration'
+        enabled: true
+        sendTo: 'test@email.com'
+        subject: 'Bi-Weekly Report: Objects Nearing Expiration'
+        template: 'Template 1'
+        events:
+          ksnAlmostDepleted: true
+          keyAlmostExpired: true
+          certAlmostExpired: true
+          logExport:
+            frequency: 2
+            runOn: ['wednesday', 'sunday']
+            fileName: 'ExpiringLogs.txt'
+            includeHash: false
+            appendDate: true
+            startDate: '2020-01-01'
+            endDate: '2021-01-01'
+            format: 'human readable'
+            includeHeader: true
+    CreateSmtpEvent2:
+      value:
+        name: 'Expired Objects Alert'
+        enabled: true
+        sendTo: 'test@email.com'
+        subject: 'Weekly Report: Expiring Objects'
+        template: 'Template 2'
+        events:
+          ksnDepleted: true
+          keyExpired: true
+          certExpired: true
+    CreateSmtpEventResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          id: '38b9sdd3248-a23'
+    RetrieveSmtpEventList:
+      value:
+        status: 'success'
+        message: ''
+        response:
+          events:
+            - 'Objects Nearing Expiration'
+            - 'Expired Objects Alert'
+            - 'Expired Keys Alert'
+    RetrieveSmtpEvent:
+      value:
+        status: 'success'
+        message: ''
+        response:
+          id: '38b9sdd3248-a23'
+          name: 'Objects Nearing Expiration'
+          enabled: true
+          sendTo: 'test@email.com'
+          subject: 'Bi-Weekly Report: Objects Nearing Expiration'
+          template: 'Template 1'
+          events:
+            ksnAlmostDepleted: true
+            keyAlmostExpired: true
+            certAlmostExpired: true
+            logExport:
+              frequency: 2
+              runOn: ['wednesday', 'sunday']
+              fileName: 'ExpiringLogs.txt'
+              includeHash: false
+              appendDate: true
+              startDate: '2020-01-01'
+              endDate: '2021-01-01'
+              format: 'human readable'
+              includeHeader: true
+    UpdateSmtpEvent:
+      value:
+        id: 'h093hsd44-2309d'
+        name: 'Expired Objects Alert'
+        events:
+          logExport:
+            frequency: 1
+            runOn: ['monday', 'friday']
+            fileName: 'Expired.csv'
+            includeHash: true
+            appendDate: true
+            startDate: '2020-01-01'
+            endDate: '2021-01-01'
+            format: 'csv'
+            includeHeader: true

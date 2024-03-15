@@ -1,0 +1,71 @@
+{
+  "objectType": "ManagedObject",
+  "objectData": {
+    "ManagedObject": {
+      "objectID": 91947097051,
+      "parentID": 59236723929,
+      "objectType": "CERT_REQ",
+      "objectSubtype": 35279282648,
+      "ownerID": "owner",
+      "attributes": [
+        {
+          "key": "key",
+          "value": "value"
+        },
+        {
+          "key": "key",
+          "value": "value"
+        },
+        {
+          "key": "key",
+          "value": "value"
+        }
+      ],
+      "path": "path",
+      "groupPermissions": [
+        {
+          "groupID": 69503468275,
+          "permissions": [
+            "Delete",
+            "Export",
+            "Modify",
+            "Add"
+          ]
+        },
+        {
+          "groupID": 35475381324,
+          "permissions": [
+            "Export",
+            "MassImport",
+            "Add",
+            "Delete"
+          ]
+        },
+        {
+          "groupID": -82778019737,
+          "permissions": [
+            "MassExport",
+            "Add",
+            "Export",
+            "Inject"
+          ]
+        }
+      ],
+      "inheritedPermissions": [
+        {
+          "groupID": 93939927360,
+          "permissions": [
+            "Delete"
+          ]
+        }
+      ],
+      "aliases": [
+        "Alias_1",
+        "Alias_2",
+        "Alias_3",
+        "Alias_4"
+      ],
+      "numChildren": 84979963069
+    }
+  }
+}

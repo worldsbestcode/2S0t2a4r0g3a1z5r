@@ -1,0 +1,56 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "X509Cert",
+    "type": "object",
+    "properties": {
+        "serialNumber": {
+            "type": "string"
+        },
+        "invalidBefore":{
+            "type":"string",
+            "format":"time"
+        },
+        "invalidAfter":{
+            "type":"string",
+            "format":"time"
+        },
+        "name":{
+            "type":"string"
+        },
+        "title":{
+            "type":"string"
+        },
+        "psudonym":{
+            "type":"string"
+        },
+        "country":{
+            "type":"string"
+        },
+        "state":{
+            "type":"string"
+        },
+        "locality":{
+            "type":"string"
+        },
+        "unit":{
+            "type":"string"
+        },
+        "organization":{
+            "type":"string"
+        },
+        "email":{
+            "type":"string",
+            "format": "email"
+        },
+        "objectType": {
+            "enum": ["X509CERT"]
+        },
+        "parentType": {
+            "enum": ["X509CERT"]
+        },
+        "childType": {
+            "enum": ["X509CERT"]
+        }
+    },
+    "allOf": [{"$ref": "PKICert.json"}]
+}

@@ -1,0 +1,9 @@
+{
+    "tips": [
+        "Today is going to be a great day!",
+        "Why stop now?",
+        "You'll always miss 100% of the shots you don't take.",
+        "Built files are meant to be served over an HTTP server.\nOpening index.html over file:// will not work."
+    ],
+    "help": "Options:\n--help               show this help\n--production         production build\n--debugproduction    development build\n--development        development build\n--product            product name"
+}

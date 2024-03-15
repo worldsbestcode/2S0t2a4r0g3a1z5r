@@ -1,0 +1,15 @@
+<div class="info-box">
+	<span class="info-box-icon bg-{{bindings.color}}">
+		<i class="fa fa-{{bindings.iconclass}}"></i>
+	</span>
+	<div class="info-box-content">
+		<span class="info-box-text">{{bindings.description}}</span>
+		<span class="info-box-number">{{bindings.count}}</span>
+		<div class="progress">
+			<div class="progress-bar bg-{{bindings.color}}" ng-style="{'width': progressWidth()}"></div>
+		</div>
+		<span class="progress-description">
+			{{bindings.count}} of {{bindings.total}} total
+		</span>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "title": "SigningApproval",
+    "type": "object",
+    "properties": {
+        "userIDs": {
+            "type": "array",
+            "items": {
+                "$ref": "DBID.json"
+            }
+        },
+        "approvalTime": {
+            "type": "string",
+            "format": "timestamp"
+        },
+        "approved": {
+            "type": "boolean"
+        },
+        "usersString": {
+            "type": "string"
+        },
+        "groupString": {
+            "type": "string"
+        },
+        "message": {
+            "type": "string"
+        }
+    }   
+}

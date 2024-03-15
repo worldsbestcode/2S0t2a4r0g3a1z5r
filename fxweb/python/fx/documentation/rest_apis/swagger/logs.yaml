@@ -1,0 +1,665 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'Logs'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/logs':
+    get:
+      tags:
+        - Log Files
+      summary: 'Retrieve list of filenames, or download log file.'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **No parameters** - Retrive a list of file names
+        + **filename** - Download a specified file
+      parameters:
+        - name: filename
+          in: query
+          schema:
+            type: string
+            example: 'Server1.log'
+      responses:
+        '200':
+         description: OK
+         content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrieveLogFiles'
+            examples:
+              'Retrieve list of Log files':
+                $ref: '#/components/examples/RetrieveLogList'
+              'Retrieve single Log file':
+                $ref: '#/components/examples/RetrieveLogFile'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/logs/settings':
+    get:
+      tags:
+        - Log Settings
+      summary: 'Retrieve general log settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveLogSettings'
+              examples:
+                'Retrieve log settings':
+                  $ref: '#/components/examples/RetrieveLogSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Log Settings
+      summary: 'Update general log settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLogSettings'
+            examples:
+              'Update log settings':
+                $ref: '#/components/examples/UpdateLogSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/logs/settings/prune':
+    get:
+      tags:
+        - Log Pruning Settings
+      summary: 'Retrieve log prune settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrievePruneSettings'
+              examples:
+                'Retrieve log prune settings':
+                  $ref: '#/components/examples/RetrievePruneSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Log Pruning Settings
+      summary: 'Update log prune settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePruneSettings'
+            examples:
+              'Update log prune settings':
+                $ref: '#/components/examples/UpdatePruneSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/logs/settings/syslog':
+    get:
+      tags:
+        - Syslog Settings
+      summary: 'Retrieve syslog log settings.'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveSyslogSettings'
+              examples:
+                'Retrieve syslog settings':
+                  $ref: '#/components/examples/RetrieveSyslogSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Syslog Settings
+      summary: 'Update syslog log settings.'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSyslogSettings'
+            examples:
+              'Update syslog settings':
+                $ref: '#/components/examples/UpdateSyslogSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/logs/settings/audit':
+    get:
+      tags:
+        - Audit Log Settings
+      summary: 'Retrieve audit log settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveAuditLogSettings'
+              examples:
+                'Retrieve audit log settings':
+                  $ref: '#/components/examples/RetrieveAuditLogSettings'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    put:
+      tags:
+        - Audit Log Settings
+      summary: 'Update audit log settings'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + LOGS
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAuditLogSettings'
+            examples:
+              'Update audit log settings':
+                $ref: '#/components/examples/UpdateAuditLogSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    RetrieveLogFiles:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/LogList'
+                - $ref: '#/components/schemas/LogFile'
+    LogList:
+      type: object
+      properties:
+        serverLogs:
+          type: array
+          items:
+            type: string
+          description: ''
+        clientLogs:
+          type: array
+          items:
+            type: string
+          description: ''
+        cardLogs:
+          type: array
+          items:
+            type: string
+          description: ''
+        webLogs:
+          type: array
+          items:
+            type: string
+          description: ''
+        systemLog:
+          type: string
+          description: ''
+      required:
+        - serverLogs
+        - clientLogs
+        - cardLogs
+        - webLogs
+        - systemLog
+    LogFile:
+      type: object
+      properties:
+        logFile:
+          type: string
+          format: binary
+          description: ''
+      required:
+        - logFile
+    RetrieveLogSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/LogSettings'
+                - required:
+                  - rkedAuditLogs
+                  - saveFirmwareLogs
+    UpdateLogSettings:
+      $ref: '#/components/schemas/LogSettings'
+    RetrievePruneSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/PruneSettings'
+                - required:
+                  - maxArchives
+                  - maxLogRotationSize
+    UpdatePruneSettings:
+      $ref: '#/components/schemas/PruneSettings'
+    RetrieveSyslogSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/SyslogSettings'
+                - required:
+                  - enabled
+                  - firmwareLogs
+                  - firmwareLogLevel
+                  - clientLogs
+                  - serverLogs
+                  - webLogs
+                  - serverAddresses
+    UpdateSyslogSettings:
+      $ref: '#/components/schemas/SyslogSettings'
+    RetrieveAuditLogSettings:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              allOf:
+                - $ref: '#/components/schemas/AuditLogSettings'
+                - required:
+                  - maxAuditLogs
+                  - prune
+                  - pruneFilter
+    UpdateAuditLogSettings:
+      $ref: '#/components/schemas/AuditLogSettings'
+    LogSettings:
+      type: object
+      properties:
+        rkedAuditLogs:
+          type: boolean
+          default: true
+          description: ''
+        saveFirmwareLogs:
+          type: boolean
+          default: true
+          description: ''
+    PruneSettings:
+      type: object
+      properties:
+        maxArchives:
+          type: integer
+          minimum: 1
+          description: ''
+        maxLogRotationSize:
+          type: integer
+          description: ''
+    SyslogSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        firmwareLogs:
+          type: boolean
+        firmwareLogLevel:
+          type: string
+          enum: ['Emergency','Alert','Critical','Error','Warning','Notice','Info']
+        clientLogs:
+          type: boolean
+        serverLogs:
+          type: boolean
+        webLogs:
+          type: boolean
+        serverAddresses:
+          type: array
+          items:
+            type: object
+            properties:
+              host:
+                type: string
+              port:
+                type: integer
+          maximum: 3
+    AuditLogSettings:
+      type: object
+      properties:
+        maxAuditLogs:
+          type: integer
+          minimum: 1
+          description: ''
+        prune:
+          type: boolean
+          default: false
+          description: ''
+        pruneFilter:
+          # Host API WIP
+          type: object
+          properties: {}
+          description: ''
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    RetrieveLogList:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          serverLogs: ['Server1.log', 'Server2.log', 'Server3.log']
+          clientLogs: ['Client1.log', 'Client2.log', 'Client3.log']
+          cardLogs: ['Card1.log', 'Card2.log', 'Card3.log']
+          webLogs: ['Web1.log', 'Web2.log', 'Web3.log']
+          systemLog: 'system.tar'
+    RetrieveLogFile:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          logFile: '....'
+    RetrieveLogSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          rkedAuditLogs: true
+          saveFirmwareLogs: true
+    UpdateLogSettings:
+      value:
+        rkedAuditLogs: true
+        savefirmwareLogs: true
+    RetrievePruneSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          maxArchives: 5
+          maxLogRotationSize: 256
+    UpdatePruneSettings:
+      value:
+        maxArchives: 5
+        maxLogRotationSize: 256
+    RetrieveSyslogSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          enabled: true
+          firmwareLogs: true
+          firmwareLogLevel: 'Alert'
+          clientLogs: true
+          serverLogs: true
+          webLogs: true
+          serverAddresses:
+            - host: '127.0.0.1'
+              port: '9009'
+            - host: '127.0.0.1'
+              port: '9010'
+            - host: '127.0.0.1'
+              port: '9011'
+    UpdateSyslogSettings:
+      value:
+        firmwareLogLevel: 'Critical'
+        clientLogs: false
+        serverAddresses:
+            - host: '192.168.0.30'
+              port: '9009'
+            - host: '192.168.0.30'
+              port: '9010'
+            - host: '192.168.0.30'
+              port: '9011'
+    RetrieveAuditLogSettings:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          prune: true
+          maxAuditLogs: 5
+          pruneFilter: {} # Host API WIP
+    UpdateAuditLogSettings:
+      value:
+        prune: true
+        maxAuditLogs: 5
+        pruneFilter: {} # Host API WIP

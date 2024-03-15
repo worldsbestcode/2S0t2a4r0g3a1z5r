@@ -1,0 +1,10 @@
+[flake8]
+count = True
+exclude =
+    .git,
+    __pycache__,
+    .pyc
+extend-ignore = E203,E231,E731,W503
+max-complexity = 10
+max-doc-length = 130
+max-line-length = 100

@@ -1,0 +1,22 @@
+<!-- NOTE: configuration and TLS config ID are currently disabled. -->
+<div>
+  <hr>
+  <h4>
+    {{$ctrl.description}}
+  </h4>
+  <div>
+    <fx-column width="6">
+        <fx-checkbox
+          description="Balancing"
+          value="$ctrl.balancingEnabled">
+        </fx-checkbox>
+    </fx-column>
+    <fx-column width="6">
+        <fx-checkbox
+          ng-if="$ctrl.showGuardianPeering"   
+          description="Guardian Peering"
+          value="$ctrl.guardianPeeringEnabled">
+        </fx-checkbox>
+    </fx-column>
+  </div>
+</div>

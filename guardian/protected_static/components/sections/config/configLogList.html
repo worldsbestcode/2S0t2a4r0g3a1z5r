@@ -1,0 +1,32 @@
+<label class="label-warning" ng-if="devicesMissingSyslog">
+WARNING: you cannot access new logs from devices that do not have syslog forwarding enabled.
+Missing syslog forwarding: {{ devicesMissingSyslog }}
+</label>
+<fx-select-multiple
+  label="Application Logs"
+  placeholder="Log File"
+  iconclass="file-text-o"
+  options="applicationLogs",
+  selected-container="container">
+</fx-select-multiple>
+<fx-input
+  label="Download Filename"
+  type="text"
+  value="logFilename">
+</fx-input>
+<div ng-hide="isLoading">
+  <fx-button callback="downloadSelected" class="pull-left">
+    Download Selected
+  </fx-button>
+  <fx-button callback="downloadAll" class="pull-left">
+    Download All
+  </fx-button>
+</div>
+<div ng-show="isLoading">
+  <label id="progress-bar-label">
+    Processing download request
+  </label>
+  <uib-progressbar class="progress-striped" value="progress.currentProgress" title="Application Log Progress">
+    {{ progress.currentProgress | number: 2 }} %
+  </uib-progressbar>
+</div>

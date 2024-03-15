@@ -1,0 +1,33 @@
+{ 
+  "$schema": "http://json-schema.org/schema",
+  "title": "Object DELETE Request Body",
+  "description": "JSON format for Object DELETE Request Body",
+  "type": "object",
+  "properties": {
+    "objectData": {
+      "type": "object",
+      "properties": {
+        "CERTAUTHORITY": {
+            "type" : "array",
+            "items": { "$ref": "json_schema/DBID.json"}
+        },
+        "CERT_REQ": { 
+            "type" : "array",
+            "items" : {"$ref": "json_schema/DBID.json"}
+        },
+        "PKICERT": {
+            "type": "array",
+            "items": {"$ref": "json_schema/DBID.json"}
+        },
+        "REG_AUTH": { 
+            "type": "array",
+            "items": {"$ref": "json_schema/DBID.json"}
+        },
+        "X509CERT": {
+            "type": "array",
+            "items": {"$ref": "json_schema/DBID.json"}
+        }
+      }
+    }
+  }
+}

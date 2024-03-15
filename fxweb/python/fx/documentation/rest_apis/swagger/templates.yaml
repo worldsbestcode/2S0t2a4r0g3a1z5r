@@ -1,0 +1,343 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'Templates'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/templates':
+    post:
+      tags:
+        - Mailer Templates
+      summary: 'Create single Template'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + MAIL
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTemplate'
+            examples:
+              'Create single Template':
+                $ref: '#/components/examples/CreateTemplate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTemplateResponse'
+              examples:
+                'Create single Template':
+                  $ref: '#/components/examples/CreateTemplateResponse'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    get:
+      tags:
+        - Mailer Templates
+      summary: 'Retrieve a single Template, or a list of Templates'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + MAIL
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      parameters:
+        - in: query
+          name: 'name'
+          schema:
+            type: string
+          description: 'Name of the template'
+        - in: query
+          name: 'type'
+          schema:
+            type: string
+            enum: ['mailer','smtp','z-fold']
+          description: 'Type of the template'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      responseData:
+                        oneOf:
+                          - $ref: '#/components/schemas/RetrieveTemplate'
+                          - $ref: '#/components/schemas/RetrieveTemplateList'
+              examples:
+                'Retrieve a list of Templates':
+                  $ref: '#/components/examples/GetTemplateList'
+                'Retrieve a filtered list of Templates':
+                  $ref: '#/components/examples/GetFilteredList'
+                'Retrieve single Template':
+                  $ref: '#/components/examples/GetTemplate'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    put:
+      tags:
+        - Mailer Templates
+      summary: 'Update single Template'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + MAIL
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTemplate'
+            examples:
+              'Update single Template':
+                $ref: '#/components/examples/UpdateTemplate'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+    delete:
+      tags:
+        - Mailer Templates
+      summary: 'Delete single Template'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + MAIL
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      parameters:
+        - in: query
+          name: 'name'
+          schema:
+            type: string
+          required: true
+          description: 'Name of the template'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    CreateTemplate:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: ['mailer','smtp','z-fold']
+        numColumns:
+          type: number
+        numRows:
+          type: number
+        template:
+          type: string
+        template2:
+          type: string
+        template3:
+          type: string
+    CreateTemplateResponse:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: UUID
+    RetrieveTemplate:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              $ref: '#/components/schemas/CreateTemplate'
+    RetrieveTemplateList:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                names:
+                  type: array
+                  items:
+                    type: string
+    UpdateTemplate:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: UUID
+          required:
+            - id
+        - $ref: '#/components/schemas/CreateTemplate'
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    CreateTemplate:
+      value:
+        name: 'Another Template'
+        type: 'z-fold'
+        numColumns: 10
+        numRows: 10
+        template: ''
+        template2: ''
+        template3: ''
+    CreateTemplateResponse:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          id: 'ab1709ef-zf8a'
+    GetTemplate:
+      value:
+        status: 'success'
+        message: ''
+        response:
+          name: 'Mailer #1'
+          type: 'mailer'
+          numColumns: 5
+          numRows: 15
+          template: ''
+    GetTemplateList:
+      value:
+        status: 'success'
+        message: ''
+        response:
+          names: ['Mailer #1', 'Mailer #2', 'Another Template']
+    GetFilteredList:
+      value:
+        status: 'success'
+        message: ''
+        response:
+          names: ['Mailer #1', 'Mailer #2']
+    UpdateTemplate:
+      value:
+        id: 'ab1709ef-zf8a'
+        name: 'New name'
+        numColumns: 6
+        numRows: 8
+        template: ''
+        template2: ''
+        template3: ''

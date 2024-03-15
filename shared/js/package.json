@@ -1,0 +1,20 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "eslint --ext .vue,.js,.jsx,.cjs,.mjs --ignore-pattern libs --fix ."
+  },
+  "dependencies": {
+    "javascript-time-ago": "^2.5.9",
+    "mitt": "^3.0.0"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
+    "@vue/compiler-sfc": "^3.3.4",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^8.7.1",
+    "prettier": "2.7.1"
+  }
+}

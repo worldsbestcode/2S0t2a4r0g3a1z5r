@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+		<title>Guardian</title>
+
+		<!-- ES6-Shim 0.35.3 - JS -->        <script type="text/javascript" src="./static/libs/es6-shim/es6-shim.min.js"></script>
+		<!-- Font Awesome 4.6.3 - CSS -->    <link rel="stylesheet" type="text/css" href="./static/libs/FontAwesome-4.6.3/css/font-awesome.min.css">
+		<!-- jQuery 2.2.0 - JS -->           <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+		<!-- Async 2.0.0 - JS -->            <script type="text/javascript" src="./static/libs/Async-2.0.0/async.min.js"></script>
+		<!-- Bootstrap 3.3.6 - JS -->        <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Bootstrap 3.3.6 - CSS -->       <link rel="stylesheet" type="text/css" href="./static/libs/AdminLTE-2.3.3/bootstrap/css/bootstrap.min.css">
+		<!-- AdminLTE 2.3.3 - JS -->         <script type="text/javascript" src="./static/libs/libconfig/AdminLTE-2.3.3/js/app.js"></script>
+		<!-- AngularJS 1.5.7 - JS -->        <script type="text/javascript" src="./static/libs/AngularJS-1.5.7/angular.min.js"></script>
+		<!-- ngAnimate 1.5.7 - JS -->        <script type="text/javascript" src="./static/libs/AngularJS-1.5.7/angular-animate.min.js"></script>
+		<!-- ABNTree 0.2.0 - JS -->          <script type="text/javascript" src="./static/libs/libconfig/ABNTree-0.2.0/dist/abn_tree_directive.js"></script>
+		<!-- ******* PLUGINS ******* -->
+		<!-- Moment 2.9.0 - JS -->               <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/daterangepicker/moment.min.js"></script>
+		<!-- DateRangePicker 1.3.21 - JS -->     <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/daterangepicker/daterangepicker.js"></script>
+		<!-- DateRangePicker 1.3.21 - CSS -->    <link rel="stylesheet" type="text/css" href="./static/libs/AdminLTE-2.3.3/plugins/daterangepicker/daterangepicker-bs3.css">
+		<!-- bootstrap-datetimepicker - JS -->   <script type="text/javascript" src="./static/libs/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+		<!-- bootstrap-datetimepicker - CSS -->  <link rel="stylesheet" type="text/css" href="./static/libs/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css">
+		<!-- select2 4.0.1 - JS -->              <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/select2/select2.full.min.js"></script>
+		<!-- select2 4.0.1 - CSS -->             <link rel="stylesheet" type="text/css" href="./static/libs/AdminLTE-2.3.3/plugins/select2/select2.min.css">
+		<!-- jquery.inputmask.bundle - JS -->    <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/input-mask/jquery.inputmask.bundle.min.js"></script>
+		<!-- bootpag 1.0.7 - JS -->              <script type="text/javascript" src="./static/libs/bootpag-1.0.7/jquery.bootpag.min.js"></script>
+		<!-- DataTables jQuery 1.10.7 - JS -->   <script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/datatables/jquery.dataTables.min.js"></script>
+		<!-- DataTables Bootstrap 1.10.7 - JS --><script type="text/javascript" src="./static/libs/AdminLTE-2.3.3/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		<!-- DataTables Bootstrap 1.10.7 - CSS --><link rel="stylesheet" type="text/css" href="./static/libs/AdminLTE-2.3.3/plugins/datatables/dataTables.bootstrap.css">
+		<!-- NotifyJS 0.4.2 - JS -->             <script type="text/javascript" src="./static/libs/NotifyJS-0.4.2/dist/notify.js"></script>
+		<!-- D3 - JS -->                         <script type="text/javascript" src="./static/libs/d3-3.5.17/d3.v3.min.js"></script>
+		<!-- nvD3 - JS -->                       <script type="text/javascript" src="./static/libs/nvd3-1.8.5/nv.d3.min.js"></script>
+		<!-- nvD3 - CSS -->                      <link rel="stylesheet" type="text/css" href="./static/libs/nvd3-1.8.5/nv.d3.css">
+		<!-- Angular-nvd3 - JS -->               <script type="text/javascript" src="./static/libs/angular-nvd3-1.0.9/angular-nvd3.min.js"></script>
+		<!-- Socket.IO - JS -->                  <script type="text/javascript" src="./static/libs/SocketIO-2.0.3/socket.io.js"></script>
+		<!-- Angular Socket.IO - JS -->          <script type="text/javascript" src="./static/libs/angular-socket-io-0.7.0/socket.min.js"></script>
+		<!-- ******* END PLUGINS ******* -->
+		<!-- AngularUI Bootstrap 2.5.0 - JS --> <script type="text/javascript" src="./static/libs/AngularUIBootstrap-2.5.0/ui-bootstrap-tpls-2.5.0.min.js"></script>
+		<!-- AdminLTE 2.3.3 - CSS -->        <link rel="stylesheet" type="text/css" href="./static/libs/libconfig/AdminLTE-2.3.3/fonts/OpenSans/OpenSans.css">
+		<!-- AdminLTE 2.3.3 - CSS -->        <link rel="stylesheet" type="text/css" href="./static/libs/libconfig/AdminLTE-2.3.3/css/AdminLTE.min.css">
+		<!-- AdminLTE 2.3.3 - CSS -->        <link rel="stylesheet" type="text/css" href="./static/libs/libconfig/AdminLTE-2.3.3/css/skin.css">
+		<!-- ABNTree 0.2.0 - CSS -->         <link rel="stylesheet" type="text/css" href="./static/libs/libconfig/ABNTree-0.2.0/dist/abn_tree.css">
+		<!-- fx-animations - CSS -->         <link rel="stylesheet" type="text/css" href="./static/css/fx-animations.css">
+		<!-- fx-container-list - CSS -->             <link rel="stylesheet" type="text/css" href="./static/css/fx-container-list.css">
+		<!-- fx-layout - CSS -->             <link rel="stylesheet" type="text/css" href="./static/css/fx-layout.css">
+		<!-- fx-widgets - CSS -->            <link rel="stylesheet" type="text/css" href="./static/css/fx-widgets.css">
+		<!-- fx-guardian - CSS -->             <link rel="stylesheet" type="text/css" href="./static/css/fx-guardian.css">
+		<!-- Network Graph - CSS -->         <link rel="stylesheet" type="text/css" href="./static/css/fx-skin.css">
+		<!-- Network Graph - CSS -->         <link rel="stylesheet" type="text/css" href="./static/css/network_graph.css">
+		<!-- List View - CSS -->         <link rel="stylesheet" type="text/css" href="./static/css/fx-container-list.css">
+		<!-- Login - CSS -->         <link rel="stylesheet" type="text/css" href="./static/css/login.css">
+
+		<script type="text/javascript" src="./static/fxCookieService.js"></script>
+		<script type="text/javascript" src="./static/fxLoginService.js"></script>
+		<script type="text/javascript" src="./static/fxLogin.js"></script>
+
+		<script type="text/javascript" src="./static/guardian.js"></script>
+		<script type="text/javascript" src="./static/fxweb/guardian.js"></script>
+
+		<link rel="icon" href="../shared/static/favicon.png" />
+		<link rel="stylesheet" href="../shared/static/roboto-v29-latin/roboto-v29-latin.css" />
+	</head>
+	<body class="hold-transition skin-fx sidebar-mini" ng-app="fxApp">
+		<fx-header></fx-header>
+		<div class="wrapper" ng-controller="contentCtrl">
+			<div id="view-switcher" ng-switch="fxAppService.getView()" class="height-wrapper">
+                <node-view ng-switch-default></node-view>
+                <config-view ng-switch-when="configView"></config-view>
+                <peer-view ng-switch-when="peerView"></peer-view>
+			</div>
+			<div id="alertModal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title">{{fxAppModalService.getModalData().alertTitle}}</h4>
+						</div>
+						<div class="modal-body">
+							<p>{{fxAppModalService.getModalData().alertMessage}}</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<aside ng-controller="rightSidebarCtrl" class="control-sidebar control-sidebar-fx control-sidebar-active">
+			<div class="control-sidebar-body" tabindex="-1">
+				<div ng-controller="guardianController" class="hold-transition login-page sidebar-login">
+          <div ng-if="!guardianService.isSelectionAuthorized()">
+            <login-form
+              object-id="guardianService.selectedObject.objectID"
+              object-parent-id="guardianService.selectedObject.parentID"
+              object-type="guardianService.selectedObject.objectType"
+              login-context-string="guardianService.loginContextString"
+              set-authorized-ids="guardianService.setAuthorizedIDs"
+              guardian-login="true">
+            </login-form>
+          </div>
+          <div ng-if="guardianService.isSelectionAuthorized()">
+            <guardian-object-tab></guardian-object-tab>
+          </div>
+				</div>
+			</div>
+		</aside>
+		<div style="position: fixed; height: auto;" class="control-sidebar-bg-guardian"></div>
+
+		<div id="app"></div>
+		<script type="module" src="/src/main.js"></script>
+	</body>
+</html>

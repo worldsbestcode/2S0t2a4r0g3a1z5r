@@ -1,0 +1,103 @@
+<div ng-switch="fxAppService.getLoading();">
+	<div ng-switch-when="true">
+		<div class="modal-header">
+		</div>
+		<div class="modal-body">
+			<div class="filter-modal-loading-body">
+				<h4 class="status-text">
+					<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp; Loading...
+				</h4>
+			</div>
+		</div>
+		<div class="modal-footer">
+		</div>
+	</div>
+	<div ng-switch-when="false">
+		<div class="modal-header">
+			<fx-row>
+				<fx-column width="12">
+					<button type="button" class="close" ng-click="fxAppFilterService.hideModal();">
+						<span>&times;</span>
+					</button>
+					<h4 class="modal-title">Filter</h4>
+				</fx-column>
+			</fx-row>
+			<br>
+			<fx-row>
+				<fx-column width="12">
+					<button class="btn btn-primary pull-right" ng-click="fxAppFilterService.addClause();" ng-show="fxAppFilterService.canAddClause();">
+						<i class="fa fa-plus"></i>
+						<span>Add</span>
+					</button>
+				</fx-column>
+			</fx-row>
+		</div>
+		<div class="modal-body">
+			<table>
+				<thead>
+					<tr>
+						<th class="filter-modal-table-column">Enabled</th>
+						<th class="filter-modal-table-column">Exact</th>
+						<th class="filter-modal-table-column">Condition</th>
+						<th class="filter-modal-table-column">Type</th>
+						<th class="filter-modal-table-column">Field</th>
+						<th class="filter-modal-table-column">Value</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="clause in fxAppFilterService.getClauses() track by $index">
+						<td class="filter-modal-table-column">
+							<input type="checkbox" ng-model="clause.values.enabled">
+						</td>
+						<td class="filter-modal-table-column">
+							<div class="filter-modal-exactmatch">
+                                <input type="checkbox" ng-model="clause.values.exactMatch" ng-disabled="fxAppFilterService.disableExact(clause)"></input>
+							</div>
+						</td>
+						<td class="filter-modal-table-column filter-modal-table-operation">
+							<select ng-model="clause.values.clauseCondition" class="form-control">
+								<option ng-repeat="clauseCondition in clause.options.clauseCondition">{{clauseCondition}}</option>
+							</select>
+						</td>
+						<td class="filter-modal-table-column filter-modal-table-dropdown">
+							<select ng-model="clause.values.objectType" ng-change="fxAppFilterService.objectTypeChanged(clause);" class="form-control">
+								<option ng-repeat="(objectType, fields) in clause.options.criteria">{{objectType}}</option>
+							</select>
+						</td>
+						<td class="filter-modal-table-column filter-modal-table-dropdown">
+							<select ng-model="clause.values.field" ng-change="fxAppFilterService.fieldChanged(clause);" class="form-control">
+								<option ng-repeat="(field, fieldConfig) in clause.options.criteria[clause.values.objectType]">{{field}}</option>
+							</select>
+						</td>
+						<td class="filter-modal-table-column filter-modal-table-value">
+							<div ng-switch on="clause.options.criteria[clause.values.objectType][clause.values.field].type" ng-class="{'has-error': clause.values.incomplete}">
+								<div ng-switch-when="DateRange" class="filter-modal-value-daterange">
+									<fx-date class="filter-modal-value-daterange-picker" datestring="clause.values.minValue"></fx-date>
+									<fx-date class="filter-modal-value-daterange-picker" datestring="clause.values.maxValue"></fx-date>
+								</div>
+								<div ng-switch-when="Select" ng-init="clause.values.valueToMatch = clause.options.criteria[clause.values.objectType][clause.values.field].options[0]">
+									<select class="form-control capitalize" ng-model="clause.values.valueToMatch">
+										<option class="capitalize" ng-repeat="option in clause.options.criteria[clause.values.objectType][clause.values.field].options">{{option}}</option>
+									</select>
+								</div>
+								<div ng-switch-default ng-init="clause.values.valueToMatch = clause.values.valueToMatch || ''">
+									<input class="form-control" ng-model="clause.values.valueToMatch">
+								</div>
+							</div>
+						</td>
+						<td class="filter-modal-table-column">
+							<button ng-show="fxAppFilterService.getClauses().length > 1" ng-click="fxAppFilterService.removeClause($index);" class="btn btn-default">
+								<i class="fa fa-trash"></i>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" ng-click="fxAppFilterService.clearClauses();">Clear</button>
+			<button type="button" class="btn btn-primary" ng-click="fxAppFilterService.returnFilter();">OK</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+# Redirect /hsmweb to internal HSM landing page
+location /hsmweb {
+    proxy_pass https://${HSM_ADDRESS}/login;
+    proxy_ssl_verify off;
+    proxy_cookie_flags ~ nosecure;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_hide_header Content-Security-Policy;
+}
+
+# Forward top level endpoints
+location ~ ^/(login|logout|grey|main.js)$ {
+    proxy_pass https://${HSM_ADDRESS}/$1;
+    proxy_ssl_verify off;
+    proxy_cookie_flags ~ nosecure;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_hide_header Content-Security-Policy;
+}
+
+# Forward top level paths
+location ~ ^/(app|unprotected|formdata)/(.*)$ {
+    proxy_pass https://${HSM_ADDRESS}/$1/$2;
+    proxy_ssl_verify off;
+    proxy_cookie_flags ~ nosecure;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_hide_header Content-Security-Policy;
+}

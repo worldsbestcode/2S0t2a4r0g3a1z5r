@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>KMES</title>
+    <!-- Font Awesome 4.6.3 - CSS --> <link rel="stylesheet" type="text/css" href="/libs/FontAwesome-4.6.3/css/font-awesome.min.css">
+    <!-- ionicons 2.0.1 - CSS -->     <link rel="stylesheet" type="text/css" href="/libs/ionicons-2.0.1/css/ionicons.min.css">
+    <!-- toastr - CSS -->             <link rel="stylesheet" type="text/css" href="/css/toastr.css">
+    <!-- fx-container-list - CSS -->  <link rel="stylesheet" type="text/css" href="/css/fx-container-list.css">
+    <style>
+      #app {
+        position: absolute;
+        height: 100%;
+      }
+
+      #router {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="router">
+        <router-view></router-view>
+      </div>
+      <vue-toastr ref="toastr"></vue-toastr>
+    </div>
+  </body>
+</html>

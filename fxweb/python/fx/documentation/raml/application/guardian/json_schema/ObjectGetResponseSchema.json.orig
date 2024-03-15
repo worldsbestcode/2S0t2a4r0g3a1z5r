@@ -1,0 +1,28 @@
+{ "$schema": "http://json-schema.org/schema",
+  "title": "Object GET Response Body",
+  "description": "JSON format for Object GET Response Body",
+  "type": "object",
+  "properties": {
+    "objectType": { "type": "string" },
+    "objectData": {
+      "type": "object",
+      "properties": {
+        "CertificateAuthority": {"$ref": "CertificateAuthority.json"},
+        "CertRequest": {"$ref": "CertRequest.json"},
+        "CRLReason": {"$ref": "CRLReason.json"},
+        "DBID": {"$ref": "DBID.json"},
+        "Filter": {"$ref": "Filter.json"},
+        "FWMajorKeySlot": {"$ref": "FWMajorKeySlot.json"},
+        "FWUsage": {"$ref": "FWUsage.json"},
+        "HashType": {"$ref": "HashType.json"},
+        "ManagedObject": {"$ref": "ManagedObject.json"},
+        "PermissionFlags": {"$ref": "PermissionFlags.json"},
+        "PKICert": {"$ref": "PKICert.json"},
+        "PKIType": {"$ref": "PKIType.json"},
+        "RegAuthority": {"$ref": "RegAuthority.json"},
+        "SigningApproval": {"$ref": "SigningApproval.json"},
+        "X509Cert": {"$ref": "X509Cert.json"}
+      }
+    }
+  }
+}

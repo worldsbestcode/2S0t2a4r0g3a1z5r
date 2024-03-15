@@ -1,0 +1,166 @@
+{
+	"variables": [],
+	"info": {
+		"name": "LoginTest",
+		"_postman_id": "544cd5d4-2ff2-1606-c445-0db73ae8ddf3",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin1 Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"Admin1 user login\"] = jsonData.result === \"Success\";\n"
+					}
+				}
+			],
+			"request": {
+				"url": "http://10.0.4.231:8081/login",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"auth_type\": \"userpass\",\n  \"auth_credentials\": {\n    \"username\": \"Admin1\",\n    \"password\": \"safest\"\n  }\n}"
+				},
+				"description": "Admin1 Login"
+			},
+			"response": []
+		},
+		{
+			"name": "Admin2 Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"Admin2 user login\"] = jsonData.result === \"Success\";\n\n"
+					}
+				}
+			],
+			"request": {
+				"url": "http://10.0.4.231:8081/login",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"auth_type\": \"userpass\",\n  \"auth_credentials\": {\n    \"username\": \"Admin2\",\n    \"password\": \"safest\"\n  }\n}"
+				},
+				"description": "Admin2 Login"
+			},
+			"response": []
+		},
+		{
+			"name": "Request Regauth Objects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"RegAuth10\"] = jsonData.objectData.REG_AUTH.length === 5;\n"
+					}
+				}
+			],
+			"request": {
+				"url": "http://10.0.4.231:8081/object",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"retrieve\",\n  \"objectType\": \"Filter\",\n  \"quantity\": 10,\n  \"request\": {\n    \"manager\": \"REG_AUTH\",\n    \"chunk\": 0,\n    \"chunkSize\": 10,\n    \"chunkCount\": 1,\n    \"matchCount\": 1,\n    \"flags\": [\n    ],\n    \"filterType\": \"RESULTS\",\n    \"sortAscending\": false,\n    \"distinctOn\": \"\",\n    \"objectIDs\": {}\n  }\n}\n"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Request Regauth and Child objects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"RegAuth10\"] = jsonData.objectData.REG_AUTH.length === 5;\n"
+					}
+				}
+			],
+			"request": {
+				"url": "http://10.0.4.231:8081/object",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"method\": \"retrieve\",\n  \"objectType\": \"Filter\",\n  \"quantity\": 10,\n  \"request\": {\n    \"manager\": \"REG_AUTH\",\n    \"chunk\": 0,\n    \"chunkSize\": 10,\n    \"chunkCount\": 1,\n    \"matchCount\": 1,\n    \"flags\": [\n        \"DESCENDANTS\"\n    ],\n    \"filterType\": \"RESULTS\",\n    \"sortAscending\": false,\n    \"distinctOn\": \"\",\n    \"objectIDs\": {\n        \"REG_AUTH\": \"27814693540200548\"\n    }\n  }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Request Regauth Objects Modify",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"RegAuth10\"] = jsonData.objectData.REG_AUTH.length === 5;\n"
+					}
+				}
+			],
+			"request": {
+				"url": "http://10.0.4.231:8081/object",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"objectData\": {\n    \"REG_AUTH\": [\n      { \n      \t\"aliases\":\"\",\n        \"approvals\":1,\n        \"certificates\": {\n        \t\"27814693540200549\": \"Test\"\n        },\n        \"objectID\": \"27814693540200548\",\n        \"expiration\":\"2026-09-02 05:00:00\",\n        \"hashAlgorithms\":\"SHA1,SHA512\",\n        \"maxValidity\":\"10 Years\",\n        \"name\":\"Test\",\n        \"notifyApprove\":false,\n        \"notifyDeny\":true,\n        \"notifyUpload\":false,\n        \"numChildren\":0,\n        \"objectType\":\"REG_AUTH\",\n        \"ownerID\":0,\n        \"parentID\":\"-1\",\n        \"path\":\"\",\n        \"profiles\":{\n        \t\"101\":\"TLS Server Certificate\"\n        }\n    }\n    ]\n  }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

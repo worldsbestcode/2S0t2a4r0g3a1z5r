@@ -1,0 +1,533 @@
+@import './variables.scss';
+@import "~bulma/sass/utilities/_all.sass";
+@import "~bulma/bulma.sass";
+/*
+Useful SCSS classes
+*/
+
+.sidebar-big {
+  width: 20%;
+  flex: none;
+}
+
+.sidebar-small {
+  width: 5%;
+  flex: none;
+}
+
+.main-big {
+  width: 80%;
+  flex: none;
+}
+
+.main-small {
+  width: 95%;
+  flex: none;
+}
+
+.no-padding {
+  padding: 0px 0px;
+}
+
+.select-full-width {
+  width: 100%;
+
+  select {
+    width: 100%;
+  }
+}
+
+
+body, html {
+    overflow-y: auto;
+    background-color: $base;
+    height: 100%;
+    font-family: 'Lato', 'Arial';
+}
+
+// Disabling the arrow selects for input= number
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+     -mox-appearance: none;
+          appearance: none;
+}
+
+// Overrides the default border glow for inputs
+textarea:focus, input:not([type='checkbox']):focus, select:focus, button:focus, .uneditable-input:focus {
+  border-color: rgba($secondary, 0.5) !important;
+  box-shadow: 0 1px 1px rgba($secondary, 0.075) inset, 0 0 8px rgba($secondary, 0.6) !important;
+  outline: 0 none !important;
+}
+
+/* disable resizing of textareas */
+textarea {
+  resize: none;
+}
+
+a {
+  &:hover {
+    color: $secondary;
+  }
+  text-decoration: none;
+}
+
+// CSS for a valid input
+.valid-input {
+  border: 1px solid #478B3F;
+  &:focus {
+    border-color: rgba(#478B3F, 0.5) !important;
+    box-shadow: 0 1px 1px rgba(#478B3F, 0.075) inset, 0 0 8px rgba(#478B3F, 0.6) !important;
+    outline: 0 none !important;
+  }
+}
+
+/*
+  Login CSS
+ */
+.login-clickable {
+  &:hover {
+    color: black;
+  }
+}
+
+/*
+  Tooltip CSS
+*/
+.tooltip {
+  display: none;
+  opacity: 0;
+  transition: opacity .15s;
+  pointer-events: none;
+  padding: 4px;
+  z-index: 10000;
+
+  .tooltip-content {
+    background: black;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 10px 4px;
+  }
+
+  &.tooltip-open-transitionend {
+    display: block;
+  }
+
+  &.tooltip-after-open {
+    opacity: 1;
+  }
+}
+
+// CSS for the X icon.
+.ion-android-close {
+  font-size: 40px;
+}
+
+
+#go-back {
+  margin-top: 90px;
+}
+
+#logout span {
+  white-space: pre;
+}
+
+/*
+  Clickables CSS
+ */
+.click {
+  cursor: pointer; // used to show pointer instead of cursor
+  overflow: hidden;
+  img {
+    height: inherit;
+    margin: auto;
+  }
+  & .service-options {
+    height: 20px;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+  color: $primary;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.clickable-text {
+  cursor: pointer;
+  color: $primary;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/*
+  Aside CSS
+ */
+.aside {
+  background: $base !important;
+}
+
+.aside-header {
+  display: none;
+}
+
+.aside-backdrop {
+  display: none;
+}
+
+/*
+  Spin Animation
+ */
+.spin::before{
+  -webkit-animation: spin 1.5s infinite linear;
+     -moz-animation: spin 1.5s infinite linear;
+      -ms-animation: spin 1.5s infinite linear;
+       -o-animation: spin 1.5s infinite linear;
+          animation: spin 1.5s infinite linear;
+}
+
+@keyframes "spin" {
+  from {
+    -webkit-transform: rotate(0deg);
+       -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+         -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+       -moz-transform: rotate(359deg);
+        -ms-transform: rotate(359deg);
+         -o-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+         transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(359deg);
+         transform: rotate(359deg);
+  }
+}
+
+@-webkit-keyframes "spin" {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@-ms-keyframes "spin" {
+  from {
+    -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(359deg);
+        transform: rotate(359deg);
+  }
+}
+
+@-o-keyframes "spin" {
+  from {
+    -o-transform: rotate(0deg);
+       transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(359deg);
+       transform: rotate(359deg);
+  }
+
+}
+
+/*
+  Alert Position and width css
+ */
+.toast-container {
+  margin-top: 35px !important;
+}
+
+.toast-container.toast-bottom-full-width>div, .toast-container.toast-top-full-width>div {
+  width: 35% !important;
+  text-align: center !important;
+}
+
+.toast-top-full-width {
+  top: 1% !important;
+}
+
+/*
+  Transitions that are used in other components
+*/
+
+// Fade-Slide Transition
+.fade-slide-enter-active, .fade-slide-leave-active {
+  overflow: hidden !important;
+  max-height: 100%;
+  -webkit-transition: all 0.3s ease-in-out;
+     -moz-transition: all 0.3s ease-in-out;
+       -o-transition: all 0.3s ease-in-out;
+          transition: all 0.3s ease-in-out;
+}
+
+.fade-slide-enter, .fade-slide-leave-to {
+  opacity: 0;
+  max-height: 0%;
+}
+
+// Fade Transition
+.fade-enter-active {
+  /* how the image looks like */
+  transition: all .3s linear;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  visibility: visible;
+  opacity: 1;
+}
+
+.fade-leave-active {
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0px;
+}
+
+.fade-enter, .fade-leave-to {
+  /* animation for an image leaving and coming */
+  opacity: 0;
+  max-height: 0% !important;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  visibility: hidden;
+}
+
+// Slide Transition
+.slide-enter-active {
+  animation: slide-in .2s;
+}
+
+.slide-leave-to {
+  animation: slide-out .2s;
+}
+
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+// Slide Text transition
+
+.slide-text-enter-active, .slide-text-leave-active {
+  max-height: 100%;
+  -webkit-transition: all .3s ease-in-out;
+     -moz-transition: all .3s ease-in-out;
+       -o-transition: all .3s ease-in-out;
+          transition: all .3s ease-in-out;
+}
+
+.slide-text-enter, .slide-text-leave-to {
+  -webkit-margin-after: 0px;
+  -webkit-margin-before: 0px;
+  margin: 0px;
+  max-height: 0%;
+  opacity: 0;
+}
+
+// Slide Left transition
+
+.slide-left-enter-active {
+  max-height: 100%;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  animation: slide-in-left .7s;
+  transition-delay: .7s;
+  -webkit-transition: all .7s;
+     -moz-transition: all .7s;
+       -o-transition: all .7s;
+          transition: all .7s;
+}
+
+.slide-left-enter, .slide-left-leave-to {
+  -webkit-margin-after: 0px;
+  -webkit-margin-before: 0px;
+  margin: 0px !important;
+  max-height: 0%;
+  opacity: 0;
+}
+
+
+// Slide Left Complex
+
+.slide-left-complex-enter-active {
+  max-height: 100%;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  visibility: hidden;
+  -webkit-transition: max-height .5s;
+     -moz-transition: max-height .5s;
+       -o-transition: max-height .5s;
+          transition: max-height .5s;
+}
+
+.slide-left-complex-enter-to {
+  visibility: visible;
+  animation: slide-in-left .5s;
+}
+
+.slide-left-complex-leave-active {
+  max-height: 100%;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  animation: slide-out-left .5s;
+  transition-delay: .3s !important;
+  -webkit-transition: all .2s;
+     -moz-transition: all .2s;
+       -o-transition: all .2s;
+          transition: all .2s;
+}
+
+.slide-left-complex-enter, .slide-left-complex-leave-to {
+  -webkit-margin-after: 0px;
+  -webkit-margin-before: 0px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  max-height: 0%;
+  opacity: 0;
+}
+
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0%)
+  }
+}
+
+@keyframes slide-out-left {
+  0% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-100%)
+  }
+}
+
+
+// Slide Left transition
+
+.slide-right-enter-active {
+  max-height: 100%;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  animation: slide-in-right .3s;
+  -webkit-transition: all .3s;
+     -moz-transition: all .3s;
+       -o-transition: all .3s;
+          transition: all .3s;
+}
+
+.slide-right-leave-active {
+  max-height: 100%;
+  overflow-y: hidden !important;
+  overflow: hidden !important;
+  animation: slide-out-right .3s;
+  -webkit-transition: all .3s;
+     -moz-transition: all .3s;
+       -o-transition: all .3s;
+          transition: all .3s;
+}
+
+.slide-right-enter, .slide-right-leave-to {
+  -webkit-margin-after: 0px;
+  -webkit-margin-before: 0px;
+  margin: 0px !important;
+  opacity: 0;
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(0%)
+  }
+}
+
+@keyframes slide-out-right {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(100%)
+  }
+}
+
+/*
+  Datepicker
+*/
+
+input.flatpickr-input {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+         -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+
+}
+
+.box {
+  border-radius: 0;
+}

@@ -1,0 +1,58 @@
+{
+  "objectType": "ManagedObject",
+  "request": {
+    "manager": "ManagerName",
+    "chunk": 35592921357,
+    "chunkSize": 4096,
+    "sortColumn": "column_name",
+    "file": "filename",
+    "isDefault": false,
+    "fileFormat": "LOG_NORM",
+    "header": 83911265805,
+    "matchCount": 56463574571,
+    "flags": [
+      "INACTIVE_INCLUDE",
+      "GUI_QUERY",
+      "DESCENDANTS",
+      "NO_COUNT"
+    ],
+    "filterType": "IDENTIFIERS",
+    "sortAscending": false,
+    "permType": "None",
+    "distinctOn": "name",
+    "objectIDs": {},
+    "clauses": [
+      {
+        "operator": "OR",
+        "column": "column_name",
+        "match": "LESS_THAN",
+        "value": "value",
+        "minValue": "minValue",
+        "maxValue": "maxValue",
+        "flags": [
+          "ALWAYSUSE",
+          "TRISTATESECOND"
+        ],
+        "grouping": "GROUPING_TEMPLATES",
+        "depth": 5,
+        "table": "table_name"
+      },
+      {
+        "operator": "AND",
+        "column": "column_name",
+        "match": "SET",
+        "value": "value",
+        "minValue": "minValue",
+        "maxValue": "maxValue",
+        "flags": [
+          "ALIAS",
+          "ALWAYSUSE",
+          "TRISTATESECOND"
+        ],
+        "grouping": "GROUPING_DEFAULT",
+        "depth": 5,
+        "table": "table_name"
+      }
+    ]
+  }
+}

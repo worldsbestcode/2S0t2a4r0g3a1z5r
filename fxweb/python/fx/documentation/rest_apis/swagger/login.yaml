@@ -1,0 +1,206 @@
+openapi: 3.0.0
+
+info:
+  version: "1.0.2"
+  title: 'Login'
+  description: "# Authenticate with username/password, anonymous login, OTP, or U2F."
+
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Futurex/login/1.0.0
+
+paths:
+  '/login':
+    post:
+      tags:
+        - Login
+      summary: 'Login response'
+      description: |-
+        **Notes on session cookie**
+        1. The **session** cookie is a **HttpOnly cookie** returned from the middleware
+        2. A **session** cookie is **not** required for the initial POST for the first login request
+        3. Any additional requests will require the session cookie
+            - **Including** any additional POST requests to /login required for multiple logins
+        
+        **Notes on CSRF Token**
+        1. A CSRF Token is returned upon **full authentication**
+            - If 2 logins are required, **XSRF-TOKEN** will be returned upon the second login success
+        2. The front-end should then take **XSRF-TOKEN** and create a **HTTP Header** called **X-XSRF-TOKEN**
+        3. Every protected request from this point forward will require the **X-XSRF-TOKEN** header
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              LoginRequest:
+                $ref: '#/components/examples/LoginRequest'
+              LoginExpiredPasswordRequest:
+                $ref: '#/components/examples/LoginExpiredPasswordRequest'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Set-Cookie:
+              $ref: '#/components/headers/Session-Cookie'
+            "\nSet-Cookie":
+              $ref: '#/components/headers/XSRF-Cookie'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ResponseBase'
+                  - type: object
+                    properties:
+                      responseData:
+                        anyOf:
+                          - $ref: '#/components/schemas/LoginCount'
+                          - $ref: '#/components/schemas/LoginExpiry'
+                          - $ref: '#/components/schemas/LoginUsers'
+              examples:
+                LoginResponse:
+                  $ref: '#/components/examples/LoginResponse'
+                PasswordExpiredLoginResponse:
+                  $ref: '#/components/examples/PasswordExpiredLoginResponse'
+                FailedLoginResponse:
+                  $ref: '#/components/examples/FailedLoginResponse'
+                FullyLoggedInResponse:
+                  $ref: '#/components/examples/FullyLoggedInResponse'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  headers:
+    Session-Cookie:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/headers/Session-Cookie'
+    XSRF-Cookie:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/headers/XSRF-Cookie'
+
+
+  schemas:
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+    RetrievePermissions:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/RetrievePermissions'
+
+    UserPass:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: base64
+        oldPassword:
+          type: string
+          format: base64
+      required:
+        - username
+        - password
+    LoginRequest:
+      type: object
+      properties:
+        authType:
+          type: string
+          enum: ['userpass']
+        authCredentials:
+          $ref: '#/components/schemas/UserPass'
+      required:
+        - authType
+        - authCredentials
+    LoginCount:
+      type: object
+      properties:
+        totalLoggedIn:
+          type: number
+        totalRequired:
+          type: number
+    LoginExpiry:
+      type: object
+      properties:
+        passwordExpired:
+          type: boolean
+    LoginUsers:
+      type: object
+      properties:
+        loggedInUsers:
+          type: array
+          items:
+            type: string
+        permissions:
+          $ref: '#/components/schemas/RetrievePermissions'
+
+
+  examples:
+    LoginRequest:
+      value:
+        authType: 'userpass'
+        authCredentials:
+          username: 'Admin1'
+          password: 'c2FmZXN0'
+    LoginExpiredPasswordRequest:
+      value:
+        authType: 'userpass'
+        authCredentials:
+          username: 'Admin1'
+          password: 'c2FmZXN0'
+          oldPassword: 'c2FmZTEyMw=='
+    LoginResponse:
+      value:
+        status: 'Success'
+        message: '1 out of 2 users have logged in'
+        responseData:
+          totalLoggedIn: 1
+          totalRequired: 2
+          passwordExpired: false
+    PasswordExpiredLoginResponse:
+      value:
+        status: 'Success'
+        message: '0 out of 2 users have logged in'
+        responseData:
+          totalLoggedIn: 0
+          totalRequired: 2
+          passwordExpired: true
+    FailedLoginResponse:
+      value:
+        status: 'Failure'
+        message: 'User already logged in'
+    FullyLoggedInResponse:
+      value:
+        status: 'Success'
+        message: 'All users have logged in, please wait...'
+        responseData:
+          totalLoggedIn: 2
+          totalRequired: 2
+          passwordExpired: false
+          loggedInUsers: ['Admin1', 'Admin2']
+          loggedInGroup: 'Admin Group'
+          permissions:
+            Log:
+              display: 'View Logs'
+              perms: ['Add','Modify']
+            User:
+              display: 'User Management'
+              perms: ['Add','Delete','Modify']
+            Key:
+              display: 'Key Management'
+              perms: []
+
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'

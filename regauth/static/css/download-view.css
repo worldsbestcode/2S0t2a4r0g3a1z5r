@@ -1,0 +1,15 @@
+/* Download view */
+
+.download-view-content {
+  padding-right: 0px;
+}
+
+.download-form-body {
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.download-form-checkbox {
+  display: inline-block;
+  min-width: 100px;
+}

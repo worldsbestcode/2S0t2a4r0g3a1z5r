@@ -1,0 +1,20 @@
+<div class="content-wrapper" ng-controller="submitterViewCtrl as ctrl">
+	<section class="content submitter-view-content">
+		<submitter-form
+			approvalgroups="ctrl.submitterForm.shownApprovalGroups"
+			issuancepolicies="ctrl.submitterForm.issuancePolicies"
+			signingcerts="ctrl.submitterForm.signingCerts"
+			selectapprovalgroup="ctrl.submitterForm.selectApprovalGroupCallback"
+			selectsigningcert="ctrl.submitterForm.selectSigningCertCallback"
+			formdata="ctrl.submitterForm.data"
+            fileupload="ctrl.submitterForm.fileUploadCallback"
+			tokendata="ctrl.submitterForm.tokendata"
+            requestsource="ctrl.submitterForm.requestsource"
+			csrupload="ctrl.submitterForm.csrUploadCallback"
+			submit="ctrl.submitterForm.submitCallback"
+            ldapusername="ctrl.submitterForm.ldapUsernameCallback"
+            ldappassword="ctrl.submitterForm.ldapPasswordCallback"
+			fxcng="fxcng">
+		</submitter-form>
+	</section>
+</div>

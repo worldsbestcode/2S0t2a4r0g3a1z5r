@@ -1,0 +1,33 @@
+<div ng-if="!isAnonymous && filterCount">
+	<fx-counter
+		ng-show="{{viewDisplayed === views['csrViewPending'] || viewDisplayed === views['csrViewAll']}}"
+		description="Pending Requests"
+		iconclass="clock-o"
+		color="light-blue"
+    count="getTypeCount('pending')"
+		total="totalCount">
+	</fx-counter>
+	<fx-counter
+		ng-show="{{viewDisplayed === views['csrViewSigned'] || viewDisplayed === views['csrViewAll']}}"
+		description="Signed Requests"
+		iconclass="check-circle"
+		color="green"
+    count="getTypeCount('signed')"
+		total="totalCount">
+	</fx-counter>
+	<fx-counter
+		ng-show="{{viewDisplayed === views['csrViewDenied'] || viewDisplayed === views['csrViewAll']}}"
+		description="Denied Requests"
+		iconclass="times-circle"
+		color="red"
+    count="getTypeCount('denied')"
+		total="totalCount">
+	</fx-counter>
+	<fx-counter
+		ng-show="{{viewDisplayed === views['csrViewFilter']}}"
+		description="Filtered Requests"
+		iconclass="filter"
+		count="getTypeCount('filter')"
+		total="totalCount">
+	</fx-counter>
+</div>

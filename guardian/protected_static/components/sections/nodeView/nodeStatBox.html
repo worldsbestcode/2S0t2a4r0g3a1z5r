@@ -1,0 +1,12 @@
+<div class="box box-info node-stat-box">
+    <div class="box-header">
+        <i class="fa fa-{{properties.icon}} stat-icon"></i>
+        <h3 class="box-title">{{properties.title}}</h3>
+        <span class="expand-icon" ng-click="openModal()">
+            <i class="fa fa-expand"></i>
+        </span>
+    </div>
+    <div class="box-body">
+        <nvd3 options='options' data='nodeStatBoxService.statData[$ctrl.statType]'></nvd3>
+    </div>
+</div>

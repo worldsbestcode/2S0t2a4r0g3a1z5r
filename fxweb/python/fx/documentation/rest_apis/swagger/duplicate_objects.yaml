@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  version: "1.0.2"
+  title: 'Duplicate Objects'
+  description: |
+    ***
+    ### Authentication Methods
+    ***
+    + HTTP Bearer token (JSON web token)
+    + XSRF Session token
+    ***
+    ### Important Notes
+    ***
+    + 
+
+security:
+  - bearerToken: []
+  - session: []
+    XSRF-TOKEN: []
+
+paths:
+  '/duplicate-objects':
+    get:
+      tags:
+        - Duplicate Objects
+      summary: 'Retrieve a list of object types, object names, or duplicate objects'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **No parameters** - Returns a list of permissable object types
+        + **type** - Returns a list of object names associated with an object type
+        + **type & name** - Returns a list of duplicate objects
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            example: ''
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveDuplicates'
+              examples:
+                'Retrieve Duplicate Object names':
+                  $ref: '#/components/examples/RetrieveDuplicateNames'
+                'Retrieve Duplicate Objects':
+                  $ref: '#/components/examples/RetrieveDuplicateObjects'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+    delete:
+      tags:
+        - Duplicate Objects
+      summary: 'Delete specified duplicate object'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+        + **Please note** - _type_ and _id_ are required to delete an object
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 'PKICERT'
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 'PKI-0123'
+      responses:
+        '200':
+          $ref: '#/components/responses/200-OK'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+  '/duplicate-objects/types':
+    get:
+      tags:
+        - Duplicate Objects
+      summary: 'Retrieve a list of Object Types'
+      description: |
+        ***
+        ### Requirements
+        ***
+        + **Features**
+          + 
+        + **Host API Commands**
+          + 
+        + **Permissions**
+          +
+        ***
+        ### Additional Notes
+        ***
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveDuplicateObjTypes'
+              examples:
+                'Retrieve Duplicate Object Types':
+                  $ref: '#/components/examples/RetrieveDuplicateObjTypes'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-NotFound'
+        default:
+          $ref: '#/components/responses/500-InternalError'
+
+components:
+  securitySchemes:
+    bearerToken:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/bearerToken'
+    session:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/session'
+    XSRF-TOKEN:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/securitySchemes/XSRF-TOKEN'
+
+  schemas:
+    RetrieveDuplicates:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              oneOf:
+                - $ref: '#/components/schemas/RetrieveDuplicateNames'
+                - $ref: '#/components/schemas/RetrieveDuplicateDetails'
+    RetrieveDuplicateNames:
+      type: object
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+          description: 'List of Duplicate Object names.'
+      required:
+        - names
+    RetrieveDuplicateDetails:
+      type: object
+      properties:
+        duplicates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              domain:
+                type: string
+              parent:
+                type: string
+              container:
+                type: string
+              loadTime:
+                type: string
+              lastModified:
+                type: string
+                format: 'UTC'
+              owner:
+                type: string
+            required:
+              - id
+              - type
+              - domain
+              - parent
+              - container
+              - loadTime
+              - lastModified
+              - owner
+          description: 'List of duplicate objects.'
+      required:
+        - duplicates
+    RetrieveDuplicateObjTypes:
+      allOf:
+        - $ref: '#/components/schemas/ResponseBase'
+        - type: object
+          properties:
+            response:
+              type: object
+              properties:
+                objectTypes:
+                  type: array
+                  items:
+                    type: string
+                  description: 'List of duplicate object types'
+              required:
+                - objectTypes
+    ResponseBase:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/schemas/ResponseBase'
+
+  responses:
+    200-OK:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/200-OK'
+    201-Created:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/201-Created'
+    400-BadRequest:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/400-BadRequest'
+    401-Unauthorized:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/401-Unauthorized'
+    403-Forbidden:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/403-Forbidden'
+    404-NotFound:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/404-NotFound'
+    500-InternalError:
+      $ref: 'https://api.swaggerhub.com/domains/Futurex/common/1.0.0#/components/responses/500-InternalError'
+
+  examples:
+    RetrieveDuplicateNames:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          names:
+            - 'PKI-0123'
+            - 'PKI-5678'
+    RetrieveDuplicateObjects:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          duplicates:
+            - id: 'AB12'
+              type: 'PKICERT'
+              domain: '1238813'
+              parent: 'My Root cert'
+              container: 'My PKI Tree'
+              loadTime: '2019-01-01 00:00:00'
+              lastModified: '2019-01-01 23:59:59'
+              owner: 'Group 1'
+            - id: 'CD34'
+              type: 'PKICERT'
+              domain: '1238813'
+              parent: 'My Root cert'
+              container: 'My PKI Tree'
+              loadTime: '2019-01-01 00:00:00'
+              lastModified: '2019-01-01 23:59:59'
+              owner: 'Group 1'
+            - id: 'EF56'
+              type: 'PKICERT'
+              domain: '1238813'
+              parent: 'My Root cert'
+              container: 'My PKI Tree'
+              loadTime: '2019-01-01 00:00:00'
+              lastModified: '2019-01-01 23:59:59'
+              owner: 'Group 1'
+    RetrieveDuplicateObjTypes:
+      value:
+        status: 'Success'
+        message: ''
+        response:
+          objectTypes:
+            - PKICERT
+            - CERTAUTHORITY
+            - X509CERT

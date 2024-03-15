@@ -1,0 +1,18 @@
+{
+  "method": "retrieve",
+  "objectType": "Filter",
+  "quantity": 10,
+  "request": {
+    "manager": "KEY",
+    "chunk": 0,
+    "chunkSize": 10,
+    "chunkCount": 1,
+    "matchCount": 1,
+    "flags": [
+    ],
+    "filterType": "RESULTS",
+    "sortAscending": false,
+    "distinctOn": "",
+    "objectIDs": {}
+  }
+}

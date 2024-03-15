@@ -1,0 +1,112 @@
+/* Base application layout */
+
+/* Header */
+.header-left-sidebar-top-level-item {
+  margin: 0;
+  width: 183px !important;
+}
+
+.header-user-icon {
+  color: white;
+  font-size: 60pt;
+}
+
+.key-header-user {
+  width: 40px;
+  margin-left: -10px;
+}
+
+.key-header-username {
+  font-size: 11pt;
+}
+
+.left-sidebar-menu-subitem {
+  margin-left: .33em !important;
+}
+
+/* Modals */
+.alert-modal-body {
+  overflow-wrap: break-word;
+}
+
+.wide-modal-dialog {
+  width: 100%;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 30px;
+}
+
+.wide-modal-content {
+  overflow: hidden;
+}
+
+.filter-modal-loading-body {
+  margin-top: 5em;
+  margin-bottom: 5em;
+}
+
+.filter-modal-value-daterange {
+  margin-bottom: 0px !important;
+}
+
+.filter-modal-value-daterange-picker {
+  display: inline-block;
+  width: 50%;
+}
+
+.filter-modal-exactmatch {
+  width: 75px;
+}
+
+.filter-modal-table-column {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.filter-modal-table-operation {
+  min-width: 75px;
+}
+
+.filter-modal-table-dropdown {
+  min-width: 175px;
+}
+
+.filter-modal-table-value {
+  width: 100%;
+}
+
+/* Right sidebar */
+.right-sidebar {
+  height: 100%;
+  box-shadow: #aaa -1px 0px 7px;
+}
+
+.right-sidebar-body {
+  height: calc(100% - 45px);
+  max-height: calc(100% - 45px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.right-sidebar-body:focus {
+  outline: none;
+}
+
+.right-sidebar-small-text {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+}
+
+.right-sidebar-button-text {
+  margin-left: 0.5em;
+}
+
+.right-sidebar-pager {
+  width: 230px;
+  bottom: 0px;
+  position: absolute;
+  text-align: center;
+  font-size: 11px;
+  background-color: #f4f4f4;
+}
